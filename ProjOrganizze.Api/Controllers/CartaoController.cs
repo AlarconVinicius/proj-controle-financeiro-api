@@ -11,7 +11,7 @@ namespace ProjOrganizze.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartaoController : ControllerBase
+    public class CartaoController : MainController
     {
         private readonly ICartaoRepository _cartaoRepository;
         private readonly IFaturaRepository _faturaRepository;
@@ -27,11 +27,16 @@ namespace ProjOrganizze.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarCartao(CartaoAddDTO objeto)
         {
+
+
             var contaExiste = await _contaRepository.GetEntityByIdAsync(objeto.ContaId);
             if (contaExiste == null)
             {
-                throw new Exception("Conta não encontrada.");
+                 AdicionarErroProcessamento("Conta invalida");
+                 return CustomResponse();
+                //throw new Exception("Conta não encontrada.");
             }
+
             Cartao objetoMapeado = _cartaoMapping.MapToAddDTO(objeto);
             await _cartaoRepository.AddAsync(objetoMapeado);
             await _faturaRepository.AdicionarFaturas(objetoMapeado);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjOrganizze.Api.Dominio.DTOs.Conta;
 using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
+using ProjOrganizze.Api.Dominio.Interfaces.Services;
 using ProjOrganizze.Api.Mapeamentos;
 using System.Collections.Generic;
 
@@ -10,23 +11,31 @@ namespace ProjOrganizze.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContaController : ControllerBase
+    public class ContaController : MainController
     {
         private readonly IContaRepository _contaRepository;
         private readonly ContaMapping _contaMapping;
-        public ContaController(IContaRepository contaRepository)
+        private readonly IContaService _service;
+
+        public ContaController(IContaRepository contaRepository, IContaService service)
         {
             _contaRepository = contaRepository;
             _contaMapping = new ContaMapping();
+            _service = service;
         }
 
         [HttpPost]
         public async Task<IActionResult> AdicionarConta(ContaAddDTO objeto)
         {
+
             Conta objetoMapeado = _contaMapping.MapToAddDTO(objeto);
-            await _contaRepository.AddAsync(objetoMapeado); 
+
+            await _service.Adicionar(objetoMapeado);
+             
             var objetoMapeadoView = _contaMapping.MapToGetDTO(objetoMapeado);
-            return Ok(objetoMapeadoView);
+
+            return CustomResponse(objetoMapeadoView);
+
         }
 
         [HttpGet]
@@ -38,34 +47,36 @@ namespace ProjOrganizze.Api.Controllers
             {
                 objetosMapeados.Add(_contaMapping.MapToGetDTO(objetoDb));
             }
-            return Ok(objetosMapeados);
+            return CustomResponse(objetosMapeados);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> ContaId([FromRoute] int id)
         {
             var objetoDb = await _contaRepository.GetEntityByIdAsync(id);
-            if(objetoDb != null)
+            if(objetoDb == null)
             {
-                return NotFound();
+                AdicionarErroProcessamento("Conta não localizada");
+                return CustomResponse();
+
             }
             var objetoMapeado = _contaMapping.MapToGetDTO(objetoDb);
-            return Ok(objetoMapeado);
+            return CustomResponse(objetoMapeado);
         }
+
         [HttpPut]
         public async Task<IActionResult> AtualizarConta(ContaUpdDTO objeto)
         {
-            var objetoDb = await _contaRepository.GetEntityByIdAsync(objeto.Id);
-            objetoDb.Nome = objeto.Nome;
-            objetoDb.TipoConta = objeto.TipoConta;
-            await _contaRepository.UpdateAsync(objetoDb);
-            var objetoMapeado = _contaMapping.MapToGetDTO(objetoDb);
-            return Ok(objetoMapeado);
+            var objetoMapeado = await _service.AtualizarConta(objeto);
+            return CustomResponse(objetoMapeado);
         }
+
         [HttpDelete]
         public async Task<IActionResult> DeltarConta([FromQuery] int id)
         {
             await _contaRepository.DeleteAsync(id);
-            return NoContent();
+            return CustomResponse();
         }
     }
 }
+

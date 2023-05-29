@@ -10,7 +10,7 @@ namespace ProjOrganizze.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FaturaController : ControllerBase
+    public class FaturaController : MainController
     {
         private readonly IFaturaRepository _faturaRepository;
         private readonly FaturaMapping _faturaMapping;

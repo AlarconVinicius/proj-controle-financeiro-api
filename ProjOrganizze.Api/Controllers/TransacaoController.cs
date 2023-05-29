@@ -13,7 +13,7 @@ namespace ProjOrganizze.Api.Controllers
 {
     [ApiController]
     [Route("api/transacoes")]
-    public class TransacaoController : ControllerBase
+    public class TransacaoController : MainController
     {
         private readonly IBaseRepository<Conta> _contaRepository;
         private readonly IBaseRepository<Cartao> _cartaoRepository;
