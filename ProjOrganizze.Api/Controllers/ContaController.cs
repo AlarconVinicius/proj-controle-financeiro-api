@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjOrganizze.Api.Dominio.DTOs.Conta;
 using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
@@ -25,7 +24,7 @@ namespace ProjOrganizze.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdicionarConta(ContaAddDTO objeto)
+        public async Task<IActionResult> AdicionarConta(ContaViewDTO objeto)
         {
 
             Conta objetoMapeado = _contaMapping.MapToAddDTO(objeto);
@@ -65,10 +64,11 @@ namespace ProjOrganizze.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> AtualizarConta(ContaUpdDTO objeto)
+        public async Task<IActionResult> AtualizarConta(ContaViewDTO objeto)
         {
-            var objetoMapeado = await _service.AtualizarConta(objeto);
-            return CustomResponse(objetoMapeado);
+            Conta objetoMapeado = _contaMapping.MapToAddDTO(objeto);
+            var result = await _service.AtualizarConta(objetoMapeado);
+            return CustomResponse(result);
         }
 
         [HttpDelete]

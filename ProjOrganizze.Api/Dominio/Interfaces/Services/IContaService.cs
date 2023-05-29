@@ -7,7 +7,7 @@ namespace ProjOrganizze.Api.Dominio.Interfaces.Services
     {
         public Task Adicionar(Conta conta);
 
-        public Task<Conta> AtualizarConta(ContaUpdDTO conta);
+        public Task<Conta> AtualizarConta(Conta conta);
 
     }
 }

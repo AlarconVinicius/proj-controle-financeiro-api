@@ -6,7 +6,7 @@ namespace ProjOrganizze.Api.Mapeamentos
 {
     public class ContaMapping
     {
-        public Conta MapToAddDTO(ContaAddDTO objeto)
+        public Conta MapToAddDTO(ContaViewDTO objeto)
         {
             return new Conta(objeto.Nome, objeto.TipoConta, objeto.Saldo);
         }
@@ -17,7 +17,7 @@ namespace ProjOrganizze.Api.Mapeamentos
                 Id = objeto.Id,
                 Nome = objeto.Nome,
                 Saldo = objeto.Saldo,
-                TipoConta = objeto.TipoConta.ToString()
+                TipoConta = objeto.TipoConta
             };
         }
     }

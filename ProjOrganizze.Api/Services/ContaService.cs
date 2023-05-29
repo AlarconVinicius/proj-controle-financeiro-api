@@ -21,7 +21,7 @@ namespace ProjOrganizze.Api.Services
              await _contaRepository.AddAsync(conta);
         }
 
-        public async Task<Conta> AtualizarConta(ContaUpdDTO conta)
+        public async Task<Conta> AtualizarConta(Conta conta)
         {
             var objetoDb = await _contaRepository.GetEntityByIdAsync(conta.Id);
 
