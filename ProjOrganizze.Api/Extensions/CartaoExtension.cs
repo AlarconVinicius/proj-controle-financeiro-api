@@ -8,6 +8,7 @@ namespace ProjOrganizze.Api.Extensions
 {
     public static class CartaoExtension
     {
+        
         public static Cartao ToAddDTO(this CartaoAddDTO value)
         {
             int ano = DateTime.Now.Year;
@@ -16,6 +17,12 @@ namespace ProjOrganizze.Api.Extensions
             int diferencaDias = (dataVencimento - dataFechamento).Days;
             return new Cartao(value.ContaId, value.Nome, value.Limite, value.VencimentoDia, diferencaDias, value.Limite);
         }
+
+        public static Cartao ToUpdDTO(this CartaoUpdDTO value)
+        {
+            return new Cartao(value.Id, value.Nome, value.Limite, value.DiaVencimento);
+        }
+
         public static CartaoViewDTO ToGetDTO(this Cartao value)
         {
             return new CartaoViewDTO
@@ -30,6 +37,7 @@ namespace ProjOrganizze.Api.Extensions
                 Faturas = new List<FaturaViewDTO>()
             };
         }
+
         public static CartaoViewDTO ToGetDetailsDTO(this Cartao value)
         {
             var faturaMapping = new FaturaMapping();

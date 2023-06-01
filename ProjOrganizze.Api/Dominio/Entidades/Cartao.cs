@@ -29,6 +29,13 @@ namespace ProjOrganizze.Api.Dominio.Entidades
             DiferencaDias = diferencaDias;
             Saldo = saldo;
         }
+        public Cartao(int id, string nome, double limite, int diaVencimento) : this()
+        {
+            Id = id;
+            Nome = nome;
+            Limite = limite;
+            DiaVencimento = diaVencimento;
+        }
         public Cartao(int contaId, string nome, double limite, int diaVencimento, int diferencaDias, List<Fatura> faturas, double saldo = 0):this()
         {
             ContaId = contaId;

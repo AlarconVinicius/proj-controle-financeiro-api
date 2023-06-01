@@ -24,6 +24,7 @@ builder.Services.AddScoped<IContaRepository, ContaRepository>();
 builder.Services.AddScoped<ITransacaoRepository, TransacaoRepository>();
 
 builder.Services.AddScoped<IContaService, ContaService>();
+builder.Services.AddScoped<ICartaoService, CartaoService>();
 
 var app = builder.Build();
 
