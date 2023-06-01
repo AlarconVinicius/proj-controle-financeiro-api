@@ -4,6 +4,7 @@ using ProjOrganizze.Api.Banco.Repositorios;
 using ProjOrganizze.Api.Dominio.DTOs.Cartao;
 using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
+using ProjOrganizze.Api.Extensions;
 using ProjOrganizze.Api.Mapeamentos;
 using System.Globalization;
 
@@ -16,13 +17,11 @@ namespace ProjOrganizze.Api.Controllers
         private readonly ICartaoRepository _cartaoRepository;
         private readonly IFaturaRepository _faturaRepository;
         private readonly IContaRepository _contaRepository;
-        private readonly CartaoMapping _cartaoMapping;
         public CartaoController(ICartaoRepository cartaoRepository, IContaRepository contaRepository, IFaturaRepository faturaRepository)
         {
             _cartaoRepository = cartaoRepository;
             _contaRepository = contaRepository;
             _faturaRepository = faturaRepository;
-            _cartaoMapping = new CartaoMapping();
         }
         [HttpPost]
         public async Task<IActionResult> AdicionarCartao(CartaoAddDTO objeto)
@@ -37,10 +36,10 @@ namespace ProjOrganizze.Api.Controllers
                 //throw new Exception("Conta não encontrada.");
             }
 
-            Cartao objetoMapeado = _cartaoMapping.MapToAddDTO(objeto);
+            Cartao objetoMapeado = objeto.ToAddDTO();
             await _cartaoRepository.AddAsync(objetoMapeado);
             await _faturaRepository.AdicionarFaturas(objetoMapeado);
-            var objetoMapeadoView = _cartaoMapping.MapToGetDTO(objetoMapeado);
+            var objetoMapeadoView = objetoMapeado.ToGetDTO();
 
             return Ok(objetoMapeadoView);
         }
@@ -52,7 +51,7 @@ namespace ProjOrganizze.Api.Controllers
             List<CartaoViewDTO> objetosMapeados = new List<CartaoViewDTO>();
             foreach (var objetoDb in objetosDb)
             {
-                objetosMapeados.Add(_cartaoMapping.MapToGetDTO(objetoDb));
+                objetosMapeados.Add(objetoDb.ToGetDTO());
             }
             return Ok(objetosMapeados);
         }
@@ -61,7 +60,7 @@ namespace ProjOrganizze.Api.Controllers
         public async Task<IActionResult> ObterCartaoId([FromRoute] int id)
         {
             var objetoDb = await _cartaoRepository.ObterCartaoPorId(id);
-            var objetoMapeado = _cartaoMapping.MapToGetDTO(objetoDb);
+            var objetoMapeado = objetoDb.ToGetDetailsDTO();
             return Ok(objetoMapeado);
         }
 
