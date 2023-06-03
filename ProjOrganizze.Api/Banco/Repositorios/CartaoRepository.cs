@@ -28,10 +28,6 @@ namespace ProjOrganizze.Api.Banco.Repositorios
                 .Include(ct => ct.Faturas)
                 .ThenInclude(ct => ct.Transacoes)
                 .SingleOrDefaultAsync(ct => ct.Id == id);
-            if(cartaoDb == null)
-            {
-                throw new Exception("Cartão não encontrado.");
-            }
             return cartaoDb;
         }
     }
