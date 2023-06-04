@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using ProjOrganizze.Api.Dominio.DTOs.Cartao;
 using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Services;
@@ -12,14 +13,26 @@ namespace ProjOrganizze.Api.Controllers
     public class CartaoController : MainController
     {
         private readonly ICartaoService _cartaoService;
-        public CartaoController(ICartaoService cartaoService)
+        private readonly IValidator<CartaoAddDTO> _validator;
+        public CartaoController(ICartaoService cartaoService, IValidator<CartaoAddDTO> validator)
         {
             _cartaoService = cartaoService;
+            _validator = validator;
         }
         [HttpPost]
         public async Task<IActionResult> AdicionarCartao(CartaoAddDTO objeto)
         {
-            // Validar DTO, depois mapear
+            var validationResult = await _validator.ValidateAsync(objeto);
+
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    AdicionarErroProcessamento(error.ErrorMessage);
+                }
+
+                return CustomResponse();
+            }
             Cartao objetoMapeado = objeto.ToAddDTO();
             try
             {
