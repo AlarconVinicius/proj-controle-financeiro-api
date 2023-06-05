@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ProjOrganizze.Api.Banco.Configuracao;
@@ -16,6 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Services.AddDbContext<ContextoBase>(options =>
                 options.UseSqlServer("name=ConnectionStrings:DefaultConnection")
@@ -32,6 +37,7 @@ builder.Services.AddScoped<IContaService, ContaService>();
 builder.Services.AddScoped<ICartaoService, CartaoService>();
 
 builder.Services.AddScoped<IValidator<CartaoAddDTO>, CartaoAddValidator>();
+builder.Services.AddScoped<IValidator<CartaoUpdDTO>, CartaoUpdValidator>();
 
 var app = builder.Build();
 
