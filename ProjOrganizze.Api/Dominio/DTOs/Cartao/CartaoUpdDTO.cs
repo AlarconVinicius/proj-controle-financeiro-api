@@ -5,6 +5,6 @@
         public int Id { get; set; }
         public string Nome { get; set; }
         public double Limite { get; set; }
-        public int DiaVencimento { get; set; }
+        public int VencimentoDia { get; set; }
     }
 }

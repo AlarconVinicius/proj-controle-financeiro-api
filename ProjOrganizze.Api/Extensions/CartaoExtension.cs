@@ -20,7 +20,7 @@ namespace ProjOrganizze.Api.Extensions
 
         public static Cartao ToUpdDTO(this CartaoUpdDTO value)
         {
-            return new Cartao(value.Id, value.Nome, value.Limite, value.DiaVencimento);
+            return new Cartao(value.Id, value.Nome, value.Limite, value.VencimentoDia);
         }
 
         public static CartaoViewDTO ToGetDTO(this Cartao value)
@@ -31,7 +31,7 @@ namespace ProjOrganizze.Api.Extensions
                 Conta = value.Conta.Nome,
                 Nome = value.Nome,
                 Limite = value.Limite,
-                DiaVencimento = value.DiaVencimento,
+                VencimentoDia = value.DiaVencimento,
                 DiferencaDias = value.DiferencaDias,
                 Saldo = value.Saldo,
                 Faturas = new List<FaturaViewDTO>()
@@ -52,7 +52,7 @@ namespace ProjOrganizze.Api.Extensions
                 Conta = value.Conta.Nome,
                 Nome = value.Nome,
                 Limite = value.Limite,
-                DiaVencimento = value.DiaVencimento,
+                VencimentoDia = value.DiaVencimento,
                 DiferencaDias = value.DiferencaDias,
                 Saldo = value.Saldo,
                 Faturas = faturasMapeadas

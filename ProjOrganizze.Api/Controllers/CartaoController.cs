@@ -13,16 +13,18 @@ namespace ProjOrganizze.Api.Controllers
     public class CartaoController : MainController
     {
         private readonly ICartaoService _cartaoService;
-        private readonly IValidator<CartaoAddDTO> _validator;
-        public CartaoController(ICartaoService cartaoService, IValidator<CartaoAddDTO> validator)
+        private readonly IValidator<CartaoAddDTO> _addValidator;
+        private readonly IValidator<CartaoUpdDTO> _updValidator;
+        public CartaoController(ICartaoService cartaoService, IValidator<CartaoAddDTO> addValidator, IValidator<CartaoUpdDTO> updValidator)
         {
             _cartaoService = cartaoService;
-            _validator = validator;
+            _addValidator = addValidator;
+            _updValidator = updValidator;
         }
         [HttpPost]
         public async Task<IActionResult> AdicionarCartao(CartaoAddDTO objeto)
         {
-            var validationResult = await _validator.ValidateAsync(objeto);
+            var validationResult = await _addValidator.ValidateAsync(objeto);
 
             if (!validationResult.IsValid)
             {
@@ -78,6 +80,17 @@ namespace ProjOrganizze.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> AtualizarCartao(CartaoUpdDTO objeto)
         {
+            var validationResult = await _updValidator.ValidateAsync(objeto);
+
+            if (!validationResult.IsValid)
+            {
+                foreach (var error in validationResult.Errors)
+                {
+                    AdicionarErroProcessamento(error.ErrorMessage);
+                }
+
+                return CustomResponse();
+            }
             Cartao objetoMapeado = objeto.ToUpdDTO();
             try
             {
