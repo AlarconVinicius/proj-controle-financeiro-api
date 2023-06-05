@@ -52,12 +52,8 @@ namespace ProjOrganizze.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> ListarCartoes()
         {
-            var objetosDb = await _cartaoService.ObterCartoes();
-            List<CartaoViewDTO> objetosMapeados = new List<CartaoViewDTO>();
-            foreach (var objetoDb in objetosDb)
-            {
-                objetosMapeados.Add(objetoDb.ToGetDTO());
-            }
+            IEnumerable<Cartao> objetosDb = await _cartaoService.ObterCartoes();
+            IEnumerable<CartaoViewDTO> objetosMapeados = objetosDb.Select(x => x.ToGetDTO());
             return CustomResponse(objetosMapeados);
         }
 
