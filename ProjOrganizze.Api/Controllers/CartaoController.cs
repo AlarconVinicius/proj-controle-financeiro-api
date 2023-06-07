@@ -25,16 +25,7 @@ namespace ProjOrganizze.Api.Controllers
         public async Task<IActionResult> AdicionarCartao(CartaoAddDTO objeto)
         {
             var validationResult = await _addValidator.ValidateAsync(objeto);
-
-            if (!validationResult.IsValid)
-            {
-                foreach (var error in validationResult.Errors)
-                {
-                    AdicionarErroProcessamento(error.ErrorMessage);
-                }
-
-                return CustomResponse();
-            }
+            if (!validationResult.IsValid) return CustomResponse(validationResult);
             Cartao objetoMapeado = objeto.ToAddDTO();
             try
             {
@@ -77,16 +68,7 @@ namespace ProjOrganizze.Api.Controllers
         public async Task<IActionResult> AtualizarCartao(CartaoUpdDTO objeto)
         {
             var validationResult = await _updValidator.ValidateAsync(objeto);
-
-            if (!validationResult.IsValid)
-            {
-                foreach (var error in validationResult.Errors)
-                {
-                    AdicionarErroProcessamento(error.ErrorMessage);
-                }
-
-                return CustomResponse();
-            }
+            if (!validationResult.IsValid) return CustomResponse(validationResult);
             Cartao objetoMapeado = objeto.ToUpdDTO();
             try
             {

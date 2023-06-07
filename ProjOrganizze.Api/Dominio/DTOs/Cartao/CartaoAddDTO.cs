@@ -7,7 +7,6 @@ namespace ProjOrganizze.Api.Dominio.DTOs.Cartao
     public class CartaoAddDTO
     {
         public int ContaId { get; set; }
-        [Required (ErrorMessage = "Campo Nome é obrigatório.")]
         public string Nome { get; set; }
         public double Limite { get; set; }
         public int VencimentoMes { get; set; }
