@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ProjOrganizze.Api.Controllers
@@ -30,6 +31,17 @@ namespace ProjOrganizze.Api.Controllers
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
         {
             var erros = modelState.Values.SelectMany(e => e.Errors);
+            foreach (var erro in erros)
+            {
+                AdicionarErroProcessamento(erro.ErrorMessage);
+            }
+
+            return CustomResponse();
+        }
+
+        protected ActionResult CustomResponse(ValidationResult validation)
+        {
+            var erros = validation.Errors;
             foreach (var erro in erros)
             {
                 AdicionarErroProcessamento(erro.ErrorMessage);

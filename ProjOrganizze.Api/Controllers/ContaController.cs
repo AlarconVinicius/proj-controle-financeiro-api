@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using ProjOrganizze.Api.Dominio.DTOs.Cartao;
 using ProjOrganizze.Api.Dominio.DTOs.Conta;
 using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
@@ -14,16 +16,24 @@ namespace ProjOrganizze.Api.Controllers
     {
         private readonly IContaRepository _contaRepository;
         private readonly IContaService _service;
+        private readonly IValidator<ContaViewDTO> _Validator;
 
-        public ContaController(IContaRepository contaRepository, IContaService service)
+
+        public ContaController(IContaRepository contaRepository, IContaService service, IValidator<ContaViewDTO> validar)
         {
             _contaRepository = contaRepository;
             _service = service;
+            _Validator = validar;
         }
 
         [HttpPost]
         public async Task<IActionResult> AdicionarConta(ContaViewDTO objeto)
         {
+
+            var validationResult = await _Validator.ValidateAsync(objeto);
+
+            if (!validationResult.IsValid) return CustomResponse(validationResult);
+
             Conta objetoMapeado = objeto.ToConta();
 
             await _service.Adicionar(objetoMapeado);
