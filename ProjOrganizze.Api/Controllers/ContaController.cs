@@ -3,8 +3,8 @@ using ProjOrganizze.Api.Dominio.DTOs.Conta;
 using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
 using ProjOrganizze.Api.Dominio.Interfaces.Services;
+using ProjOrganizze.Api.Extensions;
 using ProjOrganizze.Api.Mapeamentos;
-using System.Collections.Generic;
 
 namespace ProjOrganizze.Api.Controllers
 {
@@ -13,40 +13,34 @@ namespace ProjOrganizze.Api.Controllers
     public class ContaController : MainController
     {
         private readonly IContaRepository _contaRepository;
-        private readonly ContaMapping _contaMapping;
         private readonly IContaService _service;
 
         public ContaController(IContaRepository contaRepository, IContaService service)
         {
             _contaRepository = contaRepository;
-            _contaMapping = new ContaMapping();
             _service = service;
         }
 
         [HttpPost]
         public async Task<IActionResult> AdicionarConta(ContaViewDTO objeto)
         {
-
-            Conta objetoMapeado = _contaMapping.MapToAddDTO(objeto);
+            Conta objetoMapeado = objeto.ToConta();
 
             await _service.Adicionar(objetoMapeado);
-             
-            var objetoMapeadoView = _contaMapping.MapToGetDTO(objetoMapeado);
+
+            var objetoMapeadoView = objetoMapeado.ToContaViewDTO();
 
             return CustomResponse(objetoMapeadoView);
-
         }
 
         [HttpGet]
         public async Task<IActionResult> ListarContas()
         {
-            var objetosDb = await _contaRepository.ListAsync();
-            List <ContaViewDTO> objetosMapeados = new List <ContaViewDTO>();
-            foreach(var objetoDb in objetosDb)
-            {
-                objetosMapeados.Add(_contaMapping.MapToGetDTO(objetoDb));
-            }
-            return CustomResponse(objetosMapeados);
+            List<Conta> objetosDb = await _contaRepository.ListAsync();
+
+            IEnumerable<ContaViewDTO> contasView = objetosDb.Select(x => x.ToContaViewDTO());
+
+            return CustomResponse(contasView);
         }
 
         [HttpGet("{id}")]
@@ -59,14 +53,14 @@ namespace ProjOrganizze.Api.Controllers
                 return CustomResponse();
 
             }
-            var objetoMapeado = _contaMapping.MapToGetDTO(objetoDb);
+            var objetoMapeado = objetoDb.ToContaViewDTO();
             return CustomResponse(objetoMapeado);
         }
 
         [HttpPut]
         public async Task<IActionResult> AtualizarConta(ContaViewDTO objeto)
         {
-            Conta objetoMapeado = _contaMapping.MapToAddDTO(objeto);
+            Conta objetoMapeado = objeto.ToConta();
             var result = await _service.AtualizarConta(objetoMapeado);
             return CustomResponse(result);
         }
