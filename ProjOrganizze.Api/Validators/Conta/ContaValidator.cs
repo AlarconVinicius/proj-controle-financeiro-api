@@ -22,9 +22,21 @@ namespace ProjOrganizze.Api.Validators.Conta
 
 
             //caso precise futuramente de algo mais complexo para TipoDeConta
-            //When(dto => dto.TipoConta == Dominio.Entidades.Enums.TipoConta.Corrente, () =>
+            //When(dto => dto.TipoTransacao == Dominio.Entidades.Enums.TipoTransacao.CartaoDeCredito, () =>
             //{
-            //    //Rule 
+            //    RuleFor(dto => dto.CartaoId)
+            //       .NotEmpty().WithMessage("O campo CartaoId é obrigatório.");
+            //})
+            //When(dto => dto.TipoTransacao != Dominio.Entidades.Enums.TipoTransacao.CartaoDeCredito, () =>
+            //{
+            //    RuleFor(dto => dto.CartaoId)
+            //       .Empty().WithMessage("O CartaoId não pode ser passado.");
+            //})
+            //When(dto => dto.Repetir != False, () =>
+            //{
+            //    RuleFor(dto => dto.QtdRepeticao)
+            //       .NotEmpty().WithMessage("O campo CartaoId é obrigatório.");
+            //       .GreaterThan(0).WithMessage("O QtdRepeticao deve ser maior que zero.");
             //})
 
         }
