@@ -40,8 +40,8 @@ builder.Services.AddScoped<ICartaoService, CartaoService>();
 
 builder.Services.AddScoped<IValidator<CartaoAddDTO>, CartaoAddValidator>();
 builder.Services.AddScoped<IValidator<CartaoUpdDTO>, CartaoUpdValidator>();
-builder.Services.AddScoped<IValidator<ContaViewDTO>, ContaValidator>();
-
+builder.Services.AddScoped<IValidator<ContaViewDTO>, ContaValidator>(); 
+builder.Services.AddScoped<IValidator<ContaAddDTO>, ContaAddValidator>();
 
 var app = builder.Build();
 

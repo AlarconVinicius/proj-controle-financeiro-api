@@ -16,10 +16,10 @@ namespace ProjOrganizze.Api.Controllers
     {
         private readonly IContaRepository _contaRepository;
         private readonly IContaService _service;
-        private readonly IValidator<ContaViewDTO> _Validator;
+        private readonly IValidator<ContaAddDTO> _Validator;
 
 
-        public ContaController(IContaRepository contaRepository, IContaService service, IValidator<ContaViewDTO> validar)
+        public ContaController(IContaRepository contaRepository, IContaService service, IValidator<ContaAddDTO> validar)
         {
             _contaRepository = contaRepository;
             _service = service;
@@ -27,14 +27,14 @@ namespace ProjOrganizze.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdicionarConta(ContaViewDTO objeto)
+        public async Task<IActionResult> AdicionarConta(ContaAddDTO objeto)
         {
 
             var validationResult = await _Validator.ValidateAsync(objeto);
 
             if (!validationResult.IsValid) return CustomResponse(validationResult);
 
-            Conta objetoMapeado = objeto.ToConta();
+            Conta objetoMapeado = objeto.ToAddDTO();
 
             await _service.Adicionar(objetoMapeado);
 
@@ -46,10 +46,8 @@ namespace ProjOrganizze.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> ListarContas()
         {
-            List<Conta> objetosDb = await _contaRepository.ListAsync();
-
+            IEnumerable<Conta> objetosDb = await _contaRepository.ListAsync();
             IEnumerable<ContaViewDTO> contasView = objetosDb.Select(x => x.ToContaViewDTO());
-
             return CustomResponse(contasView);
         }
 
@@ -68,9 +66,9 @@ namespace ProjOrganizze.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> AtualizarConta(ContaViewDTO objeto)
+        public async Task<IActionResult> AtualizarConta(ContaAddDTO objeto)
         {
-            Conta objetoMapeado = objeto.ToConta();
+            Conta objetoMapeado = objeto.ToAddDTO();
             var result = await _service.AtualizarConta(objetoMapeado);
             return CustomResponse(result);
         }
