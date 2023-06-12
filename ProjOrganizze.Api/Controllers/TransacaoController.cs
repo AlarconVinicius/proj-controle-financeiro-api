@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProjOrganizze.Api.Banco.Repositorios;
-using ProjOrganizze.Api.Dominio.DTOs.Conta;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using ProjOrganizze.Api.Dominio.DTOs.Fatura;
 using ProjOrganizze.Api.Dominio.DTOs.Transacao;
 using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Entidades.Enums;
-using ProjOrganizze.Api.Dominio.Filtros;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
+using ProjOrganizze.Api.Extensions;
 using ProjOrganizze.Api.Mapeamentos;
 
 namespace ProjOrganizze.Api.Controllers
@@ -21,7 +20,8 @@ namespace ProjOrganizze.Api.Controllers
         private readonly IFaturaRepository _faturaRepository;
         private readonly TransacaoMapping _transacaoMapping;
         private readonly FaturaMapping _faturaMapping;
-        public TransacaoController(IBaseRepository<Conta> contaRepository, ITransacaoRepository transacaoRepository, IBaseRepository<Cartao> cartaoRepository, IFaturaRepository faturaRepository)
+        private readonly IValidator<TransacaoAddDTO> _addValidator;
+        public TransacaoController(IBaseRepository<Conta> contaRepository, ITransacaoRepository transacaoRepository, IBaseRepository<Cartao> cartaoRepository, IFaturaRepository faturaRepository, IValidator<TransacaoAddDTO> addValidator)
         {
             _contaRepository = contaRepository;
             _transacaoRepository = transacaoRepository;
@@ -29,12 +29,16 @@ namespace ProjOrganizze.Api.Controllers
             _faturaRepository = faturaRepository;
             _transacaoMapping = new TransacaoMapping();
             _faturaMapping = new FaturaMapping();
+            _addValidator = addValidator;
         }
 
         // Rota para adicionar uma nova transação
         [HttpPost]
-        public async Task<IActionResult> AdicionarTransacao(Transacao transacao)
+        public async Task<IActionResult> AdicionarTransacao(TransacaoAddDTO transacaoDto)
         {
+            var validationResult = await _addValidator.ValidateAsync(transacaoDto);
+            if (!validationResult.IsValid) return CustomResponse(validationResult);
+            Transacao transacao = transacaoDto.ToAddDTO();
             if (transacao.ContaId <= 0)
             {
                 return BadRequest("Informe o ID da conta.");

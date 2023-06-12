@@ -7,11 +7,13 @@ using ProjOrganizze.Api.Banco.Configuracao;
 using ProjOrganizze.Api.Banco.Repositorios;
 using ProjOrganizze.Api.Dominio.DTOs.Cartao;
 using ProjOrganizze.Api.Dominio.DTOs.Conta;
+using ProjOrganizze.Api.Dominio.DTOs.Transacao;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
 using ProjOrganizze.Api.Dominio.Interfaces.Services;
 using ProjOrganizze.Api.Services;
 using ProjOrganizze.Api.Validators.Cartao;
 using ProjOrganizze.Api.Validators.Conta;
+using ProjOrganizze.Api.Validators.Transacao;
 using System;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +44,7 @@ builder.Services.AddScoped<IValidator<CartaoAddDTO>, CartaoAddValidator>();
 builder.Services.AddScoped<IValidator<CartaoUpdDTO>, CartaoUpdValidator>();
 builder.Services.AddScoped<IValidator<ContaViewDTO>, ContaValidator>(); 
 builder.Services.AddScoped<IValidator<ContaAddDTO>, ContaAddValidator>();
+builder.Services.AddScoped<IValidator<TransacaoAddDTO>, TransacaoAddValidator>();
 
 var app = builder.Build();
 
