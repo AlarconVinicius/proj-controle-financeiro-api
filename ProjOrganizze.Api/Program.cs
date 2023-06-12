@@ -1,8 +1,6 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using ProjOrganizze.Api.Banco.Configuracao;
 using ProjOrganizze.Api.Banco.Repositorios;
 using ProjOrganizze.Api.Dominio.DTOs.Cartao;
@@ -14,7 +12,6 @@ using ProjOrganizze.Api.Services;
 using ProjOrganizze.Api.Validators.Cartao;
 using ProjOrganizze.Api.Validators.Conta;
 using ProjOrganizze.Api.Validators.Transacao;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +36,7 @@ builder.Services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
 builder.Services.AddScoped<IContaService, ContaService>();
 builder.Services.AddScoped<ICartaoService, CartaoService>();
+builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 
 builder.Services.AddScoped<IValidator<CartaoAddDTO>, CartaoAddValidator>();
 builder.Services.AddScoped<IValidator<CartaoUpdDTO>, CartaoUpdValidator>();
