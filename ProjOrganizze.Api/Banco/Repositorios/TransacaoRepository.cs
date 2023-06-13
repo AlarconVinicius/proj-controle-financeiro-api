@@ -14,7 +14,7 @@ namespace ProjOrganizze.Api.Banco.Repositorios
 
         public async Task<List<Transacao>> ObterTransacoes(TransacaoFiltro filtro)
         {
-            IQueryable<Transacao> query = _context.Transacoes.Include(t => t.Cartao).Include(t => t.Conta).Include(t => t.Fatura);
+            IQueryable<Transacao> query = _context.Transacoes.Include(t => t.Cartao).Include(t => t.Conta).Include(t => t.Fatura).Where(t => t.CartaoId == null || t.CartaoId == 0);
 
             if (filtro.Pago && !filtro.NaoPago)
             {
@@ -26,6 +26,11 @@ namespace ProjOrganizze.Api.Banco.Repositorios
             }
 
             return await query.ToListAsync();
+        }
+        public async Task<Transacao> ObterTransacaoPorId(int id)
+        {
+            Transacao objeto = await _context.Transacoes.Include(t => t.Cartao).Include(t => t.Conta).Include(t => t.Fatura).FirstOrDefaultAsync(t => t.Id == id);
+            return objeto;
         }
     }
 }

@@ -45,7 +45,7 @@ namespace ProjOrganizze.Api.Services
 
                 cartao.SubtrairSaldo(objeto.Valor);
                 objeto.Pago = false;
-
+                // Talvez parar de salvar a transação aqui e deixar somente na fatura
                 await _transacaoRepository.AddAsync(objeto);
                 return objeto;
             }
@@ -71,10 +71,18 @@ namespace ProjOrganizze.Api.Services
                 throw new ServiceException("Tipo de Transação inválido.");
             }
 
-            //transacao.Pago = true; // Por padrão, transações de conta são marcadas como pagas
-
             await _transacaoRepository.AddAsync(objeto);
             return objeto;
+        }
+
+        public async Task<Transacao> ObterTransacaoPorId(int id)
+        {
+            var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
+            if (transacao == null)
+            {
+                throw new ServiceException("Transação inválida.");
+            }
+            return transacao;
         }
 
         public async Task<List<Transacao>> ObterTransacoes(TransacaoFiltro filtro)
