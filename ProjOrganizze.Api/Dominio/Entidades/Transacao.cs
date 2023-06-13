@@ -26,6 +26,19 @@ namespace ProjOrganizze.Api.Dominio.Entidades
         public Conta? Conta { get; set; }
         public Cartao? Cartao { get; set; }
         public Fatura? Fatura { get; set; }
+        public Transacao(int contaId, MetodoPagamento metodoPagamento, string descricao, double valor, DateTime data, TipoTransacao tipoTransacao, Categoria categoria, bool repete, int? qtdRepeticao, bool pago)
+        {
+            ContaId = contaId;
+            MetodoPagamento = metodoPagamento;
+            Descricao = descricao;
+            Valor = valor;
+            Data = data;
+            TipoTransacao = tipoTransacao;
+            Categoria = categoria;
+            Repete = repete;
+            QtdRepeticao = qtdRepeticao;
+            Pago = pago;
+        }
         public Transacao(int contaId, int? cartaoId, MetodoPagamento metodoPagamento, string descricao, double valor, DateTime data, TipoTransacao tipoTransacao, Categoria categoria, bool repete, int? qtdRepeticao, bool pago)
         {
             ContaId = contaId;

@@ -13,6 +13,6 @@ namespace ProjOrganizze.Api.Dominio.DTOs.Fatura
         public string Cartao { get; set; }
         public string DataVencimento { get; set; }
         public string DataFechamento { get; set; }
-        public List<TransacaoViewDTO> Transacoes { get; set; }
+        public IEnumerable<TransacaoViewDTO> Transacoes { get; set; }
     }
 }

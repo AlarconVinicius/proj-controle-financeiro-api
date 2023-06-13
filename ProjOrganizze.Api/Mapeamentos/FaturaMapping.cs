@@ -2,6 +2,7 @@
 using ProjOrganizze.Api.Dominio.DTOs.Fatura;
 using ProjOrganizze.Api.Dominio.DTOs.Transacao;
 using ProjOrganizze.Api.Dominio.Entidades;
+using ProjOrganizze.Api.Extensions;
 
 namespace ProjOrganizze.Api.Mapeamentos
 {
@@ -9,14 +10,10 @@ namespace ProjOrganizze.Api.Mapeamentos
     {
         public FaturaViewDTO MapToGetDTO(Fatura objeto)
         {
-            var transacaoMapping = new TransacaoMapping();
-            List<TransacaoViewDTO> transacoesMapeadas = new List<TransacaoViewDTO>();
-            if(objeto.Transacoes != null)
+            IEnumerable<TransacaoViewDTO> transacoesMapeadas = Enumerable.Empty<TransacaoViewDTO>();
+            if (objeto.Transacoes != null)
             {
-                foreach (var transacao in objeto.Transacoes)
-                {
-                    transacoesMapeadas.Add(transacaoMapping.MapToGetDTO(transacao));
-                }
+                transacoesMapeadas = objeto.Transacoes.Select(x => x.ToGetDTO());
             }
             return new FaturaViewDTO
             {

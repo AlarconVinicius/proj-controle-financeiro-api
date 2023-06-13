@@ -1,11 +1,9 @@
-﻿using ProjOrganizze.Api.Banco.Repositorios;
-using ProjOrganizze.Api.Dominio.DTOs.Fatura;
-using ProjOrganizze.Api.Dominio.Entidades;
+﻿using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Entidades.Enums;
+using ProjOrganizze.Api.Dominio.Filtros;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
 using ProjOrganizze.Api.Dominio.Interfaces.Services;
 using ProjOrganizze.Api.Exceptions;
-using ProjOrganizze.Api.Mapeamentos;
 
 namespace ProjOrganizze.Api.Services
 {
@@ -68,11 +66,20 @@ namespace ProjOrganizze.Api.Services
                 //}
                 conta.SubtrairSaldo(objeto.Valor);
             }
+            else
+            {
+                throw new ServiceException("Tipo de Transação inválido.");
+            }
 
             //transacao.Pago = true; // Por padrão, transações de conta são marcadas como pagas
 
             await _transacaoRepository.AddAsync(objeto);
             return objeto;
+        }
+
+        public async Task<List<Transacao>> ObterTransacoes(TransacaoFiltro filtro)
+        {
+            return await _transacaoRepository.ObterTransacoes(filtro);
         }
     }
 }
