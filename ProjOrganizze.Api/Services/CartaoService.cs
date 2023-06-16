@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ProjOrganizze.Api.Banco.Repositorios;
-using ProjOrganizze.Api.Dominio.Entidades;
+﻿using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
 using ProjOrganizze.Api.Dominio.Interfaces.Services;
 using ProjOrganizze.Api.Exceptions;
-using System;
 
 namespace ProjOrganizze.Api.Services
 {
@@ -53,7 +50,7 @@ namespace ProjOrganizze.Api.Services
         public async Task DeletarCartao(int id)
         {
             await CartaoExiste(id);
-            await _cartaoRepository.DeleteAsync(id);
+            await _cartaoRepository.DeletarCartao(id);
         }
 
         public async Task<Cartao> ObterCartaoPorId(int id)

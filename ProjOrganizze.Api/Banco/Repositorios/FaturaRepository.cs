@@ -65,6 +65,17 @@ namespace ProjOrganizze.Api.Banco.Repositorios
             throw new ArgumentNullException("Informe os parâmetros corretamente.");
         }
 
+        public async Task DeletarFatura(int id)
+        {
+            var fatura = await _context.Faturas
+            .Include(f => f.Transacoes)
+            .FirstOrDefaultAsync(f => f.Id == id);
+            foreach (var transacao in fatura.Transacoes.ToList())
+            {
+                _context.Transacoes.Remove(transacao);
+            }
 
+            _context.Faturas.Remove(fatura);
+        }
     }
 }

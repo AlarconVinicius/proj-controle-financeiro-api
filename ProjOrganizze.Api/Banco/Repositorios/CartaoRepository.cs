@@ -7,8 +7,10 @@ namespace ProjOrganizze.Api.Banco.Repositorios
 {
     public class CartaoRepository : BaseRepository<Cartao>, ICartaoRepository
     {
-        public CartaoRepository(ContextoBase context) : base(context)
+        private readonly IFaturaRepository _faturaRepository;
+        public CartaoRepository(ContextoBase context, IFaturaRepository faturaRepository) : base(context)
         {
+            _faturaRepository = faturaRepository;
         }
 
         public async Task<IEnumerable<Cartao>> ObterCartoes()
@@ -28,6 +30,19 @@ namespace ProjOrganizze.Api.Banco.Repositorios
                 .ThenInclude(ct => ct.Transacoes)
                 .SingleOrDefaultAsync(ct => ct.Id == id);
             return cartaoDb;
+        }
+        public async Task DeletarCartao(int id)
+        {
+            var cartao = await _context.Cartoes
+            .Include(c => c.Faturas)
+            .FirstOrDefaultAsync(c => c.Id == id);
+            foreach (var fatura in cartao.Faturas.ToList())
+            {
+                await _faturaRepository.DeletarFatura(fatura.Id);
+            }
+
+            _context.Cartoes.Remove(cartao);
+            await _context.SaveChangesAsync();
         }
     }
 }
