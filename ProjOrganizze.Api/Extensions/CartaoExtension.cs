@@ -11,11 +11,8 @@ namespace ProjOrganizze.Api.Extensions
         
         public static Cartao ToAddDTO(this CartaoAddDTO value)
         {
-            int ano = DateTime.Now.Year;
-            DateTime dataVencimento = new DateTime(ano, value.VencimentoMes, value.VencimentoDia);
-            DateTime dataFechamento = new DateTime(ano, value.FechamentoMes, value.FechamentoDia);
-            int diferencaDias = (dataVencimento - dataFechamento).Days;
-            return new Cartao(value.ContaId, value.Nome, value.Limite, value.VencimentoDia, diferencaDias, value.Limite);
+            int diferencaDias = (value.VencimentoData.ToDateTime() - value.FechamentoData.ToDateTime()).Days;
+            return new Cartao(value.ContaId, value.Nome, value.Limite, value.VencimentoData.ToDateTime().Day, diferencaDias, value.Limite);
         }
 
         public static Cartao ToUpdDTO(this CartaoUpdDTO value)

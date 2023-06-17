@@ -24,6 +24,8 @@ namespace ProjOrganizze.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarCartao(CartaoAddDTO objeto)
         {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
             var validationResult = await _addValidator.ValidateAsync(objeto);
             if (!validationResult.IsValid) return CustomResponse(validationResult);
             Cartao objetoMapeado = objeto.ToAddDTO();

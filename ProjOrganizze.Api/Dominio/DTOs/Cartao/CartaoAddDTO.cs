@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,9 +10,10 @@ namespace ProjOrganizze.Api.Dominio.DTOs.Cartao
         public int ContaId { get; set; }
         public string Nome { get; set; }
         public double Limite { get; set; }
-        public int VencimentoMes { get; set; }
-        public int VencimentoDia { get; set; }
-        public int FechamentoMes { get; set; }
-        public int FechamentoDia { get; set; }
+
+        [RegularExpression(@"\d{2}/\d{2}/\d{4}", ErrorMessage = "O formato da data deve ser dd/mm/yyyy")]
+        public string VencimentoData { get; set; }
+        [RegularExpression(@"\d{2}/\d{2}/\d{4}", ErrorMessage = "O formato da data deve ser dd/mm/yyyy")]
+        public string FechamentoData { get; set; }
     }
 }
