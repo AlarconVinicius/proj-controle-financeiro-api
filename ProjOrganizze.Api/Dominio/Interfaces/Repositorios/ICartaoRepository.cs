@@ -7,5 +7,6 @@ namespace ProjOrganizze.Api.Dominio.Interfaces.Repositorios
     {
         Task<IEnumerable<Cartao>> ObterCartoes();
         Task<Cartao> ObterCartaoPorId(int id);
+        Task DeletarCartao(int id);
     }
 }
