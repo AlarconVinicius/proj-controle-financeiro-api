@@ -16,27 +16,27 @@ namespace ProjOrganizze.Api.Validators.Cartao
                 .GreaterThan(0).WithMessage("O limite deve ser maior que zero.");
 
             RuleFor(dto => dto.VencimentoData)
-                .Must((dto, vencimento)=> vencimentoCorreto(vencimento, dto.FechamentoData))
-                .WithMessage("Data vencimento precisa ser maior que de fechamento")
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty()
+                    .WithMessage("A data de vencimento é obrigatório")
                 .Matches(@"^\d{2}/\d{2}/\d{4}$")
-                .WithMessage("O campo Data deve seguir o padrão dd/MM/yyyy.")
-                .NotEmpty().WithMessage("A data de vencimento é obrigatório");
+                    .WithMessage("O campo Data deve seguir o padrão dd/MM/yyyy.")
+                .Must((dto, vencimento) => vencimentoCorreto(vencimento, dto.FechamentoData))
+                    .WithMessage("Data vencimento precisa ser maior que de fechamento");
 
             RuleFor(dto => dto.FechamentoData)
+                .NotEmpty()
+                    .WithMessage("A data de fechamento é obrigatório.")
                 .Matches(@"^\d{2}/\d{2}/\d{4}$")
-                .WithMessage("O campo Data deve seguir o padrão dd/MM/yyyy.")
-                .NotEmpty().WithMessage("A data de fechamento é obrigatório.");
-
+                    .WithMessage("O campo Data deve seguir o padrão dd/MM/yyyy.");
         }
 
         private bool vencimentoCorreto(string vencimento, string fechamento)
         {
-            //converter para data 
             DateTime dtVencimento = vencimento.ToDateTime();
             DateTime dtFechamento = fechamento.ToDateTime();
 
-             return dtVencimento >= dtFechamento ;
-
+            return dtVencimento >= dtFechamento ;
         }
     }
 }

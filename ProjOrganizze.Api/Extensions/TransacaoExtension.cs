@@ -7,11 +7,11 @@ namespace ProjOrganizze.Api.Extensions
     {
         public static Transacao ToAddDTO(this TransacaoAddDTO value)
         {
-            return new Transacao(value.ContaId, value.CartaoId, value.MetodoPagamento, value.Descricao, value.Valor, value.Data, value.TipoTransacao, value.Categoria, value.Repete, value.QtdRepeticao, value.Pago);
+            return new Transacao(value.ContaId, value.CartaoId, value.MetodoPagamento, value.Descricao, value.Valor, value.Data.ToDateTime(), value.TipoTransacao, value.Categoria, value.Repete, value.QtdRepeticao, value.Pago);
         }
         public static Transacao ToAddDTO2(this TransacaoAddDTO value)
         {
-            return new Transacao(value.ContaId, value.MetodoPagamento, value.Descricao, value.Valor, value.Data, value.TipoTransacao, value.Categoria, value.Repete, value.QtdRepeticao, value.Pago);
+            return new Transacao(value.ContaId, value.MetodoPagamento, value.Descricao, value.Valor, value.Data.ToDateTime(), value.TipoTransacao, value.Categoria, value.Repete, value.QtdRepeticao, value.Pago);
         }
         public static TransacaoViewDTO ToGetDTO(this Transacao value)
         {

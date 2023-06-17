@@ -41,7 +41,8 @@ namespace ProjOrganizze.Api.Extensions
             List<FaturaViewDTO> faturasMapeadas = new List<FaturaViewDTO>();
             foreach (var fatura in value.Faturas)
             {
-                faturasMapeadas.Add(faturaMapping.MapToGetDTO(fatura));
+                faturasMapeadas.Add(fatura.ToGetDTO());
+                //faturasMapeadas.Add(faturaMapping.MapToGetDTO(fatura));
             }
             return new CartaoViewDTO
             {

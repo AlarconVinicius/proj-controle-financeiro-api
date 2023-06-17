@@ -56,8 +56,7 @@ namespace ProjOrganizze.Api.Services
         public async Task<Cartao> ObterCartaoPorId(int id)
         {
             await CartaoExiste(id);
-            var objetoDb = await _cartaoRepository.ObterCartaoPorId(id);
-            return objetoDb;
+            return await _cartaoRepository.ObterCartaoPorId(id);
         }
 
         public async Task<IEnumerable<Cartao>> ObterCartoes()

@@ -24,8 +24,6 @@ namespace ProjOrganizze.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarCartao(CartaoAddDTO objeto)
         {
-            if (!ModelState.IsValid) return CustomResponse(ModelState);
-
             var validationResult = await _addValidator.ValidateAsync(objeto);
             if (!validationResult.IsValid) return CustomResponse(validationResult);
             Cartao objetoMapeado = objeto.ToAddDTO();
@@ -43,7 +41,7 @@ namespace ProjOrganizze.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListarCartoes()
+        public async Task<IActionResult> ObterCartoes()
         {
             IEnumerable<Cartao> objetosDb = await _cartaoService.ObterCartoes();
             IEnumerable<CartaoViewDTO> objetosMapeados = objetosDb.Select(x => x.ToGetDTO());
@@ -51,7 +49,7 @@ namespace ProjOrganizze.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObterCartaoId([FromRoute] int id)
+        public async Task<IActionResult> ObterCartaoPorId([FromRoute] int id)
         {
             try
             {

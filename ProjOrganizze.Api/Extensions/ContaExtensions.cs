@@ -1,26 +1,28 @@
 ﻿using Microsoft.OpenApi.Extensions;
 using ProjOrganizze.Api.Dominio.DTOs.Conta;
 using ProjOrganizze.Api.Dominio.Entidades;
-using System;
 
 namespace ProjOrganizze.Api.Extensions
 {
     public static class ContaExtensions
     {
 
-        public static Conta ToAddDTO(this ContaAddDTO obj)
+        public static Conta ToAddDTO(this ContaAddDTO value)
         {
-           return new Conta(obj.Nome, obj.TipoConta, obj.Saldo);
+           return new Conta(value.Nome, value.TipoConta, value.Saldo);
         }
-
-        public static ContaViewDTO ToContaViewDTO(this Conta obj)
+        public static Conta ToUpdDTO(this ContaUpdDTO value)
+        {
+            return new Conta(value.Id, value.Nome, value.TipoConta, 0);
+        }
+        public static ContaViewDTO ToGetDTO(this Conta value)
         {
             return new ContaViewDTO
             {
-                Id = obj.Id,
-                Nome = obj.Nome,
-                Saldo = obj.Saldo,
-                TipoConta = obj.TipoConta.GetDisplayName(),
+                Id = value.Id,
+                Nome = value.Nome,
+                Saldo = value.Saldo,
+                TipoConta = value.TipoConta.GetDisplayName(),
             };
        
         }

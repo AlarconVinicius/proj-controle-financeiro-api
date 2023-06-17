@@ -5,6 +5,7 @@ using ProjOrganizze.Api.Dominio.DTOs.Conta;
 using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
 using ProjOrganizze.Api.Dominio.Interfaces.Services;
+using ProjOrganizze.Api.Exceptions;
 using ProjOrganizze.Api.Extensions;
 using ProjOrganizze.Api.Mapeamentos;
 using ProjOrganizze.Api.Services;
@@ -21,9 +22,9 @@ namespace ProjOrganizze.Api.Controllers
         private readonly IValidator<ContaUpdDTO> _updValidator;
 
 
-        public ContaController(IContaRepository contaRepository, IContaService service, IValidator<ContaAddDTO> addValidator, IValidator<ContaUpdDTO> updValidator)
+        public ContaController(IContaRepository contaRepository, IContaService contaService, IValidator<ContaAddDTO> addValidator, IValidator<ContaUpdDTO> updValidator)
         {
-            _contaservice = service;
+            _contaservice = contaService;
             _addValidator = addValidator;
             _updValidator = updValidator;
         }
@@ -31,52 +32,66 @@ namespace ProjOrganizze.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarConta(ContaAddDTO objeto)
         {
-
             var validationResult = await _addValidator.ValidateAsync(objeto);
-
             if (!validationResult.IsValid) return CustomResponse(validationResult);
-
             Conta objetoMapeado = objeto.ToAddDTO();
-
-            await _contaservice.Adicionar(objetoMapeado);
-
-            var objetoMapeadoView = objetoMapeado.ToContaViewDTO();
-
+            try
+            {
+                await _contaservice.AdicionarConta(objetoMapeado);
+            }
+            catch (ServiceException ex)
+            {
+                AdicionarErroProcessamento(ex.Message);
+                return CustomResponse();
+            }
+            var objetoMapeadoView = objetoMapeado.ToGetDTO();
             return CustomResponse(objetoMapeadoView);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListarContas()
+        public async Task<IActionResult> ObterContas()
         {
-            IEnumerable<Conta> objetosDb = await _contaservice.ListarContas();
-            IEnumerable<ContaViewDTO> contasView = objetosDb.Select(x => x.ToContaViewDTO());
+            IEnumerable<Conta> objetosDb = await _contaservice.ObterContas();
+            IEnumerable<ContaViewDTO> contasView = objetosDb.Select(x => x.ToGetDTO());
             return CustomResponse(contasView);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ContaId([FromRoute] int id)
+        public async Task<IActionResult> ObterContaPorId([FromRoute] int id)
         {
-            var objetoDb = await _contaservice.ContaId(id);
-            if(objetoDb == null)
+            try
             {
-                AdicionarErroProcessamento("Conta não localizada");
-                return CustomResponse();
-
+                var objetoDb = await _contaservice.ObterContaPorId(id);
+                var objetoMapeado = objetoDb.ToGetDTO();
+                return CustomResponse(objetoMapeado);
             }
-            var objetoMapeado = objetoDb.ToContaViewDTO();
-            return CustomResponse(objetoMapeado);
+            catch (ServiceException ex)
+            {
+                AdicionarErroProcessamento(ex.Message);
+                return CustomResponse();
+            }
         }
 
         [HttpPut]
-        public async Task<IActionResult> AtualizarConta(ContaAddDTO objeto)
+        public async Task<IActionResult> AtualizarConta(ContaUpdDTO objeto)
         {
-            Conta objetoMapeado = objeto.ToAddDTO();
-            var result = await _contaservice.AtualizarConta(objetoMapeado);
-            return CustomResponse(result);
+            var validationResult = await _updValidator.ValidateAsync(objeto);
+            if (!validationResult.IsValid) return CustomResponse(validationResult);
+            Conta objetoMapeado = objeto.ToUpdDTO();
+            try
+            {
+                var result = await _contaservice.AtualizarConta(objetoMapeado);
+                return CustomResponse(result);
+            }
+            catch (ServiceException ex)
+            {
+                AdicionarErroProcessamento(ex.Message);
+                return CustomResponse();
+            }
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeltarConta([FromQuery] int id)
+        public async Task<IActionResult> DeletarConta([FromQuery] int id)
         {
             await _contaservice.DeletarConta(id);
             return CustomResponse();

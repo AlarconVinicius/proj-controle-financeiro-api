@@ -9,7 +9,7 @@ namespace ProjOrganizze.Api.Dominio.DTOs.Transacao
         public MetodoPagamento MetodoPagamento { get; set; }
         public string Descricao { get; set; }
         public double Valor { get; set; }
-        public DateTime Data { get; set; }
+        public string Data { get; set; }
         public TipoTransacao TipoTransacao { get; set; }
         public Categoria Categoria { get; set; }
         public bool Repete { get; set; }

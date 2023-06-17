@@ -21,9 +21,11 @@ namespace ProjOrganizze.Api.Validators.Transacao
                 .NotEmpty().WithMessage("O campo Valor é obrigatório.")
                 .GreaterThan(0).WithMessage("O campo Valor deve ser maior que 0.");
 
-            //RuleFor(dto => dto.Data)
-            //    .NotEmpty().WithMessage("O campo Data é obrigatório.")
-            //    .Matches(@"^\d{2}/\d{2}/\d{4}$").WithMessage("O campo Data deve seguir o padrão dd/MM/yyyy.");
+            RuleFor(dto => dto.Data)
+                .NotEmpty()
+                    .WithMessage("A data é obrigatória.")
+                .Matches(@"^\d{2}/\d{2}/\d{4}$")
+                    .WithMessage("O campo Data deve seguir o padrão dd/MM/yyyy.");
 
             RuleFor(dto => dto.TipoTransacao)
                 .NotEmpty().WithMessage("O campo TipoTransacao é obrigatório.");
