@@ -40,7 +40,7 @@ builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 
 builder.Services.AddScoped<IValidator<CartaoAddDTO>, CartaoAddValidator>();
 builder.Services.AddScoped<IValidator<CartaoUpdDTO>, CartaoUpdValidator>();
-builder.Services.AddScoped<IValidator<ContaViewDTO>, ContaValidator>(); 
+builder.Services.AddScoped<IValidator<ContaUpdDTO>, ContaValidator>(); 
 builder.Services.AddScoped<IValidator<ContaAddDTO>, ContaAddValidator>();
 builder.Services.AddScoped<IValidator<TransacaoAddDTO>, TransacaoAddValidator>();
 

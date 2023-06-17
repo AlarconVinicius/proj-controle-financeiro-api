@@ -7,6 +7,8 @@ using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
 using ProjOrganizze.Api.Dominio.Interfaces.Services;
 using ProjOrganizze.Api.Extensions;
 using ProjOrganizze.Api.Mapeamentos;
+using ProjOrganizze.Api.Services;
+using ProjOrganizze.Api.Validators.Conta;
 
 namespace ProjOrganizze.Api.Controllers
 {
@@ -14,29 +16,29 @@ namespace ProjOrganizze.Api.Controllers
     [ApiController]
     public class ContaController : MainController
     {
-        private readonly IContaRepository _contaRepository;
-        private readonly IContaService _service;
-        private readonly IValidator<ContaAddDTO> _Validator;
+        private readonly IContaService _contaservice;
+        private readonly IValidator<ContaAddDTO> _addValidator;
+        private readonly IValidator<ContaUpdDTO> _updValidator;
 
 
-        public ContaController(IContaRepository contaRepository, IContaService service, IValidator<ContaAddDTO> validar)
+        public ContaController(IContaRepository contaRepository, IContaService service, IValidator<ContaAddDTO> addValidator, IValidator<ContaUpdDTO> updValidator)
         {
-            _contaRepository = contaRepository;
-            _service = service;
-            _Validator = validar;
+            _contaservice = service;
+            _addValidator = addValidator;
+            _updValidator = updValidator;
         }
 
         [HttpPost]
         public async Task<IActionResult> AdicionarConta(ContaAddDTO objeto)
         {
 
-            var validationResult = await _Validator.ValidateAsync(objeto);
+            var validationResult = await _addValidator.ValidateAsync(objeto);
 
             if (!validationResult.IsValid) return CustomResponse(validationResult);
 
             Conta objetoMapeado = objeto.ToAddDTO();
 
-            await _service.Adicionar(objetoMapeado);
+            await _contaservice.Adicionar(objetoMapeado);
 
             var objetoMapeadoView = objetoMapeado.ToContaViewDTO();
 
@@ -46,7 +48,7 @@ namespace ProjOrganizze.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> ListarContas()
         {
-            IEnumerable<Conta> objetosDb = await _contaRepository.ListAsync();
+            IEnumerable<Conta> objetosDb = await _contaservice.ListarContas();
             IEnumerable<ContaViewDTO> contasView = objetosDb.Select(x => x.ToContaViewDTO());
             return CustomResponse(contasView);
         }
@@ -54,7 +56,7 @@ namespace ProjOrganizze.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> ContaId([FromRoute] int id)
         {
-            var objetoDb = await _contaRepository.GetEntityByIdAsync(id);
+            var objetoDb = await _contaservice.ContaId(id);
             if(objetoDb == null)
             {
                 AdicionarErroProcessamento("Conta não localizada");
@@ -69,14 +71,14 @@ namespace ProjOrganizze.Api.Controllers
         public async Task<IActionResult> AtualizarConta(ContaAddDTO objeto)
         {
             Conta objetoMapeado = objeto.ToAddDTO();
-            var result = await _service.AtualizarConta(objetoMapeado);
+            var result = await _contaservice.AtualizarConta(objetoMapeado);
             return CustomResponse(result);
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeltarConta([FromQuery] int id)
         {
-            await _contaRepository.DeleteAsync(id);
+            await _contaservice.DeletarConta(id);
             return CustomResponse();
         }
     }

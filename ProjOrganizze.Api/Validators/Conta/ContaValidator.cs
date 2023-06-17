@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using ProjOrganizze.Api.Dominio.DTOs.Cartao;
 using ProjOrganizze.Api.Dominio.DTOs.Conta;
 
 namespace ProjOrganizze.Api.Validators.Conta
 {
-    public class ContaValidator : AbstractValidator<ContaViewDTO>
+    public class ContaValidator : AbstractValidator<ContaUpdDTO>
     {
        
         public ContaValidator()
