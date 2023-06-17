@@ -8,5 +8,7 @@ namespace ProjOrganizze.Api.Dominio.Interfaces.Repositorios
         Task<List<Fatura>> ObterFaturas();
         Task<Fatura> ObterFaturaPorCartaoMesAno(int cartaoId, int mes, int ano);
         Task AdicionarFaturas(Cartao objeto);
+        Task DeletarFatura(int id);
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using ProjOrganizze.Api.Dominio.Entidades.Enums;
+﻿using ProjOrganizze.Api.Dominio.Entidades;
+using ProjOrganizze.Api.Dominio.Entidades.Enums;
+using System.ComponentModel;
 
 namespace ProjOrganizze.Api.Dominio.DTOs.Conta
 {
@@ -7,6 +9,6 @@ namespace ProjOrganizze.Api.Dominio.DTOs.Conta
         public int Id { get; set; }
         public string Nome { get; set; }
         public TipoConta TipoConta { get; set; }
-        public double Saldo { get; set; }
     }
+
 }

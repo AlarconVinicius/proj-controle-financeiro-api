@@ -1,14 +1,12 @@
-﻿using ProjOrganizze.Api.Dominio.DTOs.Cartao;
-using ProjOrganizze.Api.Dominio.DTOs.Fatura;
+﻿using ProjOrganizze.Api.Dominio.DTOs.Fatura;
 using ProjOrganizze.Api.Dominio.DTOs.Transacao;
 using ProjOrganizze.Api.Dominio.Entidades;
-using ProjOrganizze.Api.Extensions;
 
-namespace ProjOrganizze.Api.Mapeamentos
+namespace ProjOrganizze.Api.Extensions
 {
-    public class FaturaMapping
+    public static class FaturaExtension
     {
-        public FaturaViewDTO MapToGetDTO(Fatura objeto)
+        public static FaturaViewDTO ToGetDTO(this Fatura objeto)
         {
             IEnumerable<TransacaoViewDTO> transacoesMapeadas = Enumerable.Empty<TransacaoViewDTO>();
             if (objeto.Transacoes != null)

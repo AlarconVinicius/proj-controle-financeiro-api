@@ -17,6 +17,10 @@ namespace ProjOrganizze.Api.Dominio.Entidades
             TipoConta = tipoConta;
             Saldo = saldo;
         }
+        public Conta(int id, string nome, TipoConta tipoConta, double saldo):this(nome, tipoConta, saldo)
+        {
+            Id = id;
+        }
         public void AdicionarSaldo(double valor)
         {
             Saldo += valor;
