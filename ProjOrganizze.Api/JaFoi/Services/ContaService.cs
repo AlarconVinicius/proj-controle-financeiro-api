@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProjOrganizze.Api.Banco.Repositorios;
-using ProjOrganizze.Api.Dominio.DTOs.Conta;
-using ProjOrganizze.Api.Dominio.Entidades;
+﻿using ProjOrganizze.Api.Dominio.Entidades;
 using ProjOrganizze.Api.Dominio.Interfaces.Repositorios;
 using ProjOrganizze.Api.Dominio.Interfaces.Services;
 using ProjOrganizze.Api.Exceptions;
-using ProjOrganizze.Api.Extensions;
-using System;
 
 namespace ProjOrganizze.Api.Services
 {
