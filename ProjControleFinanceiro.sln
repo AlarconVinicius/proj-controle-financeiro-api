@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjControleFinanceiro.Enti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjControleFinanceiro.Domain", "ProjControleFinanceiro.Domain\ProjControleFinanceiro.Domain.csproj", "{226FE08C-0AB0-4EB8-8703-C256CD3BDA76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Api", "ProjControleFinanceiro.Api\ProjControleFinanceiro.Api.csproj", "{2F0636F5-02E3-4A15-90FE-6383A5E47D03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjControleFinanceiro.Api", "ProjControleFinanceiro.Api\ProjControleFinanceiro.Api.csproj", "{2F0636F5-02E3-4A15-90FE-6383A5E47D03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Api", "1 - Api", "{2A78508E-05A6-432E-BD64-962CB01A2FE6}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Data", "3 - Data", "{DAFF403F-5989-424A-91B3-E64EC5F625E5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Entities", "4 - Entities", "{35DA671F-B8CF-4038-B3B1-497B5D3AECF2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Test", "0 - Test", "{4BC965B7-E18D-458D-8E45-3757C75AAAA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Test", "ProjControleFinanceiro.Test\ProjControleFinanceiro.Test.csproj", "{39847D0A-E1AA-4FAD-B63D-8BC409EC8509}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,10 @@ Global
 		{2F0636F5-02E3-4A15-90FE-6383A5E47D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F0636F5-02E3-4A15-90FE-6383A5E47D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F0636F5-02E3-4A15-90FE-6383A5E47D03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39847D0A-E1AA-4FAD-B63D-8BC409EC8509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39847D0A-E1AA-4FAD-B63D-8BC409EC8509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39847D0A-E1AA-4FAD-B63D-8BC409EC8509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39847D0A-E1AA-4FAD-B63D-8BC409EC8509}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +58,7 @@ Global
 		{6518D084-30A6-4082-A86E-1309A0B28F0D} = {35DA671F-B8CF-4038-B3B1-497B5D3AECF2}
 		{226FE08C-0AB0-4EB8-8703-C256CD3BDA76} = {33898CED-9DFB-4E3A-AE40-04B43BD1AECF}
 		{2F0636F5-02E3-4A15-90FE-6383A5E47D03} = {2A78508E-05A6-432E-BD64-962CB01A2FE6}
+		{39847D0A-E1AA-4FAD-B63D-8BC409EC8509} = {4BC965B7-E18D-458D-8E45-3757C75AAAA4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E19D687A-136A-4192-BFDC-7D9E70C31398}
