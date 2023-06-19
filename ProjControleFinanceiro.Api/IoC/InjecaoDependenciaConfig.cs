@@ -29,6 +29,7 @@ namespace ProjControleFinanceiro.Api.IoC
             services.AddScoped<ITransacaoRepository, TransacaoRepository>();
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
+            services.AddScoped<IMainService, MainService>();
             services.AddScoped<IContaService, ContaService>();
             services.AddScoped<ICartaoService, CartaoService>();
             services.AddScoped<ITransacaoService, TransacaoService>();
