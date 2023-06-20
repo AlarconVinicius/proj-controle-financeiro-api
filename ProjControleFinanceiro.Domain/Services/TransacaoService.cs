@@ -1,4 +1,7 @@
-﻿using ProjControleFinanceiro.Domain.Exceptions;
+﻿using FluentValidation;
+using ProjControleFinanceiro.Domain.DTOs.Transacao;
+using ProjControleFinanceiro.Domain.Exceptions;
+using ProjControleFinanceiro.Domain.Extensions;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 using ProjControleFinanceiro.Entities.Entidades;
@@ -7,58 +10,81 @@ using ProjControleFinanceiro.Entities.Filtros;
 
 namespace ProjControleFinanceiro.Domain.Services
 {
-    public class TransacaoService : ITransacaoService
+    public class TransacaoService : MainService, ITransacaoService
     {
         private readonly ICartaoRepository _cartaoRepository;
         private readonly IContaRepository _contaRepository;
         private readonly IFaturaRepository _faturaRepository;
         private readonly ITransacaoRepository _transacaoRepository;
+        private readonly IValidator<TransacaoAddDTO> _addValidator;
 
-        public TransacaoService(ICartaoRepository cartaoRepository, IContaRepository contaRepository, IFaturaRepository faturaRepository, ITransacaoRepository transacaoRepository)
+        public TransacaoService(ICartaoRepository cartaoRepository, IContaRepository contaRepository, IFaturaRepository faturaRepository, ITransacaoRepository transacaoRepository, IValidator<TransacaoAddDTO> addValidator)
         {
             _cartaoRepository = cartaoRepository;
             _contaRepository = contaRepository;
             _faturaRepository = faturaRepository;
             _transacaoRepository = transacaoRepository;
+            _addValidator = addValidator;
         }
-        public async Task<Transacao> AdicionarTransacao(Transacao objeto)
+        public async Task<TransacaoViewDTO> AdicionarTransacao(TransacaoAddDTO objeto)
         {
-            Conta conta = await _contaRepository.GetEntityByIdAsync(objeto.ContaId);
+            var validationResult = await _addValidator.ValidateAsync(objeto);
+            if (!validationResult.IsValid)
+            {
+                AdicionarErroProcessamento(validationResult);
+                return null;
+            }
+            Transacao objetoMapeado;
+            TransacaoViewDTO objetoMapeadoView;
+            if (objeto.CartaoId > 0 || objeto.CartaoId != 0)
+            {
+                objetoMapeado = objeto.ToAddDTO();
+            }
+            else
+            {
+                objetoMapeado = objeto.ToAddDTO2();
+            }
+            Conta conta = await _contaRepository.GetEntityByIdAsync(objetoMapeado.ContaId);
             if (conta == null)
             {
-                throw new ServiceException("Conta inválida.");
+                AdicionarErroProcessamento("Conta inválida.");
+                return null;
             }
-            if (objeto.MetodoPagamento.Equals(MetodoPagamento.CartaoCredito))
+            if (objetoMapeado.MetodoPagamento.Equals(MetodoPagamento.CartaoCredito))
             {
-                Cartao cartao = await _cartaoRepository.GetEntityByIdAsync(objeto.CartaoId ?? 0);
+                Cartao cartao = await _cartaoRepository.GetEntityByIdAsync(objetoMapeado.CartaoId ?? 0);
                 if (cartao == null)
                 {
-                    throw new ServiceException("Cartão inválido.");
+                    AdicionarErroProcessamento("Cartão inválido.");
+                    return null;
                 }
-                Fatura fatura = await _faturaRepository.ObterFaturaPorCartaoMesAno(objeto.CartaoId ?? 0, objeto.Data.Month, objeto.Data.Year);
+                Fatura fatura = await _faturaRepository.ObterFaturaPorCartaoMesAno(objetoMapeado.CartaoId ?? 0, objetoMapeado.Data.Month, objetoMapeado.Data.Year);
                 if (fatura == null)
                 {
-                    throw new ServiceException("Fatura não encontrada.");
+                    AdicionarErroProcessamento("Fatura não encontrada.");
+                    return null;
                 }
-                objeto.FaturaId = fatura.Id;
-                fatura.AdicionarTransacao(objeto);
+                objetoMapeado.FaturaId = fatura.Id;
+                fatura.AdicionarTransacao(objetoMapeado);
 
                 cartao.SubtrairSaldo(objeto.Valor);
                 objeto.Pago = false;
                 // Talvez parar de salvar a transação aqui e deixar somente na fatura
-                await _transacaoRepository.AddAsync(objeto);
-                return objeto;
+                await _transacaoRepository.AddAsync(objetoMapeado);
+                objetoMapeadoView = objetoMapeado.ToGetDTO();
+                return objetoMapeadoView;
             }
-            if (objeto.CartaoId.HasValue && objeto.CartaoId > 0)
+            if (objetoMapeado.CartaoId.HasValue && objetoMapeado.CartaoId > 0)
             {
-                throw new ServiceException("CartaoId não deve ser passado nesse tipo de MetodoPagamento.");
+                AdicionarErroProcessamento("CartaoId não deve ser passado nesse tipo de MetodoPagamento.");
+                return null;
             }
 
-            if (objeto.TipoTransacao == TipoTransacao.Receita)
+            if (objetoMapeado.TipoTransacao == TipoTransacao.Receita)
             {
-                conta.AdicionarSaldo(objeto.Valor);
+                conta.AdicionarSaldo(objetoMapeado.Valor);
             }
-            else if (objeto.TipoTransacao == TipoTransacao.Despesa)
+            else if (objetoMapeado.TipoTransacao == TipoTransacao.Despesa)
             {
                 //if (objeto.Valor > conta.Saldo)
                 //{
@@ -68,26 +94,31 @@ namespace ProjControleFinanceiro.Domain.Services
             }
             else
             {
-                throw new ServiceException("Tipo de Transação inválido.");
+                AdicionarErroProcessamento("Tipo de Transação inválido.");
+                return null;
             }
 
-            await _transacaoRepository.AddAsync(objeto);
-            return objeto;
+            await _transacaoRepository.AddAsync(objetoMapeado);
+            objetoMapeadoView = objetoMapeado.ToGetDTO();
+            return objetoMapeadoView;
         }
 
-        public async Task<Transacao> ObterTransacaoPorId(int id)
+        public async Task<TransacaoViewDTO> ObterTransacaoPorId(int id)
         {
             var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
             if (transacao == null)
             {
-                throw new ServiceException("Transação inválida.");
+                AdicionarErroProcessamento("Transação não encontrada.");
+                return null;
             }
-            return transacao;
+            TransacaoViewDTO objetoMapeadoView = transacao.ToGetDTO();
+            return objetoMapeadoView;
         }
 
-        public async Task<List<Transacao>> ObterTransacoes(TransacaoFiltro filtro)
+        public async Task<IEnumerable<TransacaoViewDTO>> ObterTransacoes(TransacaoFiltro filtro)
         {
-            return await _transacaoRepository.ObterTransacoes(filtro);
+            IEnumerable<Transacao> objetosDb = await _transacaoRepository.ObterTransacoes(filtro);
+            return objetosDb.Select(x => x.ToGetDTO());
         }
     }
 }

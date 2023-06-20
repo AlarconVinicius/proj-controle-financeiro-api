@@ -1,12 +1,13 @@
-﻿using ProjControleFinanceiro.Entities.Entidades;
+﻿using ProjControleFinanceiro.Domain.DTOs.Transacao;
+using ProjControleFinanceiro.Entities.Entidades;
 using ProjControleFinanceiro.Entities.Filtros;
 
 namespace ProjControleFinanceiro.Domain.Interfaces.Services
 {
-    public interface ITransacaoService
+    public interface ITransacaoService : IMainService
     {
-        public Task<Transacao> AdicionarTransacao(Transacao objeto);
-        public Task<List<Transacao>> ObterTransacoes(TransacaoFiltro filtro);
-        public Task<Transacao> ObterTransacaoPorId(int id);
+        public Task<TransacaoViewDTO> AdicionarTransacao(TransacaoAddDTO objeto);
+        public Task<IEnumerable<TransacaoViewDTO>> ObterTransacoes(TransacaoFiltro filtro);
+        public Task<TransacaoViewDTO> ObterTransacaoPorId(int id);
     }
 }
