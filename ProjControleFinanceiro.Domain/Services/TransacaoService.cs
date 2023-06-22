@@ -51,55 +51,12 @@ namespace ProjControleFinanceiro.Domain.Services
             }
             if (objetoMapeado.MetodoPagamento.Equals(MetodoPagamento.CartaoCredito))
             {
-                Cartao cartao = await _cartaoRepository.GetEntityByIdAsync(objetoMapeado.CartaoId ?? 0);
-                if (cartao == null)
-                {
-                    AdicionarErroProcessamento("Cartão inválido.");
-                    return null;
-                }
-                Fatura fatura = await _faturaRepository.ObterFaturaPorCartaoMesAno(objetoMapeado.CartaoId ?? 0, objetoMapeado.Data.Month, objetoMapeado.Data.Year);
-                if (fatura == null)
-                {
-                    AdicionarErroProcessamento("Fatura não encontrada.");
-                    return null;
-                }
-                objetoMapeado.FaturaId = fatura.Id;
-                fatura.AdicionarTransacao(objetoMapeado);
-
-                cartao.SubtrairSaldo(objeto.Valor);
-                objeto.Pago = false;
-                // Talvez parar de salvar a transação aqui e deixar somente na fatura
-                await _transacaoRepository.AddAsync(objetoMapeado);
-                objetoMapeadoView = objetoMapeado.ToGetDTO();
-                return objetoMapeadoView;
-            }
-            if (objetoMapeado.CartaoId.HasValue && objetoMapeado.CartaoId > 0)
-            {
-                AdicionarErroProcessamento("CartaoId não deve ser passado nesse tipo de MetodoPagamento.");
-                return null;
-            }
-
-            if (objetoMapeado.TipoTransacao == TipoTransacao.Receita)
-            {
-                conta.AdicionarSaldo(objetoMapeado.Valor);
-            }
-            else if (objetoMapeado.TipoTransacao == TipoTransacao.Despesa)
-            {
-                //if (objeto.Valor > conta.Saldo)
-                //{
-                //    throw new ServiceException("Saldo insuficiente na conta.");
-                //}
-                conta.SubtrairSaldo(objeto.Valor);
+                return await AdicionarTransacaoCartaoCredito(objetoMapeado);
             }
             else
             {
-                AdicionarErroProcessamento("Tipo de Transação inválido.");
-                return null;
+                return await AdicionarTransacaoOutrosMetodosPagamento(objetoMapeado, conta);
             }
-
-            await _transacaoRepository.AddAsync(objetoMapeado);
-            objetoMapeadoView = objetoMapeado.ToGetDTO();
-            return objetoMapeadoView;
         }
 
         public async Task<TransacaoViewDTO> ObterTransacaoPorId(int id)
@@ -118,6 +75,52 @@ namespace ProjControleFinanceiro.Domain.Services
         {
             IEnumerable<Transacao> objetosDb = await _transacaoRepository.ObterTransacoes(filtro);
             return objetosDb.Select(x => x.ToGetDTO());
+        }
+
+        //-----------------------------------------------------------------------------------------------------------------//
+        private async Task<TransacaoViewDTO> AdicionarTransacaoCartaoCredito(Transacao objetoMapeado)
+        {
+            Cartao cartao = await _cartaoRepository.GetEntityByIdAsync(objetoMapeado.CartaoId ?? 0);
+            Fatura fatura = await _faturaRepository.ObterFaturaPorCartaoMesAno(objetoMapeado.CartaoId ?? 0, objetoMapeado.Data.Month, objetoMapeado.Data.Year);
+
+            if (cartao == null || fatura == null)
+            {
+                AdicionarErroProcessamento(cartao == null ? "Cartão inválido." : "Fatura não encontrada.");
+                return null;
+            }
+
+            objetoMapeado.FaturaId = fatura.Id;
+            fatura.AdicionarTransacao(objetoMapeado);
+
+            cartao.SubtrairSaldo(objetoMapeado.Valor);
+            objetoMapeado.Pago = false;
+            await _transacaoRepository.AddAsync(objetoMapeado);
+            return objetoMapeado.ToGetDTO();
+        }
+        private async Task<TransacaoViewDTO> AdicionarTransacaoOutrosMetodosPagamento(Transacao objetoMapeado, Conta conta)
+        {
+            if (objetoMapeado.CartaoId.HasValue && objetoMapeado.CartaoId > 0)
+            {
+                AdicionarErroProcessamento("CartaoId não deve ser passado nesse tipo de MetodoPagamento.");
+                return null;
+            }
+
+            if (objetoMapeado.TipoTransacao == TipoTransacao.Receita)
+            {
+                conta.AdicionarSaldo(objetoMapeado.Valor);
+            }
+            else if (objetoMapeado.TipoTransacao == TipoTransacao.Despesa)
+            {
+                conta.SubtrairSaldo(objetoMapeado.Valor);
+            }
+            else
+            {
+                AdicionarErroProcessamento("Tipo de Transação inválido.");
+                return null;
+            }
+
+            await _transacaoRepository.AddAsync(objetoMapeado);
+            return objetoMapeado.ToGetDTO();
         }
     }
 }
