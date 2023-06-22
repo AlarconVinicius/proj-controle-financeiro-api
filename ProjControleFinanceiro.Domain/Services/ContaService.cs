@@ -1,74 +1,114 @@
-﻿using ProjControleFinanceiro.Domain.Exceptions;
+﻿using FluentValidation;
+using ProjControleFinanceiro.Domain.DTOs.Conta;
+using ProjControleFinanceiro.Domain.Extensions;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 using ProjControleFinanceiro.Entities.Entidades;
 
 namespace ProjControleFinanceiro.Domain.Services
 {
-    public class ContaService : IContaService
+    public class ContaService : MainService, IContaService
     {
         private readonly IContaRepository _contaRepository;
+        private readonly IValidator<ContaAddDTO> _addValidator;
+        private readonly IValidator<ContaUpdDTO> _updValidator;
 
-        public ContaService(IContaRepository contaRepository)
+        public ContaService(IContaRepository contaRepository, IValidator<ContaAddDTO> addValidator, IValidator<ContaUpdDTO> updValidator)
         {
             _contaRepository = contaRepository;
+            _addValidator = addValidator;
+            _updValidator = updValidator;
         }
 
 
-        public async Task AdicionarConta(Conta conta)
+        public async Task<ContaViewDTO> AdicionarConta(ContaAddDTO objeto)
         {
-            await NomeExiste(conta.Nome);
-            await _contaRepository.AddAsync(conta);
-        }
-
-        public async Task<Conta> AtualizarConta(Conta conta)
-        {
-            await ContaExiste(conta.Id);
-            var objetoDb = await _contaRepository.GetEntityByIdAsync(conta.Id);
-            if (objetoDb.Nome != conta.Nome)
+            var validationResult = await _addValidator.ValidateAsync(objeto);
+            if (!validationResult.IsValid)
             {
-                await NomeExiste(conta.Nome);
+                AdicionarErroProcessamento(validationResult);
+                return null;
             }
-            objetoDb.Nome = conta.Nome;
-            objetoDb.TipoConta = conta.TipoConta;
+            Conta objetoMapeado = objeto.ToAddDTO();
+            if (await NomeExiste(objetoMapeado.Nome))
+            {
+                return null;
+            }
+            await _contaRepository.AddAsync(objetoMapeado);
+            var objetoMapeadoView = objetoMapeado.ToGetDTO();
+            return objetoMapeadoView;
+        }
 
+        public async Task<ContaViewDTO> AtualizarConta(ContaUpdDTO objeto)
+        {
+            var validationResult = await _updValidator.ValidateAsync(objeto);
+            if (!validationResult.IsValid)
+            {
+                AdicionarErroProcessamento(validationResult);
+                return null;
+            }
+            if (!await ContaExiste(objeto.Id))
+            {
+                return null;
+            };
+            var objetoDb = await _contaRepository.GetEntityByIdAsync(objeto.Id);
+            if (objetoDb.Nome != objeto.Nome)
+            {
+                if (await NomeExiste(objeto.Nome))
+                {
+                    return null;
+                }
+            }
+            objetoDb.Nome = objeto.Nome;
+            objetoDb.TipoConta = objeto.TipoConta;
             await _contaRepository.UpdateAsync(objetoDb);
 
-            return objetoDb;
+            return objetoDb.ToGetDTO();
         }
 
         public async Task DeletarConta(int id)
         {
-            await ContaExiste(id);
+            if (!await ContaExiste(id))
+            {
+                return;
+            };
             await _contaRepository.DeleteAsync(id);
         }
 
-        public async Task<Conta> ObterContaPorId(int id)
+        public async Task<ContaViewDTO> ObterContaPorId(int id)
         {
-            await ContaExiste(id);
-            return  await _contaRepository.GetEntityByIdAsync(id);
+            if(!await ContaExiste(id))
+            {
+                return null;
+            };
+            var objetoDb = await _contaRepository.GetEntityByIdAsync(id);
+            return objetoDb.ToGetDTO();
         }
 
-        public async Task<IEnumerable<Conta>> ObterContas()
+        public async Task<IEnumerable<ContaViewDTO>> ObterContas()
         {
-            IEnumerable<Conta> contas = await _contaRepository.ListAsync();
-            return contas;
+            IEnumerable<Conta> objetosDb = await _contaRepository.ListAsync();;
+            return objetosDb.Select(x => x.ToGetDTO());
         }
-        private async Task ContaExiste(int id)
+        private async Task<bool> ContaExiste(int id)
         {
             var objetoDb = await _contaRepository.GetEntityByIdAsync(id);
             if (objetoDb == null)
             {
-                throw new ServiceException("Conta não encontrada.");
+                AdicionarErroProcessamento("Conta não encontrada.");
+                return false;
             }
+            return true;
         }
-        private async Task NomeExiste(string nome)
+        private async Task<bool> NomeExiste(string nome)
         {
-            var cartoesDb = await _contaRepository.ListAsync();
-            if (cartoesDb.Any(p => p.Nome == nome))
+            var objetosDb = await _contaRepository.ListAsync();
+            if (objetosDb.Any(p => p.Nome == nome))
             {
-                throw new ServiceException("Não é possível adicionar mais de uma conta com o mesmo nome.");
+                AdicionarErroProcessamento("Não é possível adicionar mais de uma conta com o mesmo nome.");
+                return true;
             }
+            return false;
         }
     }
 }
