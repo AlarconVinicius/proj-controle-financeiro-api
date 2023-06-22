@@ -1,10 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
-using ProjControleFinanceiro.Domain.Exceptions;
-using ProjControleFinanceiro.Domain.Extensions;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
-using ProjControleFinanceiro.Entities.Entidades;
 using ProjControleFinanceiro.Entities.Filtros;
 
 namespace ProjControleFinanceiro.Api.Controllers
@@ -14,10 +10,8 @@ namespace ProjControleFinanceiro.Api.Controllers
     public class TransacaoController : MainController
     {
         private readonly ITransacaoService _transacaoService;
-        private readonly IValidator<TransacaoAddDTO> _addValidator;
-        public TransacaoController(IValidator<TransacaoAddDTO> addValidator, ITransacaoService transacaoService)
+        public TransacaoController(ITransacaoService transacaoService)
         {
-            _addValidator = addValidator;
             _transacaoService = transacaoService;
         }
 

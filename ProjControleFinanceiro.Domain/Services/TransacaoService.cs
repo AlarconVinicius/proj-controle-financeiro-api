@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
-using ProjControleFinanceiro.Domain.Exceptions;
 using ProjControleFinanceiro.Domain.Extensions;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
