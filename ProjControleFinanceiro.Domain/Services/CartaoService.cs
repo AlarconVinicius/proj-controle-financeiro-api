@@ -52,7 +52,7 @@ namespace ProjControleFinanceiro.Domain.Services
 
         public async Task<CartaoViewDTO> AtualizarCartao(CartaoUpdDTO objeto)
         {
-            if (await CartaoExiste(objeto.Id))
+            if (!await CartaoExiste(objeto.Id))
             {
                 return null;
             }
@@ -79,7 +79,7 @@ namespace ProjControleFinanceiro.Domain.Services
 
         public async Task DeletarCartao(int id)
         {
-            if (await CartaoExiste(id))
+            if (!await CartaoExiste(id))
             {
                 return;
             }
@@ -88,7 +88,7 @@ namespace ProjControleFinanceiro.Domain.Services
 
         public async Task<CartaoViewDTO> ObterCartaoPorId(int id)
         {
-            if (await CartaoExiste(id))
+            if (!await CartaoExiste(id))
             {
                 return null;
             }
@@ -108,9 +108,9 @@ namespace ProjControleFinanceiro.Domain.Services
             if (objetoDb == null)
             {
                 AdicionarErroProcessamento("Cartão não encontrado.");
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
         private async Task<bool> NomeExiste(string nome)
         {
