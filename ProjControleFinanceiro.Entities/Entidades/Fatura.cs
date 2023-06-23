@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using ProjControleFinanceiro.Entities.Entidades.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProjControleFinanceiro.Entities.Entidades
 {
@@ -13,6 +14,7 @@ namespace ProjControleFinanceiro.Entities.Entidades
         public int Ano { get; set; }
         public DateTime DataVencimento { get; set; }
         public DateTime DataFechamento { get; set; }
+        public StatusPagamento StatusPagamento { get; set; }
         public List<Transacao> Transacoes { get; private set; }
 
         public Cartao? Cartao { get; set; }
@@ -21,7 +23,7 @@ namespace ProjControleFinanceiro.Entities.Entidades
         {
             Transacoes = new List<Transacao>();
         }
-        public Fatura(int id, int cartaoId, string nome, int mes, int ano, DateTime dataVencimento, DateTime dataFechamento, List<Transacao> transacoes)
+        public Fatura(int id, int cartaoId, string nome, int mes, int ano, DateTime dataVencimento, DateTime dataFechamento, List<Transacao> transacoes, StatusPagamento statusPagamento = StatusPagamento.Pendente)
         {
             Id = id;
             CartaoId = cartaoId;
@@ -31,6 +33,7 @@ namespace ProjControleFinanceiro.Entities.Entidades
             DataVencimento = dataVencimento;
             DataFechamento = dataFechamento;
             Transacoes = transacoes;
+            StatusPagamento = statusPagamento;
         }
         public void AdicionarTransacao(Transacao transacao)
         {
