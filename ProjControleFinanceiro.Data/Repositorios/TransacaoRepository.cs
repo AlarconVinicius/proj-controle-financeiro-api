@@ -12,25 +12,13 @@ namespace ProjControleFinanceiro.Data.Repositorios
         {
         }
 
-        public async Task<List<Transacao>> ObterTransacoes(TransacaoFiltro filtro)
+        public async Task<List<Transacao>> ObterTransacoes()
         {
-            IQueryable<Transacao> query = _context.Transacoes.Include(t => t.Cartao).Include(t => t.Conta).Include(t => t.Fatura).Where(t => t.CartaoId == null || t.CartaoId == 0);
-
-            if (filtro.Pago && !filtro.NaoPago)
-            {
-                query = query.Where(t => t.Pago);
-            }
-            else if (!filtro.Pago && filtro.NaoPago)
-            {
-                query = query.Where(t => !t.Pago);
-            }
-
-            return await query.ToListAsync();
+            return await _context.Transacoes.ToListAsync();
         }
         public async Task<Transacao> ObterTransacaoPorId(int id)
         {
-            Transacao objeto = await _context.Transacoes.Include(t => t.Cartao).Include(t => t.Conta).Include(t => t.Fatura).FirstOrDefaultAsync(t => t.Id == id);
-            return objeto;
+            return await _context.Transacoes.FirstOrDefaultAsync(t => t.Id == id);
         }
     }
 }
