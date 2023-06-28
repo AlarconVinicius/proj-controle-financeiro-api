@@ -33,7 +33,6 @@ namespace ProjControleFinanceiro.Data.Repositorios
 
         public async Task<List<T>> ListAsync()
         {
-            //return _context.Set<T>().AsNoTracking().AsQueryable();
             return await _context.Set<T>().AsNoTracking().ToListAsync();
         }
 

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
-using ProjControleFinanceiro.Entities.Entidades.Enums;
 
 namespace ProjControleFinanceiro.Domain.Validators.Transacao
 {
@@ -8,8 +7,6 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao
     {
         public TransacaoAddValidator()
         {
-            RuleFor(dto => dto.ContaId)
-                .NotEmpty().WithMessage("O campo ContaId é obrigatório.");
 
             RuleFor(dto => dto.MetodoPagamento)
                 .NotEmpty().WithMessage("O campo MetodoPagamento é obrigatório.");
@@ -32,24 +29,6 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao
 
             RuleFor(dto => dto.Categoria)
                 .NotEmpty().WithMessage("O campo Categoria é obrigatório.");
-
-            When(dto => dto.MetodoPagamento == MetodoPagamento.CartaoCredito, () =>
-            {
-                RuleFor(dto => dto.CartaoId)
-                    .NotEmpty().WithMessage("O campo CartaoId é obrigatório.");
-            }).Otherwise(() =>
-            {
-                RuleFor(dto => dto.CartaoId)
-                    .NotNull().WithMessage("O campo CartaoId não pode ser passado.")
-                    .Empty().WithMessage("O campo CartaoId não pode ser passado.");
-            });
-
-            When(dto => dto.Repete, () =>
-            {
-                RuleFor(dto => dto.QtdRepeticao)
-                    .NotEmpty().WithMessage("O campo QtdRepeticao é obrigatório.")
-                    .GreaterThan(0).WithMessage("O campo QtdRepeticao deve ser maior que 0.");
-            });
         }
     }
 }
