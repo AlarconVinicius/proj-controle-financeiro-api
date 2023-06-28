@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjControleFinanceiro.Data.Configuracao;
-using ProjControleFinanceiro.Entities.Entidades;
-using ProjControleFinanceiro.Entities.Filtros;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
+using ProjControleFinanceiro.Entities.Entidades;
 
 namespace ProjControleFinanceiro.Data.Repositorios
 {
