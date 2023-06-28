@@ -1,84 +1,126 @@
-﻿using ProjControleFinanceiro.Entities.Entidades;
+﻿using FluentValidation;
+using ProjControleFinanceiro.Domain.DTOs.Cartao;
+using ProjControleFinanceiro.Domain.Extensions;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
-using ProjControleFinanceiro.Domain.Exceptions;
+using ProjControleFinanceiro.Entities.Entidades;
 
 namespace ProjControleFinanceiro.Domain.Services
 {
-    public class CartaoService : ICartaoService
+    public class CartaoService : MainService, ICartaoService
     {
         private readonly ICartaoRepository _cartaoRepository;
         private readonly IContaRepository _contaRepository;
         private readonly IFaturaRepository _faturaRepository;
-        public CartaoService(ICartaoRepository cartaoRepository, IContaRepository contaRepository, IFaturaRepository faturaRepository)
+        private readonly IValidator<CartaoAddDTO> _addValidator;
+        private readonly IValidator<CartaoUpdDTO> _updValidator;
+        public CartaoService(ICartaoRepository cartaoRepository, IContaRepository contaRepository, IFaturaRepository faturaRepository, IValidator<CartaoAddDTO> addValidator, IValidator<CartaoUpdDTO> updValidator)
         {
             _cartaoRepository = cartaoRepository;
             _contaRepository = contaRepository;
             _faturaRepository = faturaRepository;
+            _addValidator = addValidator;
+            _updValidator = updValidator;
         }
 
-        public async Task AdicionarCartao(Cartao objeto)
+        public async Task<CartaoViewDTO> AdicionarCartao(CartaoAddDTO objeto)
         {
-            var contaExiste = await _contaRepository.GetEntityByIdAsync(objeto.ContaId);
+            var validationResult = await _addValidator.ValidateAsync(objeto);
+            if (!validationResult.IsValid)
+            {
+                AdicionarErroProcessamento(validationResult);
+                return null;
+            }
+            Cartao objetoMapeado = objeto.ToAddDTO();
+            var contaExiste = await _contaRepository.GetEntityByIdAsync(objetoMapeado.ContaId);
             var cartoesDb = await _cartaoRepository.ObterCartoes();
             if (contaExiste == null)
             {
-                throw new ServiceException("Conta inválida");
+                AdicionarErroProcessamento("Conta inválida.");
+                return null;
             }
-            await NomeExiste(objeto.Nome);
-            await _cartaoRepository.AddAsync(objeto);
-            await _faturaRepository.AdicionarFaturas(objeto);
-            // Adicionar await _unitOfWorkRepository.Commit();
+            if (await NomeExiste(objeto.Nome))
+            {
+                return null;
+            }
+            await _cartaoRepository.AddAsync(objetoMapeado);
+            await _faturaRepository.AdicionarFaturas(objetoMapeado);
+            //// Adicionar await _unitOfWorkRepository.Commit();
+            var objetoMapeadoView = objetoMapeado.ToGetDTO();
+            return objetoMapeadoView;
         }
 
-        public async Task<Cartao> AtualizarCartao(Cartao objeto)
+        public async Task<CartaoViewDTO> AtualizarCartao(CartaoUpdDTO objeto)
         {
-            await CartaoExiste(objeto.Id);
+            if (!await CartaoExiste(objeto.Id))
+            {
+                return null;
+            }
+            var validationResult = await _updValidator.ValidateAsync(objeto);
+            if (!validationResult.IsValid)
+            {
+                AdicionarErroProcessamento(validationResult);
+                return null;
+            }
             var objetoDb = await _cartaoRepository.GetEntityByIdAsync(objeto.Id);
             if (objetoDb.Nome != objeto.Nome)
             {
-                await NomeExiste(objeto.Nome);
+                if (await NomeExiste(objeto.Nome))
+                {
+                    return null;
+                }
             }
-
             objetoDb.Nome = objeto.Nome;
             objetoDb.Limite = objeto.Limite;
-            objetoDb.DiaVencimento = objeto.DiaVencimento;
+            objetoDb.DiaVencimento = objeto.VencimentoDia;
             await _cartaoRepository.UpdateAsync(objetoDb);
-            return objetoDb;
+            return objetoDb.ToGetDTO();
         }
 
         public async Task DeletarCartao(int id)
         {
-            await CartaoExiste(id);
+            if (!await CartaoExiste(id))
+            {
+                return;
+            }
             await _cartaoRepository.DeletarCartao(id);
         }
 
-        public async Task<Cartao> ObterCartaoPorId(int id)
+        public async Task<CartaoViewDTO> ObterCartaoPorId(int id)
         {
-            await CartaoExiste(id);
-            return await _cartaoRepository.ObterCartaoPorId(id);
+            if (!await CartaoExiste(id))
+            {
+                return null;
+            }
+            var objetoDb = await _cartaoRepository.ObterCartaoPorId(id);
+            return objetoDb.ToGetDetailsDTO();
         }
 
-        public async Task<IEnumerable<Cartao>> ObterCartoes()
+        public async Task<IEnumerable<CartaoViewDTO>> ObterCartoes()
         {
-            return await _cartaoRepository.ObterCartoes();
+            IEnumerable<Cartao> objetosDb = await _cartaoRepository.ObterCartoes();
+            return objetosDb.Select(x => x.ToGetDTO());
         }
 
-        private async Task CartaoExiste(int id)
+        private async Task<bool> CartaoExiste(int id)
         {
             var objetoDb = await _cartaoRepository.GetEntityByIdAsync(id);
             if (objetoDb == null)
             {
-                throw new ServiceException("Cartão não encontrado.");
+                AdicionarErroProcessamento("Cartão não encontrado.");
+                return false;
             }
+            return true;
         }
-        private async Task NomeExiste(string nome)
+        private async Task<bool> NomeExiste(string nome)
         {
             var cartoesDb = await _cartaoRepository.ObterCartoes();
             if (cartoesDb.Any(p => p.Nome == nome))
             {
-                throw new ServiceException("Não é possível adicionar mais de um cartão com o mesmo nome.");
+                AdicionarErroProcessamento("Não é possível adicionar mais de um cartão com o mesmo nome.");
+                return true;
             }
+            return false;
         }
     }
 }

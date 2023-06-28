@@ -1,16 +1,16 @@
-﻿using ProjControleFinanceiro.Entities.Entidades;
+﻿using ProjControleFinanceiro.Domain.DTOs.Conta;
 
 namespace ProjControleFinanceiro.Domain.Interfaces.Services
 {
-    public interface IContaService
+    public interface IContaService : IMainService
     {
-        public Task AdicionarConta(Conta conta);
+        public Task<ContaViewDTO> AdicionarConta(ContaAddDTO conta);
 
-        public Task<Conta> AtualizarConta(Conta conta);
+        public Task<ContaViewDTO> AtualizarConta(ContaUpdDTO conta);
 
-        public Task<IEnumerable<Conta>> ObterContas();
+        public Task<IEnumerable<ContaViewDTO>> ObterContas();
 
-        public Task<Conta> ObterContaPorId(int id);
+        public Task<ContaViewDTO> ObterContaPorId(int id);
 
         public Task DeletarConta(int id);
     }

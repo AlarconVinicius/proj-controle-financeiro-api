@@ -1,14 +1,14 @@
-﻿using ProjControleFinanceiro.Entities.Entidades;
+﻿using ProjControleFinanceiro.Domain.DTOs.Cartao;
 
 namespace ProjControleFinanceiro.Domain.Interfaces.Services
 {
-    public interface ICartaoService
+    public interface ICartaoService : IMainService
     {
-        public Task AdicionarCartao(Cartao objeto);
+        public Task<CartaoViewDTO> AdicionarCartao(CartaoAddDTO objeto);
 
-        public Task<Cartao> ObterCartaoPorId(int id);
-        public Task<IEnumerable<Cartao>> ObterCartoes();
-        public Task<Cartao> AtualizarCartao(Cartao objeto);
+        public Task<CartaoViewDTO> ObterCartaoPorId(int id);
+        public Task<IEnumerable<CartaoViewDTO>> ObterCartoes();
+        public Task<CartaoViewDTO> AtualizarCartao(CartaoUpdDTO objeto);
         public Task DeletarCartao(int id);
     }
 }

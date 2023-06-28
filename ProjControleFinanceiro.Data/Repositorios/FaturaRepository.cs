@@ -4,6 +4,8 @@ using ProjControleFinanceiro.Entities.Entidades;
 using ProjControleFinanceiro.Entities.Filtros;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using System.Globalization;
+using ProjControleFinanceiro.Entities.Entidades.Enums;
+using System.Collections.Immutable;
 
 namespace ProjControleFinanceiro.Data.Repositorios
 {
@@ -47,11 +49,10 @@ namespace ProjControleFinanceiro.Data.Repositorios
         }
 
 
-        public async Task<List<Fatura>> ObterFaturas()
+        public async Task<List<Fatura>> ObterFaturas(int cartaoId)
         {
             return await _context.Faturas
-                .Include(f => f.Cartao)
-                .Include(f => f.Transacoes).ThenInclude(f => f.Conta)
+                .Where(f => f.CartaoId == cartaoId)
                 .ToListAsync();
         }
 
@@ -63,6 +64,19 @@ namespace ProjControleFinanceiro.Data.Repositorios
                 return fatura;
             }
             throw new ArgumentNullException("Informe os parâmetros corretamente.");
+        }
+        public async Task<Fatura> ObterFaturaPorCartaoEId(int cartaoId, int faturaId)
+        {
+            return await _context.Faturas.Include(f => f.Cartao).Include(f => f.Transacoes).ThenInclude(f => f.Conta).Where(f => f.Id == faturaId).Where(f => f.CartaoId == cartaoId).FirstAsync();
+        }
+        public async Task<Fatura> ObterFaturaPorId(int faturaId, int cartaoId = 0)
+        {
+            var query = _context.Faturas.Include(f => f.Cartao).Include(f => f.Transacoes).ThenInclude(f => f.Conta).Where(f => f.Id == faturaId).AsQueryable();
+            if (cartaoId != 0)
+            {
+                query = query.Where(f => f.CartaoId == cartaoId);
+            }
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task DeletarFatura(int id)
@@ -76,6 +90,31 @@ namespace ProjControleFinanceiro.Data.Repositorios
             }
 
             _context.Faturas.Remove(fatura);
+        }
+        public async Task<bool> PagarFatura(int cartaoId, int faturaId)
+        {
+            Fatura faturaDb = await ObterFaturaPorId(faturaId, cartaoId);
+            if(!faturaDb.Transacoes.Any())
+            {
+                return false;
+            }
+            int contaId = faturaDb.Cartao.ContaId;
+            MetodoPagamento metodoPagamento = MetodoPagamento.Debito;
+            string descricao = "Fatura '" + faturaDb.Nome + "' paga.";
+            double valor = 0;
+            DateTime data = DateTime.Now;
+            TipoTransacao tipoTransacao = TipoTransacao.Despesa;
+            Categoria categoria = Categoria.CartaoDeCredito;
+            foreach (var transacao in faturaDb.Transacoes)
+            {
+                transacao.Pago = true;
+                valor += transacao.Valor;
+            }
+            faturaDb.StatusPagamento = StatusPagamento.Pago;
+            Transacao faturaPaga = new Transacao(contaId, metodoPagamento, descricao, valor, data, tipoTransacao, categoria, false, 0, true);
+            await _context.Transacoes.AddAsync(faturaPaga);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

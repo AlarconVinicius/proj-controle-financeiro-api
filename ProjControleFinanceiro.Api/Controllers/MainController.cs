@@ -50,6 +50,16 @@ namespace ProjControleFinanceiro.Api.Controllers
             return CustomResponse();
         }
 
+        protected ActionResult CustomResponse(ICollection<string> mensagens)
+        {
+            foreach (var erro in mensagens)
+            {
+                AdicionarErroProcessamento(erro);
+            }
+
+            return CustomResponse();
+        }
+
         protected bool OperacaoValida()
         {
             return !Erros.Any();
