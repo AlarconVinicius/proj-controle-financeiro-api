@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
-using ProjControleFinanceiro.Entities.Filtros;
 
 namespace ProjControleFinanceiro.Api.Controllers
 {
@@ -30,9 +29,9 @@ namespace ProjControleFinanceiro.Api.Controllers
             return CustomResponse(objetoMapeado);
         }
         [HttpGet]
-        public async Task<IActionResult> ObterTransacoes([FromQuery] TransacaoFiltro filtro)
+        public async Task<IActionResult> ObterTransacoes()
         {            
-            return CustomResponse(await _transacaoService.ObterTransacoes(filtro));
+            return CustomResponse(await _transacaoService.ObterTransacoes());
         }
     }
 }
