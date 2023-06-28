@@ -1,8 +1,11 @@
-﻿namespace ProjControleFinanceiro.Entities.Filtros
+﻿using ProjControleFinanceiro.Entities.Entidades.Enums;
+
+namespace ProjControleFinanceiro.Entities.Filtros
 {
     public class TransacaoFiltro
     {
-        public bool Pago { get; set; }
-        public bool NaoPago { get; set; }
+        public MetodoPagamento MetodoPagamento { get; set; }
+        public TipoTransacao TipoTransacao { get; set; }
+        public Categoria Categoria { get; set; }
     }
 }
