@@ -5,7 +5,7 @@ namespace ProjControleFinanceiro.Domain.Interfaces.Repositorios
 {
     public interface ITransacaoRepository : IBaseRepository<Transacao>
     {
-        Task<List<Transacao>> ObterTransacoes(TransacaoFiltro filtro);
+        Task<List<Transacao>> ObterTransacoes();
         Task<Transacao> ObterTransacaoPorId(int id);
     }
 }
