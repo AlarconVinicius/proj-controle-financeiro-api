@@ -1,5 +1,4 @@
 ﻿using ProjControleFinanceiro.Entities.Entidades;
-using ProjControleFinanceiro.Entities.Filtros;
 
 namespace ProjControleFinanceiro.Domain.Interfaces.Repositorios
 {
