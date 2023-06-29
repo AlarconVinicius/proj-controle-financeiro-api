@@ -7,5 +7,7 @@ namespace ProjControleFinanceiro.Domain.Interfaces.Services
         public Task<TransacaoViewDTO> AdicionarTransacao(TransacaoAddDTO objeto);
         public Task<IEnumerable<TransacaoViewDTO>> ObterTransacoes();
         public Task<TransacaoViewDTO> ObterTransacaoPorId(int id);
+        public Task<bool> AtualizarTransacao(TransacaoUpdDTO objeto);
+        public Task<bool> AtualizarStatusPagamento(int id, bool pago);
     }
 }
