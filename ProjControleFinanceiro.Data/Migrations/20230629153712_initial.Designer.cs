@@ -12,7 +12,7 @@ using ProjControleFinanceiro.Data.Configuracao;
 namespace ProjControleFinanceiro.Data.Migrations
 {
     [DbContext(typeof(ContextoBase))]
-    [Migration("20230628211140_initial")]
+    [Migration("20230629153712_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,8 +42,14 @@ namespace ProjControleFinanceiro.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MetodoPagamento")
+                    b.Property<bool>("Pago")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("QtdRepeticao")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Repete")
+                        .HasColumnType("bit");
 
                     b.Property<int>("TipoTransacao")
                         .HasColumnType("int");
