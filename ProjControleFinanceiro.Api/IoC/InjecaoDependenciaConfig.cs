@@ -26,6 +26,7 @@ namespace ProjControleFinanceiro.Api.IoC
             services.AddScoped<ITransacaoService, TransacaoService>();
 
             services.AddScoped<IValidator<TransacaoAddDTO>, TransacaoAddValidator>();
+            services.AddScoped<IValidator<TransacaoUpdDTO>, TransacaoUpdValidator>();
         }
     }
 }
