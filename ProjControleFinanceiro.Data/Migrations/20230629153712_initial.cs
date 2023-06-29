@@ -15,12 +15,14 @@ namespace ProjControleFinanceiro.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MetodoPagamento = table.Column<int>(type: "int", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Valor = table.Column<double>(type: "float", nullable: false),
                     Data = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TipoTransacao = table.Column<int>(type: "int", nullable: false),
-                    Categoria = table.Column<int>(type: "int", nullable: false)
+                    Categoria = table.Column<int>(type: "int", nullable: false),
+                    Pago = table.Column<bool>(type: "bit", nullable: false),
+                    Repete = table.Column<bool>(type: "bit", nullable: false),
+                    QtdRepeticao = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

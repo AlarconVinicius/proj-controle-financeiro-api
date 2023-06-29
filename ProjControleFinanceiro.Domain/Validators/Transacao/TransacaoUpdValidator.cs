@@ -3,9 +3,9 @@ using ProjControleFinanceiro.Domain.DTOs.Transacao;
 
 namespace ProjControleFinanceiro.Domain.Validators.Transacao
 {
-    public class TransacaoAddValidator : AbstractValidator<TransacaoAddDTO>
+    public class TransacaoUpdValidator : AbstractValidator<TransacaoUpdDTO>
     {
-        public TransacaoAddValidator()
+        public TransacaoUpdValidator()
         {
             RuleFor(dto => dto.Descricao)
                 .NotEmpty().WithMessage("O campo Descricao é obrigatório.");
@@ -25,12 +25,6 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao
 
             RuleFor(dto => dto.Categoria)
                 .NotEmpty().WithMessage("O campo Categoria é obrigatório.");
-            When(dto => dto.Repete, () =>
-            {
-                RuleFor(dto => dto.QtdRepeticao)
-                    .NotEmpty().WithMessage("O campo QtdRepeticao é obrigatório.")
-                    .GreaterThan(0).WithMessage("O campo QtdRepeticao deve ser maior que 0.");
-            });
         }
     }
 }

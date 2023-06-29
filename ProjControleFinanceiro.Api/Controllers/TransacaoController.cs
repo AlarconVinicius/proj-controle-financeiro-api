@@ -33,5 +33,17 @@ namespace ProjControleFinanceiro.Api.Controllers
         {            
             return CustomResponse(await _transacaoService.ObterTransacoes());
         }
+        [HttpPut]
+        public async Task<IActionResult> AtualizarTransacao(TransacaoUpdDTO objeto)
+        {
+            await _transacaoService.AtualizarTransacao(objeto);
+            return Ok();
+        }
+        [HttpPatch("{id}/pago")]
+        public async Task<IActionResult> AtualizarStatusPagamento([FromRoute] int id, [FromBody] bool pago)
+        {
+            await _transacaoService.AtualizarStatusPagamento(id, pago);
+            return Ok();
+        }
     }
 }

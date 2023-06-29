@@ -40,8 +40,14 @@ namespace ProjControleFinanceiro.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MetodoPagamento")
+                    b.Property<bool>("Pago")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("QtdRepeticao")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Repete")
+                        .HasColumnType("bit");
 
                     b.Property<int>("TipoTransacao")
                         .HasColumnType("int");
