@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace ProjControleFinanceiro.Api.Controllers
+namespace ProjControleFinanceiro.Api.Controllers.Configuracao
 {
     [ApiController]
     public abstract class MainController : ControllerBase
@@ -13,19 +13,24 @@ namespace ProjControleFinanceiro.Api.Controllers
         {
             if (OperacaoValida())
             {
-                return Ok
-                (new
+                var response = new ApiSuccessResponse<object>
                 {
-                   success = true,
-                   data = result,
-                }
-                );
-            }
+                    Success = true,
+                    Data = result
+                };
 
-            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>
+                return Ok(response);
+            }
+            var errorResponse = new ApiErrorResponse
+            {
+                Success = false,
+                Errors = new Dictionary<string, string[]>
             {
                 { "Mensagens", Erros.ToArray() }
-            }));
+            }
+            };
+
+            return BadRequest(errorResponse);
         }
 
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
@@ -69,7 +74,5 @@ namespace ProjControleFinanceiro.Api.Controllers
         {
             Erros.Add(erro);
         }
-
-
     }
 }

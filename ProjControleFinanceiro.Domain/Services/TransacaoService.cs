@@ -96,44 +96,17 @@ namespace ProjControleFinanceiro.Domain.Services
             await _transacaoRepository.UpdateAsync(transacao);
             return true;
         }
-        //-----------------------------------------------------------------------------------------------------------------//
-        //private async Task<TransacaoViewDTO> AdicionarTransacaoCartaoCredito(Transacao objetoMapeado)
-        //{
-        //    Cartao cartao = await _cartaoRepository.GetEntityByIdAsync(objetoMapeado.CartaoId ?? 0);
-        //    Fatura fatura = await _faturaRepository.ObterFaturaPorCartaoMesAno(objetoMapeado.CartaoId ?? 0, objetoMapeado.Data.Month, objetoMapeado.Data.Year);
+        public async Task<bool> DeletarTransacao(int id)
+        {
+            var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
 
-        //    if (cartao == null || fatura == null)
-        //    {
-        //        AdicionarErroProcessamento(cartao == null ? "Cartão inválido." : "Fatura não encontrada.");
-        //        return null;
-        //    }
-
-        //    objetoMapeado.FaturaId = fatura.Id;
-        //    fatura.AdicionarTransacao(objetoMapeado);
-
-        //    cartao.SubtrairSaldo(objetoMapeado.Valor);
-        //    objetoMapeado.Pago = false;
-        //    await _transacaoRepository.AddAsync(objetoMapeado);
-        //    return objetoMapeado.ToGetDTO();
-        //}
-        //private async Task<TransacaoViewDTO> AdicionarTransacaoOutrosMetodosPagamento(Transacao objetoMapeado, Conta conta)
-        //{
-        //    if (objetoMapeado.TipoTransacao == TipoTransacao.Receita)
-        //    {
-        //        conta.AdicionarSaldo(objetoMapeado.Valor);
-        //    }
-        //    else if (objetoMapeado.TipoTransacao == TipoTransacao.Despesa)
-        //    {
-        //        conta.SubtrairSaldo(objetoMapeado.Valor);
-        //    }
-        //    else
-        //    {
-        //        AdicionarErroProcessamento("Tipo de Transação inválido.");
-        //        return null;
-        //    }
-
-        //    await _transacaoRepository.AddAsync(objetoMapeado);
-        //    return objetoMapeado.ToGetDTO();
-        //}
+            if (transacao == null)
+            {
+                AdicionarErroProcessamento("Transação não encontrada.");
+                return false;
+            }
+            await _transacaoRepository.DeleteAsync(id);
+            return true;
+        }
     }
 }
