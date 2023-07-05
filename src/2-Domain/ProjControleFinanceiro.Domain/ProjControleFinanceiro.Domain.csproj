@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjControleFinanceiro.Entities\ProjControleFinanceiro.Entities.csproj" />
+    <ProjectReference Include="..\..\4-Entities\ProjControleFinanceiro.Entities\ProjControleFinanceiro.Entities.csproj" />
   </ItemGroup>
 
 </Project>

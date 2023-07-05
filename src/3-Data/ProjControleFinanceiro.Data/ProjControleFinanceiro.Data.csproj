@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProjControleFinanceiro.Domain\ProjControleFinanceiro.Domain.csproj" />
-    <ProjectReference Include="..\ProjControleFinanceiro.Entities\ProjControleFinanceiro.Entities.csproj" />
+    <ProjectReference Include="..\..\2-Domain\ProjControleFinanceiro.Domain\ProjControleFinanceiro.Domain.csproj" />
+    <ProjectReference Include="..\..\4-Entities\ProjControleFinanceiro.Entities\ProjControleFinanceiro.Entities.csproj" />
   </ItemGroup>
 
 </Project>
