@@ -7,27 +7,27 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{64E9C68B-0CE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0-Test", "0-Test", "{1AAEE8DE-F3B4-4C54-9E7F-FCE15997334D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Test", "src\0-Test\ProjControleFinanceiro.Test\ProjControleFinanceiro.Test.csproj", "{60522B66-6F5F-445C-B18E-46780A2A5401}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjControleFinanceiro.Test", "src\0-Test\ProjControleFinanceiro.Test\ProjControleFinanceiro.Test.csproj", "{60522B66-6F5F-445C-B18E-46780A2A5401}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Api", "1-Api", "{A597B034-3C20-41F8-BD74-FE9DCC936EDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Api", "src\1-Api\ProjControleFinanceiro.Api\ProjControleFinanceiro.Api.csproj", "{1CCD4606-6778-4B1E-82DA-80FFB7CB54F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjControleFinanceiro.Api", "src\1-Api\ProjControleFinanceiro.Api\ProjControleFinanceiro.Api.csproj", "{1CCD4606-6778-4B1E-82DA-80FFB7CB54F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2-Domain", "2-Domain", "{9147A0CC-1FA0-4B97-AC16-0E9A3CC3B51F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Domain", "src\2-Domain\ProjControleFinanceiro.Domain\ProjControleFinanceiro.Domain.csproj", "{AAAF25A2-6D7D-43DA-A92E-DDE322F78BF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjControleFinanceiro.Domain", "src\2-Domain\ProjControleFinanceiro.Domain\ProjControleFinanceiro.Domain.csproj", "{AAAF25A2-6D7D-43DA-A92E-DDE322F78BF4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Data", "3-Data", "{232EF8F6-7483-41A8-8110-2E74B1B21FBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Data", "src\3-Data\ProjControleFinanceiro.Data\ProjControleFinanceiro.Data.csproj", "{0383BF8B-06B5-4783-8135-186D58E14E37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjControleFinanceiro.Data", "src\3-Data\ProjControleFinanceiro.Data\ProjControleFinanceiro.Data.csproj", "{0383BF8B-06B5-4783-8135-186D58E14E37}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Entities", "4-Entities", "{D50E0B73-AFEA-4E93-AD3A-090916AAD1ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Entities", "src\4-Entities\ProjControleFinanceiro.Entities\ProjControleFinanceiro.Entities.csproj", "{6451F8B1-862C-4C8B-8054-9EC14F726317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjControleFinanceiro.Entities", "src\4-Entities\ProjControleFinanceiro.Entities\ProjControleFinanceiro.Entities.csproj", "{6451F8B1-862C-4C8B-8054-9EC14F726317}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-Mobile", "5-Mobile", "{7891B9C2-6B7A-48DE-995D-966C9E5FAF70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Mobile", "src\5-Mobile\ProjControleFinanceiro.Mobile\ProjControleFinanceiro.Mobile.csproj", "{289D04D9-00CD-4081-A99D-013B79199658}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjControleFinanceiro.Mobile", "ProjControleFinanceiro.Mobile\ProjControleFinanceiro.Mobile.csproj", "{47073EEE-07A9-45B1-8D95-E5184E458A3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,16 +55,15 @@ Global
 		{6451F8B1-862C-4C8B-8054-9EC14F726317}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6451F8B1-862C-4C8B-8054-9EC14F726317}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6451F8B1-862C-4C8B-8054-9EC14F726317}.Release|Any CPU.Build.0 = Release|Any CPU
-		{289D04D9-00CD-4081-A99D-013B79199658}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{289D04D9-00CD-4081-A99D-013B79199658}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{289D04D9-00CD-4081-A99D-013B79199658}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{289D04D9-00CD-4081-A99D-013B79199658}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47073EEE-07A9-45B1-8D95-E5184E458A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47073EEE-07A9-45B1-8D95-E5184E458A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47073EEE-07A9-45B1-8D95-E5184E458A3A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{47073EEE-07A9-45B1-8D95-E5184E458A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47073EEE-07A9-45B1-8D95-E5184E458A3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47073EEE-07A9-45B1-8D95-E5184E458A3A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E19D687A-136A-4192-BFDC-7D9E70C31398}
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1AAEE8DE-F3B4-4C54-9E7F-FCE15997334D} = {64E9C68B-0CE4-4C76-AB0B-06C12EE1C1AC}
@@ -78,6 +77,9 @@ Global
 		{D50E0B73-AFEA-4E93-AD3A-090916AAD1ED} = {64E9C68B-0CE4-4C76-AB0B-06C12EE1C1AC}
 		{6451F8B1-862C-4C8B-8054-9EC14F726317} = {D50E0B73-AFEA-4E93-AD3A-090916AAD1ED}
 		{7891B9C2-6B7A-48DE-995D-966C9E5FAF70} = {64E9C68B-0CE4-4C76-AB0B-06C12EE1C1AC}
-		{289D04D9-00CD-4081-A99D-013B79199658} = {7891B9C2-6B7A-48DE-995D-966C9E5FAF70}
+		{47073EEE-07A9-45B1-8D95-E5184E458A3A} = {7891B9C2-6B7A-48DE-995D-966C9E5FAF70}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E19D687A-136A-4192-BFDC-7D9E70C31398}
 	EndGlobalSection
 EndGlobal
