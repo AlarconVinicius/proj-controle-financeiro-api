@@ -55,10 +55,22 @@ namespace ProjControleFinanceiro.Api.Controllers
         /// <returns>Lista de todas as transações.</returns>
         /// <response code="200">Retorna a lista de transações obtidas com sucesso.</response>
         [HttpGet]
-        [ProducesResponseType(typeof(ApiSuccessResponse<List<TransacaoViewDTO>>), 200)]
+        [ProducesResponseType(typeof(ApiSuccessResponse<TransacaoViewListDTO>), 200)]
         public async Task<IActionResult> ObterTransacoes()
         {            
             return CustomResponse(await _transacaoService.ObterTransacoes());
+        }
+
+        /// <summary>
+        /// Obtém todas as transações de um respectivo mês e ano.
+        /// </summary>
+        /// <returns>Lista de todas as transações do mês e ano enviados.</returns>
+        /// <response code="200">Retorna a lista de transações obtidas com sucesso.</response>
+        [HttpGet("mes-ano")]
+        [ProducesResponseType(typeof(ApiSuccessResponse<TransacaoViewListDTO>), 200)]
+        public async Task<IActionResult> ObterTransacoesMesAno([FromQuery] int mes, [FromQuery] int ano)
+        {
+            return CustomResponse(await _transacaoService.ObterTransacoesMesAno(mes, ano));
         }
 
         /// <summary>
