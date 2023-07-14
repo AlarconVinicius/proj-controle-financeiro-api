@@ -4,6 +4,8 @@ using ProjControleFinanceiro.Domain.Extensions;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 using ProjControleFinanceiro.Entities.Entidades;
+using ProjControleFinanceiro.Entities.Entidades.Enums;
+using System.Collections.Generic;
 
 namespace ProjControleFinanceiro.Domain.Services
 {
@@ -53,10 +55,44 @@ namespace ProjControleFinanceiro.Domain.Services
             return objetoMapeadoView;
         }
 
-        public async Task<IEnumerable<TransacaoViewDTO>> ObterTransacoes()
+        public async Task<TransacaoViewListDTO> ObterTransacoes()
         {
+            TransacaoViewListDTO transacoesList = new TransacaoViewListDTO();
             IEnumerable<Transacao> objetosDb = await _transacaoRepository.ObterTransacoes();
-            return objetosDb.Select(x => x.ToGetDTO());
+            foreach( var transacao in objetosDb)
+            {
+                if(transacao.TipoTransacao == TipoTransacao.Receita)
+                {
+                    transacoesList.Entrada += transacao.Valor; 
+                }
+                else
+                {
+                    transacoesList.Saida += transacao.Valor;
+                }
+            }
+            transacoesList.Saldo = transacoesList.Entrada - transacoesList.Saida;
+            transacoesList.Transacoes = objetosDb.Select(x => x.ToGetDTO());
+            return transacoesList;
+        }
+        public async Task<TransacaoViewListDTO> ObterTransacoesMesAno(int mes, int ano)
+        {
+            TransacaoViewListDTO transacoesList = new TransacaoViewListDTO();
+            IEnumerable<Transacao> objetosDb = await _transacaoRepository.ObterTransacoesMesAno(mes, ano);
+            if (!objetosDb.Any()) return transacoesList;
+            foreach (var transacao in objetosDb)
+            {
+                if (transacao.TipoTransacao == TipoTransacao.Receita)
+                {
+                    transacoesList.Entrada += transacao.Valor;
+                }
+                else
+                {
+                    transacoesList.Saida += transacao.Valor;
+                }
+            }
+            transacoesList.Saldo = transacoesList.Entrada - transacoesList.Saida;
+            transacoesList.Transacoes = objetosDb.Select(x => x.ToGetDTO());
+            return transacoesList;
         }
         public async Task<bool> AtualizarTransacao(TransacaoUpdDTO objeto)
         {
