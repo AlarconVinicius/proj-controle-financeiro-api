@@ -1,8 +1,8 @@
 ﻿namespace ProjControleFinanceiro.Mobile.Data.Models.Enum
 {
-    public enum TransacaoTipo
+    public enum TipoTransacao
     {
-        Income,
-        Expense
+        Receita = 1,
+        Despesa = 2
     }
 }

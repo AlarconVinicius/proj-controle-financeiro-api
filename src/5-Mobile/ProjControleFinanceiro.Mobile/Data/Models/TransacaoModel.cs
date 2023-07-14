@@ -7,8 +7,8 @@ namespace ProjControleFinanceiro.Mobile.Data.Models
     {
         [BsonId]
         public int Id { get; set; }
-        public TransacaoTipo Tipo { get; set; }
-        public String Nome { get; set; }
+        public TipoTransacao TipoTransacao { get; set; }
+        public string Descricao { get; set; }
         public DateTime Data { get; set; }
         public double Valor { get; set; }
         public bool Pago { get; set; }
