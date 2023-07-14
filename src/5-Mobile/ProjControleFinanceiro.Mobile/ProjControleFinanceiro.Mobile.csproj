@@ -12,11 +12,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>ProjControleFinanceiro.Mobile</ApplicationTitle>
+		<ApplicationTitle>Controle Financeiro</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.projcontrolefinanceiro.mobile</ApplicationId>
-		<ApplicationIdGuid>5814c1cf-378c-4178-9653-da3cb6368a97</ApplicationIdGuid>
+		<ApplicationId>br.com.alarconsdev.appcontrolefinanceiro</ApplicationId>
+		<ApplicationIdGuid>935c223c-44e5-4d7a-961f-b4b86d7b4b81</ApplicationIdGuid>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

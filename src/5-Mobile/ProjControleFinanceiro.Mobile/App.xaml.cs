@@ -1,12 +1,11 @@
-﻿namespace ProjControleFinanceiro.Mobile
-{
-    public partial class App : Application
-    {
-        public App()
-        {
-            InitializeComponent();
+﻿namespace ProjControleFinanceiro.Mobile;
 
-            MainPage = new AppShell();
-        }
-    }
+public partial class App : Application
+{
+	public App()
+	{
+		InitializeComponent();
+
+		MainPage = new AppShell();
+	}
 }
