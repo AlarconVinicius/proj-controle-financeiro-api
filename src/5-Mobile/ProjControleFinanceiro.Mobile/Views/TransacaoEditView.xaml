@@ -3,10 +3,75 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ProjControleFinanceiro.Mobile.Views.TransacaoEditView"
              Title="TransacaoEditView">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+    <VerticalStackLayout Spacing="10" BackgroundColor="White">
+        <Border 
+            BackgroundColor="Transparent" 
+            Padding="0,10" 
+            Stroke="Transparent">
+            <Grid RowDefinitions="Auto" ColumnDefinitions="50,Auto">
+                <Label 
+                    Text="Atualizar Transação"
+                    FontSize="20"
+                    TextColor="Black"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                />
+                <Image
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center" 
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Source="arrowback.png"
+                    WidthRequest="25"
+                    HeightRequest="30">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_ToClose"/>
+                    </Image.GestureRecognizers>
+
+                </Image>
+            </Grid>
+        </Border>
+        <Label x:Name="LabelError" Margin="30" TextColor="Red" IsVisible="False" />
+        <StackLayout Orientation="Vertical">
+            <Label Text="Valor da Transação" VerticalOptions="Center" Margin="100, 0" HorizontalTextAlignment="Center"/>
+            <Entry x:Name="EntryValue" Placeholder="00,00" Margin="100, 0" HorizontalTextAlignment="Center"/>
+        </StackLayout>
+
+        <Grid ColumnDefinitions="*, *" Margin="30">
+            <RadioButton x:Name="RadioIncome" IsChecked="True" Content="Receita" />
+            <RadioButton x:Name="RadioExpense" Grid.Column="1" HorizontalOptions="End" Content="Despesa"/>
+        </Grid>
+        <StackLayout Orientation="Vertical">
+            <Label Text="Descrição" VerticalOptions="Center" Margin="18, 0"/>
+            <Entry x:Name="EntryName" Placeholder="Descrição" Margin="15, 0"/>
+        </StackLayout>
+
+        <StackLayout Orientation="Vertical" >
+            <Label Text="Data" VerticalOptions="Center" Margin="18, 0"/>
+            <DatePicker x:Name="DatePickerDate" Margin="15, 0"/>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" Margin="25, 0">
+            <StackLayout Orientation="Horizontal" IsVisible="false" >
+                <CheckBox x:Name="CheckBoxRepete" VerticalOptions="Center" />
+                <Label Text="Repetir Mensalmente" VerticalOptions="Center" />
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Grid.Column="1">
+                <CheckBox x:Name="CheckBoxPaid" VerticalOptions="Center" />
+                <Label Text="Pago" VerticalOptions="Center" />
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout Orientation="Vertical" IsVisible="false">
+            <Label Text="Quantidade de vezes" VerticalOptions="Center" Margin="18, 0" IsVisible="{Binding Source={x:Reference CheckBoxRepete}, Path=IsChecked}"/>
+            <Entry x:Name="EntryQtdRepete" Placeholder="0" Margin="15, 0" IsVisible="{Binding Source={x:Reference CheckBoxRepete}, Path=IsChecked}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+            <Button Clicked="OnButtonClicked_Delete" Text="Deletar" CommandParameter="{Binding .}" Margin="15, 0" HorizontalOptions="Center" BackgroundColor="Red"/>
+            <Button Clicked="OnButtonClicked_Save" Text="Salvar" Margin="15, 0" HorizontalOptions="Center"/>
+        </StackLayout>
+        
     </VerticalStackLayout>
 </ContentPage>

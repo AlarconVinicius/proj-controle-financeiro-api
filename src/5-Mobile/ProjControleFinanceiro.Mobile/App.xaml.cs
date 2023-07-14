@@ -1,8 +1,10 @@
-﻿namespace ProjControleFinanceiro.Mobile;
+﻿using ProjControleFinanceiro.Mobile.Views;
+
+namespace ProjControleFinanceiro.Mobile;
 
 public partial class App : Application
 {
-    public App(TransactionList listPage)
+    public App(TransacaoListView listPage)
     {
         InitializeComponent();
         App.Current!.UserAppTheme = AppTheme.Light;
