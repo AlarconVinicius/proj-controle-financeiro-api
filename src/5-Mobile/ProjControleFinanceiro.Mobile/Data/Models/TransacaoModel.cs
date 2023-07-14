@@ -7,15 +7,15 @@ namespace ProjControleFinanceiro.Mobile.Data.Models
     {
         [BsonId]
         public int Id { get; set; }
-        public TransacaoTipo Type { get; set; }
-        public String Name { get; set; }
-        public DateTime Date { get; set; }
-        public double Value { get; set; }
-        public bool Paid { get; set; }
+        public TransacaoTipo Tipo { get; set; }
+        public String Nome { get; set; }
+        public DateTime Data { get; set; }
+        public double Valor { get; set; }
+        public bool Pago { get; set; }
         public bool Repete { get; set; }
         public int QtdRepete { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime ModifiedAt { get; set; }
+        public DateTime CriadoEm { get; set; }
+        public DateTime ModificadoEm { get; set; }
     }
 }
