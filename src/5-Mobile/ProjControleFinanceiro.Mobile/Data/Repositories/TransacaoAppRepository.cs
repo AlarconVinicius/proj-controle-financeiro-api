@@ -14,16 +14,16 @@ namespace ProjControleFinanceiro.Mobile.Data.Repositories
         }
         public void AdicionarTransacao(TransacaoModel objeto)
         {
-            objeto.CreatedAt = DateTime.UtcNow;
-            objeto.ModifiedAt = DateTime.UtcNow;
+            objeto.CriadoEm = DateTime.UtcNow;
+            objeto.ModificadoEm = DateTime.UtcNow;
             var coll = _database.GetCollection<TransacaoModel>(_collectionName);
             coll.Insert(objeto);
-            coll.EnsureIndex(t => t.Date);
+            coll.EnsureIndex(t => t.Data);
         }
 
         public void AtualizarTransacao(TransacaoModel objeto)
         {
-            objeto.ModifiedAt = DateTime.UtcNow;
+            objeto.ModificadoEm = DateTime.UtcNow;
             var coll = _database.GetCollection<TransacaoModel>(_collectionName);
             coll.Update(objeto);
         }
@@ -36,7 +36,7 @@ namespace ProjControleFinanceiro.Mobile.Data.Repositories
 
         public List<TransacaoModel> ObterTodasTransacoes()
         {
-            return _database.GetCollection<TransacaoModel>(_collectionName).Query().OrderByDescending(t => t.Date).ToList();
+            return _database.GetCollection<TransacaoModel>(_collectionName).Query().OrderByDescending(t => t.Data).ToList();
         }
 
         public TransacaoModel ObterTransacaoPorId(int id)
@@ -47,8 +47,8 @@ namespace ProjControleFinanceiro.Mobile.Data.Repositories
         public IEnumerable<TransacaoModel> ObterTransacaoPorMesEAno(int month, int year)
         {
             return _database.GetCollection<TransacaoModel>("transactions")
-                            .Find(t => t.Date.Month == month && t.Date.Year == year)
-                            .OrderByDescending(t => t.Date)
+                            .Find(t => t.Data.Month == month && t.Data.Year == year)
+                            .OrderByDescending(t => t.Data)
                             .ToList();
         }
     }
