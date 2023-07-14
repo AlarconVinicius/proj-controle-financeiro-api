@@ -2,10 +2,11 @@
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
+    public App(TransactionList listPage)
+    {
+        InitializeComponent();
+        App.Current!.UserAppTheme = AppTheme.Light;
 
-		MainPage = new AppShell();
-	}
+        MainPage = new NavigationPage(listPage);
+    }
 }
