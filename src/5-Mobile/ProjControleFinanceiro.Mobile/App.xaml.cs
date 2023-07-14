@@ -1,11 +1,14 @@
-﻿namespace ProjControleFinanceiro.Mobile;
+﻿using ProjControleFinanceiro.Mobile.Views;
+
+namespace ProjControleFinanceiro.Mobile;
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
+    public App(TransacaoListView listPage)
+    {
+        InitializeComponent();
+        App.Current!.UserAppTheme = AppTheme.Light;
 
-		MainPage = new AppShell();
-	}
+        MainPage = new NavigationPage(listPage);
+    }
 }
