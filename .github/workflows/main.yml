@@ -20,10 +20,10 @@ jobs:
           dotnet-version: 7.0.x
           
       - name: Restore
-        run: dotnet restore src/ProjControleFinanceiroApi/ProjControleFinanceiroApi.csproj
+        run: dotnet restore src\1-Api\ProjControleFinanceiro.Api\ProjControleFinanceiro.Api.csproj
         
       - name: Build
-        run: dotnet build ./src/ProjControleFinanceiroApi/ProjControleFinanceiroApi.csproj --no-restore
+        run: dotnet build src\1-Api\ProjControleFinanceiro.Api\ProjControleFinanceiro.Api.csproj --no-restore
         
       - name: Publish
-        run: dotnet publish ./src/ProjControleFinanceiroApi/ProjControleFinanceiroApi.csproj -o publish/Api --no-build
+        run: dotnet publish src\1-Api\ProjControleFinanceiro.Api\ProjControleFinanceiro.Api.csproj -o publish/Api --no-build
