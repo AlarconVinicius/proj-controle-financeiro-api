@@ -20,7 +20,7 @@ jobs:
           dotnet-version: 7.0.x
           
       - name: Restore
-        run: dotnet restore ./src/ProjControleFinanceiroApi/ProjControleFinanceiroApi.csproj
+        run: dotnet restore ./ProjControleFinanceiro/src/ProjControleFinanceiroApi/ProjControleFinanceiroApi.csproj
         
       - name: Build
         run: dotnet build ./src/ProjControleFinanceiroApi/ProjControleFinanceiroApi.csproj --no-restore
