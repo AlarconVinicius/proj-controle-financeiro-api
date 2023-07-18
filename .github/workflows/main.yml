@@ -19,7 +19,7 @@ jobs:
           dotnet-version: '7.0.x'
           
       - name: Restore
-        run: dotnet restore ./ProjControleFinanceiro.sln
+        run: dotnet workload restore && dotnet restore ./ProjControleFinanceiro.sln
         
       - name: Build
         run: dotnet build ./ProjControleFinanceiro.sln --configuration Release --no-restore
