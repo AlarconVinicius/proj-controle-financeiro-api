@@ -1,4 +1,4 @@
-name: Publish API🚀
+name: Build API 🛠️
 
 on:
   workflow_dispatch:
