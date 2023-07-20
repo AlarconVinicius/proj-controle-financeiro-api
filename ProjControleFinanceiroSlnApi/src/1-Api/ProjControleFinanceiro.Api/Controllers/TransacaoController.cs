@@ -54,11 +54,15 @@ namespace ProjControleFinanceiro.Api.Controllers
         /// </summary>
         /// <returns>Lista de todas as transações.</returns>
         /// <response code="200">Retorna a lista de transações obtidas com sucesso.</response>
-        [HttpGet]
+        /// <response code="400">Retorna erros de validação ou problemas na requisição.</response>
         [ProducesResponseType(typeof(ApiSuccessResponse<TransacaoViewListDTO>), 200)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+        [HttpGet]
         public async Task<IActionResult> ObterTransacoes()
         {            
-            return CustomResponse(await _transacaoService.ObterTransacoes());
+            var objetosMapeados = CustomResponse(await _transacaoService.ObterTransacoes());
+            if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
+            return CustomResponse(objetosMapeados);
         }
 
         /// <summary>
@@ -66,11 +70,15 @@ namespace ProjControleFinanceiro.Api.Controllers
         /// </summary>
         /// <returns>Lista de todas as transações do mês e ano enviados.</returns>
         /// <response code="200">Retorna a lista de transações obtidas com sucesso.</response>
-        [HttpGet("mes-ano")]
+        /// <response code="400">Retorna erros de validação ou problemas na requisição.</response>
         [ProducesResponseType(typeof(ApiSuccessResponse<TransacaoViewListDTO>), 200)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+        [HttpGet("mes-ano")]
         public async Task<IActionResult> ObterTransacoesMesAno([FromQuery] int mes, [FromQuery] int ano)
         {
-            return CustomResponse(await _transacaoService.ObterTransacoesMesAno(mes, ano));
+            var objetosMapeados = CustomResponse(await _transacaoService.ObterTransacoesMesAno(mes, ano));
+            if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
+            return CustomResponse(objetosMapeados);
         }
 
         /// <summary>
