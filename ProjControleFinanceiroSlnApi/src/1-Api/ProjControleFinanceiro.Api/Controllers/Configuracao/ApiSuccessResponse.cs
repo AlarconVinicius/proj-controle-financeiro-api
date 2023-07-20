@@ -6,6 +6,6 @@ namespace ProjControleFinanceiro.Api.Controllers.Configuracao
     {
         public bool Success { get; set; }
         [DefaultValue(null)]
-        public T Data { get; set; }
+        public T? Data { get; set; }
     }
 }
