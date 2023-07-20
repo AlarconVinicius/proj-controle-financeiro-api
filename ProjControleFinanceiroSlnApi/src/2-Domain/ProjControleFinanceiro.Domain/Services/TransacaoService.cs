@@ -5,7 +5,6 @@ using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 using ProjControleFinanceiro.Entities.Entidades;
 using ProjControleFinanceiro.Entities.Entidades.Enums;
-using System.Collections.Generic;
 
 namespace ProjControleFinanceiro.Domain.Services
 {
@@ -23,126 +22,206 @@ namespace ProjControleFinanceiro.Domain.Services
         }
         public async Task<TransacaoViewDTO> AdicionarTransacao(TransacaoAddDTO objeto)
         {
-            var validationResult = await _addValidator.ValidateAsync(objeto);
-            if (!validationResult.IsValid)
+            try
             {
-                AdicionarErroProcessamento(validationResult);
-                return null;
-            }
-            Transacao objetoMapeado = objeto.ToAddDTO();
-            await _transacaoRepository.AddAsync(objetoMapeado);
-            if (objetoMapeado.QtdRepeticao > 0)
-            {
-                for (int i = 0; i <= objetoMapeado.QtdRepeticao - 1; i++)
+                var validationResult = await _addValidator.ValidateAsync(objeto);
+                if (!validationResult.IsValid)
                 {
-                    DateTime dataFutura = objetoMapeado.Data.AddMonths(i+1);
-                    Transacao transacaoFutura = new Transacao(objetoMapeado.Descricao, objetoMapeado.Valor, dataFutura, objetoMapeado.TipoTransacao, objetoMapeado.Categoria);
-                    await _transacaoRepository.AddAsync(transacaoFutura);
+                    AdicionarErroProcessamento(validationResult);
+                    return null!;
                 }
+                Transacao objetoMapeado = objeto.ToAddDTO();
+                await _transacaoRepository.AddAsync(objetoMapeado);
+                if (objetoMapeado.QtdRepeticao > 0)
+                {
+                    for (int i = 0; i <= objetoMapeado.QtdRepeticao - 1; i++)
+                    {
+                        DateTime dataFutura = objetoMapeado.Data.AddMonths(i + 1);
+                        Transacao transacaoFutura = new Transacao(objetoMapeado.Descricao, objetoMapeado.Valor, dataFutura, objetoMapeado.TipoTransacao, objetoMapeado.Categoria);
+                        await _transacaoRepository.AddAsync(transacaoFutura);
+                    }
+                }
+                return objetoMapeado.ToGetDTO();
             }
-            return objetoMapeado.ToGetDTO();
+            catch (ArgumentNullException ex)
+            {
+                List<string> errors = new List<string>();
+                errors.Add("Erro ao adicionar a transação!");
+                errors.Add("Nenhum campo pode ser nulo.");
+                errors.Add(ex.Message);
+                AdicionarErroProcessamento(errors);
+                return new TransacaoViewDTO();
+            }
+            catch (Exception ex)
+            {
+                AdicionarErroProcessamento($"Erro ao adicionar a transação: {ex.Message}");
+                return new TransacaoViewDTO();
+            }
         }
 
         public async Task<TransacaoViewDTO> ObterTransacaoPorId(int id)
         {
-            var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
-            if (transacao == null)
+            try
             {
-                AdicionarErroProcessamento("Transação não encontrada.");
-                return null;
+                var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
+                if (transacao is null)
+                {
+                    return null!;
+                }
+                TransacaoViewDTO objetoMapeadoView = transacao.ToGetDTO();
+                return objetoMapeadoView;
             }
-            TransacaoViewDTO objetoMapeadoView = transacao.ToGetDTO();
-            return objetoMapeadoView;
+            catch (Exception ex)
+            {
+                AdicionarErroProcessamento($"Falha ao buscar a transação: {ex.Message}");
+                return null!;
+            }
         }
 
         public async Task<TransacaoViewListDTO> ObterTransacoes()
         {
-            TransacaoViewListDTO transacoesList = new TransacaoViewListDTO();
-            IEnumerable<Transacao> objetosDb = await _transacaoRepository.ObterTransacoes();
-            foreach( var transacao in objetosDb)
+            try
             {
-                if(transacao.TipoTransacao == TipoTransacao.Receita)
+                TransacaoViewListDTO transacoesList = new TransacaoViewListDTO();
+                IEnumerable<Transacao> objetosDb = await _transacaoRepository.ObterTransacoes();
+                if (!objetosDb.Any()) return null!;
+                foreach (var transacao in objetosDb)
                 {
-                    transacoesList.Entrada += transacao.Valor; 
+                    if (transacao.TipoTransacao == TipoTransacao.Receita)
+                    {
+                        transacoesList.Entrada += transacao.Valor;
+                    }
+                    else
+                    {
+                        transacoesList.Saida += transacao.Valor;
+                    }
                 }
-                else
-                {
-                    transacoesList.Saida += transacao.Valor;
-                }
+                transacoesList.Saldo = transacoesList.Entrada - transacoesList.Saida;
+                transacoesList.Transacoes = objetosDb.Select(x => x.ToGetDTO());
+                return transacoesList;
             }
-            transacoesList.Saldo = transacoesList.Entrada - transacoesList.Saida;
-            transacoesList.Transacoes = objetosDb.Select(x => x.ToGetDTO());
-            return transacoesList;
+
+            catch (Exception ex)
+            {
+                AdicionarErroProcessamento($"Falha ao buscar as transações: {ex.Message}");
+                return null!;
+            }
         }
         public async Task<TransacaoViewListDTO> ObterTransacoesMesAno(int mes, int ano)
         {
-            TransacaoViewListDTO transacoesList = new TransacaoViewListDTO();
-            IEnumerable<Transacao> objetosDb = await _transacaoRepository.ObterTransacoesMesAno(mes, ano);
-            if (!objetosDb.Any()) return transacoesList;
-            foreach (var transacao in objetosDb)
+            try
             {
-                if (transacao.TipoTransacao == TipoTransacao.Receita)
+                TransacaoViewListDTO transacoesList = new TransacaoViewListDTO();
+                if (mes < 1 || mes > 12)
                 {
-                    transacoesList.Entrada += transacao.Valor;
+                    AdicionarErroProcessamento("Mês inválido, o valor deve estar entre 1 e 12.");
+                    return null!;
                 }
-                else
+                IEnumerable<Transacao> objetosDb = await _transacaoRepository.ObterTransacoesMesAno(mes, ano);
+                if (!objetosDb.Any()) return null!;
+                foreach (var transacao in objetosDb)
                 {
-                    transacoesList.Saida += transacao.Valor;
+                    if (transacao.TipoTransacao == TipoTransacao.Receita)
+                    {
+                        transacoesList.Entrada += transacao.Valor;
+                    }
+                    else
+                    {
+                        transacoesList.Saida += transacao.Valor;
+                    }
                 }
+                transacoesList.Saldo = transacoesList.Entrada - transacoesList.Saida;
+                transacoesList.Transacoes = objetosDb.Select(x => x.ToGetDTO());
+                return transacoesList;
             }
-            transacoesList.Saldo = transacoesList.Entrada - transacoesList.Saida;
-            transacoesList.Transacoes = objetosDb.Select(x => x.ToGetDTO());
-            return transacoesList;
+            catch (Exception ex)
+            {
+                AdicionarErroProcessamento($"Falha ao buscar as transações: {ex.Message}");
+                return null!;
+            }
         }
         public async Task<bool> AtualizarTransacao(TransacaoUpdDTO objeto)
         {
-            var validationResult = await _updValidator.ValidateAsync(objeto);
-            if (!validationResult.IsValid)
+            try
             {
-                AdicionarErroProcessamento(validationResult);
-                return false;
-            }
-            var objetoDb = await _transacaoRepository.ObterTransacaoPorId(objeto.Id);
+                var validationResult = await _updValidator.ValidateAsync(objeto);
+                if (!validationResult.IsValid)
+                {
+                    AdicionarErroProcessamento(validationResult);
+                    return false;
+                }
+                var objetoDb = await _transacaoRepository.ObterTransacaoPorId(objeto.Id);
 
-            if (objetoDb == null)
+                if (objetoDb is null)
+                {
+                    AdicionarErroProcessamento("Transação não encontrada.");
+                    return false;
+                }
+                objetoDb.Descricao = objeto.Descricao;
+                objetoDb.Valor = objeto.Valor;
+                objetoDb.Data = objeto.Data.ToDateTime();
+                objetoDb.Valor = objeto.Valor;
+                objetoDb.TipoTransacao = objeto.TipoTransacao;
+                objetoDb.Categoria = objeto.Categoria;
+                await _transacaoRepository.UpdateAsync(objetoDb);
+                return true;
+            }
+            catch (ArgumentNullException ex)
             {
-                AdicionarErroProcessamento("Transação não encontrada.");
+                List<string> errors = new List<string>();
+                errors.Add("Erro ao atualizar a transação!");
+                errors.Add("Nenhum campo pode ser nulo.");
+                errors.Add(ex.Message);
+                AdicionarErroProcessamento(errors);
                 return false;
             }
-            objetoDb.Descricao = objeto.Descricao;
-            objetoDb.Valor = objeto.Valor;
-            objetoDb.Data = objeto.Data.ToDateTime();
-            objetoDb.Valor = objeto.Valor;
-            objetoDb.TipoTransacao = objeto.TipoTransacao;
-            objetoDb.Categoria = objeto.Categoria;
-            await _transacaoRepository.UpdateAsync(objetoDb);
-            return true;
+            catch (Exception ex)
+            {
+                AdicionarErroProcessamento($"Erro ao atualizar a transação: {ex.Message}");
+                return false;
+            }
         }
         public async Task<bool> AtualizarStatusPagamento(int id, bool pago)
         {
-            var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
-
-            if (transacao == null)
+            try
             {
-                AdicionarErroProcessamento("Transação não encontrada.");
+                var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
+
+                if (transacao is null)
+                {
+                    AdicionarErroProcessamento("Transação não encontrada.");
+                    return false;
+                }
+
+                transacao.Pago = pago;
+                await _transacaoRepository.UpdateAsync(transacao);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                AdicionarErroProcessamento($"Falha ao atualizar o status de pagamento da transação: {ex.Message}");
                 return false;
             }
-
-            transacao.Pago = pago;
-            await _transacaoRepository.UpdateAsync(transacao);
-            return true;
         }
         public async Task<bool> DeletarTransacao(int id)
         {
-            var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
-
-            if (transacao == null)
+            try
             {
-                AdicionarErroProcessamento("Transação não encontrada.");
+                var transacao = await _transacaoRepository.ObterTransacaoPorId(id);
+
+                if (transacao is null)
+                {
+                    AdicionarErroProcessamento("Transação não encontrada.");
+                    return false;
+                }
+                await _transacaoRepository.DeleteAsync(id);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                AdicionarErroProcessamento($"Falha ao deletar a transação: {ex.Message}");
                 return false;
             }
-            await _transacaoRepository.DeleteAsync(id);
-            return true;
         }
     }
 }
