@@ -15,6 +15,13 @@ namespace ProjControleFinanceiro.Domain.Services
         {
             Errors.Add(error);
         }
+        public void AdicionarErroProcessamento(List<string> errors)
+        {
+            foreach ( var error in errors)
+            {
+                Errors.Add(error);
+            }
+        }
         public void AdicionarErroProcessamento(ValidationResult validation)
         {
             var errors = validation.Errors;
