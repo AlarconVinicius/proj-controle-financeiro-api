@@ -17,5 +17,17 @@ namespace ProjControleFinanceiro.Domain.DTOs.Transacao
         public bool Repete { get; set; }
         public int QtdRepeticao { get; set; }
 
+        public TransacaoAddDTO()
+        {
+            Descricao = string.Empty;
+            Valor = 0.0;
+            Data = DateTime.Now.ToString("dd/MM/yyyy");
+            TipoTransacao = TipoTransacao.Despesa;
+            Categoria = Categoria.Outros;
+            Pago = false;
+            Repete = false;
+            QtdRepeticao = 0;
+        }
+
     }
 }

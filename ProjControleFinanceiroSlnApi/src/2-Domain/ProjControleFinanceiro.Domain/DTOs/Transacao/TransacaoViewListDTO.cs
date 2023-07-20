@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ProjControleFinanceiro.Domain.DTOs.Transacao
+﻿namespace ProjControleFinanceiro.Domain.DTOs.Transacao
 {
     public class TransacaoViewListDTO
     {
