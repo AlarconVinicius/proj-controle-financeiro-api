@@ -117,10 +117,13 @@ namespace ProjControleFinanceiro.Api.Controllers
 
 
         /// <summary>
-        /// Gera um relatorio
+        /// Gerar PDF com base no filtro de transações
         /// </summary>
-        /// <returns>Relatorio listando todas as transações.</returns>
-        /// <response code="200">Gera uma listagem das transacoes</response>
+        /// <returns>Resposta de sucesso.</returns>
+        /// <response code="200">Indica que a geração do relatório obteve sucesso</response>
+        /// <response code="400">Retorna erros de validação ou problemas na requisição.</response>
+        [ProducesResponseType(typeof(ApiSuccessResponse<object>), 200)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpPost("relatorio")]
         public async Task<IActionResult> GerarPdf([FromQuery] RelatorioPDF query)
         {

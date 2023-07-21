@@ -25,7 +25,7 @@ namespace ProjControleFinanceiro.Data.Repositorios
         {
             DateTime dtInicio = dtI.ToDateTime();
             DateTime dtFim = dtF.ToDateTime();
-            return _context.Transacoes.Where(t => t.Data.Date >= dtInicio && t.Data.Date <= dtFim);
+            return _context.Transacoes.Where(t => t.Data.Date >= dtInicio && t.Data.Date <= dtFim).OrderBy(x => x.Data);
         }
 
         public IQueryable<Transacao> ObterTransacaoPorMes(int? mes, int? ano)
@@ -35,7 +35,7 @@ namespace ProjControleFinanceiro.Data.Repositorios
 
         public IQueryable<Transacao> ObterTransacaoPorAno(int? ano)
         {
-            return _context.Transacoes.Where(t => t.Data.Year.Equals(ano));
+            return _context.Transacoes.Where(t => t.Data.Year.Equals(ano)).OrderBy(x => x.Data);
         }
 
     }

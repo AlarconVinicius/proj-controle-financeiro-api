@@ -25,10 +25,10 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio
 
 
                 RuleFor(dto => dto.Ano)
-                    .Empty().WithMessage("O ano não pode ser utilizado nesse filtro");
+                    .Empty().WithMessage("Para o filtro de Período: o ano não pode ser utilizado");
 
                 RuleFor(dto => dto.Mes)
-                    .Empty().WithMessage("O mês não pode ser utilizado nesse filtro");
+                    .Empty().WithMessage("Para o filtro de Período: o mês não pode ser utilizado");
 
             });
 
@@ -47,10 +47,10 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio
 
 
                 RuleFor(dto => dto.De)
-                    .Empty().WithMessage("O período não pode ser utilizado no ciclo mensal");
+                    .Empty().WithMessage("Para o filtro de Mensal: o período não pode ser utilizado");
 
                 RuleFor(dto => dto.Ate)
-                    .Empty().WithMessage("O período não pode ser utilizado no ciclo mensal");
+                    .Empty().WithMessage("Para o filtro de Mensal: o período não pode ser utilizado");
 
             });
 

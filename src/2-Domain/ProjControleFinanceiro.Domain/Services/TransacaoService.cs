@@ -141,10 +141,18 @@ namespace ProjControleFinanceiro.Domain.Services
             IEnumerable<TransacaoViewDTO> listagemTransacao = ObterTransacaoPorTipo(query).Select(t => t.ToGetDTORelatorio()).ToList();
 
             if (!OperacaoValida()) return false;
-            if (!listagemTransacao.Any()) { AdicionarErroProcessamento("Transição vazia para o período"); return false; }
+            if (!listagemTransacao.Any()) { AdicionarErroProcessamento("Transação vazia para o período"); return false; }
 
             var path ="c:/Teste.pdf";
 
+            await CriarPdf(path, listagemTransacao);
+
+            return true;
+
+        }
+
+        private async Task CriarPdf(string path, IEnumerable<TransacaoViewDTO> listaTransacao)
+        {
             await Task.Run(() =>
             {
                 using (PdfWriter wpf = new PdfWriter(path, new WriterProperties().SetPdfVersion(PdfVersion.PDF_2_0)))
@@ -152,7 +160,9 @@ namespace ProjControleFinanceiro.Domain.Services
                     var pdfDocument = new PdfDocument(wpf);
                     var document = new Document(pdfDocument, PageSize.A4);
 
-                    Paragraph heading = new Paragraph("Controle Financeiro").SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER).SetFontSize(25);
+                    Paragraph heading = new Paragraph("Controle Financeiro")
+                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                        .SetFontSize(18);
                     document.Add(heading);
 
                     float[] columnsWidth = { 30, 10, 10, 10 };
@@ -188,18 +198,14 @@ namespace ProjControleFinanceiro.Domain.Services
                       .SetBackgroundColor(ColorConstants.WHITE)
                       .Add(new Paragraph("Pago")));
 
-                    PopularColunas(tabela, document, (IList<TransacaoViewDTO>)listagemTransacao);
+                    PopularColunas(tabela, document, (IList<TransacaoViewDTO>)listaTransacao);
 
                     document.Close();
                     pdfDocument.Close();
                 }
             });
-
-            return true;
-
         }
 
-        
         private bool PopularColunas(Table tabela, Document document, IList<TransacaoViewDTO> listaTransacao)
         {
            
@@ -229,7 +235,7 @@ namespace ProjControleFinanceiro.Domain.Services
             {
 
                 string mes = new DateTimeFormatInfo().GetMonthName(query.Mes.Value).ToString();
-                ciclo = $"Ttransações do mês {mes}/ {query.Ano}";
+                ciclo = $"Transações do mês {mes}/ {query.Ano}";
                 return _transacaoRepository.ObterTransacaoPorMes(query.Mes, query.Ano).ToList();
             }
             else if (query.Ano.HasValue)
