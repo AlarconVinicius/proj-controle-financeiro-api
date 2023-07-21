@@ -6,5 +6,9 @@ namespace ProjControleFinanceiro.Domain.Interfaces.Repositorios
     {
         Task<List<Transacao>> ObterTransacoes();
         Task<Transacao> ObterTransacaoPorId(int id);
+        IQueryable<Transacao> ObterTransacaoPeriodo(string? dtInicio, string? dtFim);
+        IQueryable<Transacao> ObterTransacaoPorMes(int? mes, int? ano);
+        IQueryable<Transacao> ObterTransacaoPorAno(int? ano);
+
     }
 }

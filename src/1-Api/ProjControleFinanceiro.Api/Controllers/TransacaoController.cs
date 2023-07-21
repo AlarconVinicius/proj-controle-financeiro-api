@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjControleFinanceiro.Api.Controllers.Configuracao;
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
+using ProjControleFinanceiro.Domain.DTOs.Transacao.Relatorio;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace ProjControleFinanceiro.Api.Controllers
 {
@@ -112,5 +114,20 @@ namespace ProjControleFinanceiro.Api.Controllers
             if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
             return CustomResponse();
         }
+
+
+        /// <summary>
+        /// Gera um relatorio
+        /// </summary>
+        /// <returns>Relatorio listando todas as transações.</returns>
+        /// <response code="200">Gera uma listagem das transacoes</response>
+        [HttpPost("relatorio")]
+        public async Task<IActionResult> GerarPdf([FromQuery] RelatorioPDF query)
+        {
+            var objetoMapeado = await _transacaoService.GerarRelatorio(query);
+            if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
+            return CustomResponse(objetoMapeado);
+        }
+
     }
 }

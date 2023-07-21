@@ -11,5 +11,6 @@ namespace ProjControleFinanceiro.Domain.DTOs.Transacao
         public TipoTransacaoDTO TipoTransacao { get; set; }
         public CategoriaDTO Categoria { get; set; }
         public bool Pago { get; set; }
+        public string? PagoRelaorio { get; set; }
     }
 }
