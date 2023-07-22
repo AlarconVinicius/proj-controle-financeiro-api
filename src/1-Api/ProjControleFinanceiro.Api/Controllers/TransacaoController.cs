@@ -127,9 +127,9 @@ namespace ProjControleFinanceiro.Api.Controllers
         [HttpPost("relatorio")]
         public async Task<IActionResult> GerarPdf([FromQuery] RelatorioPDF query)
         {
-            var objetoMapeado = await _transacaoService.GerarRelatorio(query);
+            Byte[] pdfEmByte = await _transacaoService.GerarRelatorio(query);
             if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
-            return CustomResponse(objetoMapeado);
+            return CustomResponse(File(pdfEmByte, "application/pdf", "relatorio.pdf"));
         }
 
     }

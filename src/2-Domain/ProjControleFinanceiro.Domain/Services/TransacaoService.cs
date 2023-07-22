@@ -13,8 +13,6 @@ using ProjControleFinanceiro.Domain.Extensions;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 using ProjControleFinanceiro.Entities.Entidades;
-using System;
-using System.Collections;
 using System.Globalization;
 
 namespace ProjControleFinanceiro.Domain.Services
@@ -128,34 +126,38 @@ namespace ProjControleFinanceiro.Domain.Services
             return true;
         }
 
-        public async Task<bool> GerarRelatorio(RelatorioPDF query)
+        public async Task<Byte[]> GerarRelatorio(RelatorioPDF query)
         {
 
             var validationResult = await _addValidatorPdf.ValidateAsync(query);
             if (!validationResult.IsValid)
             {
                 AdicionarErroProcessamento(validationResult);
-                return false;
+                return null;
             }
 
             IEnumerable<TransacaoViewDTO> listagemTransacao = ObterTransacaoPorTipo(query).Select(t => t.ToGetDTORelatorio()).ToList();
 
-            if (!OperacaoValida()) return false;
-            if (!listagemTransacao.Any()) { AdicionarErroProcessamento("Transação vazia para o período"); return false; }
+            
+            if (!listagemTransacao.Any()) {
+                AdicionarErroProcessamento("Transação vazia para o período");
+                return null;
+            }
 
-            var path ="c:/Teste.pdf";
-
-            await CriarPdf(path, listagemTransacao);
-
-            return true;
+            var ms = await CriarPdf(listagemTransacao);
+            return ms.ToArray();
+            
 
         }
 
-        private async Task CriarPdf(string path, IEnumerable<TransacaoViewDTO> listaTransacao)
+        private async Task<MemoryStream> CriarPdf(IEnumerable<TransacaoViewDTO> listaTransacao)
         {
+            MemoryStream ms = new MemoryStream();
+
             await Task.Run(() =>
             {
-                using (PdfWriter wpf = new PdfWriter(path, new WriterProperties().SetPdfVersion(PdfVersion.PDF_2_0)))
+
+                using (PdfWriter wpf = new PdfWriter(ms))
                 {
                     var pdfDocument = new PdfDocument(wpf);
                     var document = new Document(pdfDocument, PageSize.A4);
@@ -201,9 +203,10 @@ namespace ProjControleFinanceiro.Domain.Services
                     PopularColunas(tabela, document, (IList<TransacaoViewDTO>)listaTransacao);
 
                     document.Close();
-                    pdfDocument.Close();
+                    pdfDocument.Close();                   
                 }
             });
+            return ms;
         }
 
         private bool PopularColunas(Table tabela, Document document, IList<TransacaoViewDTO> listaTransacao)
