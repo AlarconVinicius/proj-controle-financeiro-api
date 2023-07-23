@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using ProjControleFinanceiro.Api.IoC;
+using ProjControleFinanceiro.Api.Configuration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,12 +20,15 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+
 builder.Services.RegistrarServicos(builder.Configuration);
+builder.Services.AddIdentityConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
@@ -35,7 +38,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapControllers();
 

@@ -8,7 +8,7 @@ using ProjControleFinanceiro.Domain.Interfaces.Services;
 using ProjControleFinanceiro.Domain.Services;
 using ProjControleFinanceiro.Domain.Validators.Transacao;
 
-namespace ProjControleFinanceiro.Api.IoC
+namespace ProjControleFinanceiro.Api.Configuration
 {
     public static class InjecaoDependenciaConfig
     {
