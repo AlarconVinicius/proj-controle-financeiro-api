@@ -69,7 +69,7 @@
             <Entry x:Name="EntryQtdRepete" Placeholder="0" Margin="15, 0" IsVisible="{Binding Source={x:Reference CheckBoxRepete}, Path=IsChecked}"/>
         </StackLayout>
         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-            <Button Clicked="OnButtonClicked_Delete" Text="Deletar" CommandParameter="{Binding .}" Margin="15, 0" HorizontalOptions="Center" BackgroundColor="Red"/>
+            <Button Clicked="OnButtonClicked_Delete" Text="Deletar" Margin="15, 0" HorizontalOptions="Center" BackgroundColor="Red"/>
             <Button Clicked="OnButtonClicked_Save" Text="Salvar" Margin="15, 0" HorizontalOptions="Center"/>
         </StackLayout>
         

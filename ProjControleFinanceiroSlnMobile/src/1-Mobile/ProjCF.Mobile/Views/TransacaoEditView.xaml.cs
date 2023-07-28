@@ -61,11 +61,23 @@ public partial class TransacaoEditView : ContentPage
 
         if (result)
         {
-            Button button = (Button)sender;
-            TransacaoModel transaction = (TransacaoModel)button.CommandParameter;
-            await Navigation.PopModalAsync();
+            TransacaoModel transaction = new TransacaoModel()
+            {
+                Id = _transacaoModel.Id,
+                TipoTransacao = RadioIncome.IsChecked ? TipoTransacao.Receita : TipoTransacao.Despesa,
+                Descricao = EntryName.Text,
+                Data = DatePickerDate.Date,
+                Valor = Math.Abs(double.Parse(EntryValue.Text)),
+                Pago = CheckBoxPaid.IsChecked ? true : false
+            };
             _transacaoRepository.DeletarTransacao(transaction);
+            await Navigation.PopModalAsync();
             WeakReferenceMessenger.Default.Send<string>(string.Empty);
+            //Button button = (Button)sender;
+            //TransacaoModel transaction = (TransacaoModel)button.CommandParameter;
+            //await Navigation.PopModalAsync();
+            //_transacaoRepository.DeletarTransacao(transaction);
+            //WeakReferenceMessenger.Default.Send<string>(string.Empty);
         }
         else
         {

@@ -27,7 +27,6 @@ public partial class TransacaoListView : ContentPage
             Reload();
         });
     }
-
     private void Reload()
     {
         GetYearAndMounth();
