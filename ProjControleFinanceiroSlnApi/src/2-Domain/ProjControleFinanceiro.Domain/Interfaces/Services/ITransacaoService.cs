@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using ProjControleFinanceiro.Domain.DTOs.Transacao;
+﻿using ProjControleFinanceiro.Domain.DTOs.Transacao;
 using ProjControleFinanceiro.Domain.DTOs.Transacao.Relatorio;
 
 namespace ProjControleFinanceiro.Domain.Interfaces.Services
