@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ProjControleFinanceiro.Api.Configuration;
 using ProjControleFinanceiro.Api.Controllers.Configuracao;
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 
 namespace ProjControleFinanceiro.Api.Controllers
 {
-    [ApiController]
+   
     [Route("api/transacoes")]
+    [Authorize]
     public class TransacaoController : MainController
     {
         private readonly ITransacaoService _transacaoService;
@@ -54,7 +57,8 @@ namespace ProjControleFinanceiro.Api.Controllers
         /// </summary>
         /// <returns>Lista de todas as transações.</returns>
         /// <response code="200">Retorna a lista de transações obtidas com sucesso.</response>
-        /// <response code="400">Retorna erros de validação ou problemas na requisição.</response>
+        /// <response code="400">Retorna erros de validação ou problemas na requisição.</response> 
+        [ClaimsAuthorize("Admin", "Total")]
         [ProducesResponseType(typeof(ApiSuccessResponse<TransacaoViewListDTO>), 200)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpGet]
