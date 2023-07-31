@@ -329,7 +329,7 @@ namespace ProjControleFinanceiro.Domain.Services
                 tabela.AddCell(new Cell().SetPadding(10).SetTextAlignment(TextAlignment.LEFT).Add(new Paragraph(listaTransacao[i].Descricao)));
                 tabela.AddCell(new Cell().SetPadding(10).SetTextAlignment(TextAlignment.LEFT).Add(new Paragraph(listaTransacao[i].Valor.ToString())));
                 tabela.AddCell(new Cell().SetPadding(10).SetTextAlignment(TextAlignment.LEFT).Add(new Paragraph(listaTransacao[i].Data.ToString())));
-                tabela.AddCell(new Cell().SetPadding(10).SetTextAlignment(TextAlignment.LEFT).Add(new Paragraph(listaTransacao[i].PagoRelaorio)));
+                tabela.AddCell(new Cell().SetPadding(10).SetTextAlignment(TextAlignment.LEFT).Add(new Paragraph(listaTransacao[i].PagoRelatorio)));
             }
 
             document.Add(tabela);
