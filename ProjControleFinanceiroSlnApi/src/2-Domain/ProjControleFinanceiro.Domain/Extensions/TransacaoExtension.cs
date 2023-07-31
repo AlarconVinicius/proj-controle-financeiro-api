@@ -22,5 +22,17 @@ namespace ProjControleFinanceiro.Domain.Extensions
                 Pago = value.Pago
             };
         }
+
+        public static TransacaoViewDTO ToGetDTORelatorio(this Transacao value)
+        {
+            return new TransacaoViewDTO
+            {
+                Descricao = value.Descricao,
+                Valor = value.Valor,
+                Data = value.Data.ToString("dd/MM/yyyy"),
+                PagoRelaorio = value.Pago ? "Pago" : "Não pago"
+            };
+        }
+
     }
 }

@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using ProjControleFinanceiro.Data.Configuracao;
 using ProjControleFinanceiro.Data.Repositorios;
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
+using ProjControleFinanceiro.Domain.DTOs.Transacao.Relatorio;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 using ProjControleFinanceiro.Domain.Services;
 using ProjControleFinanceiro.Domain.Validators.Transacao;
+using ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio;
 
-namespace ProjControleFinanceiro.Api.IoC
+namespace ProjControleFinanceiro.Api.Configuration
 {
     public static class InjecaoDependenciaConfig
     {
@@ -27,6 +29,7 @@ namespace ProjControleFinanceiro.Api.IoC
 
             services.AddScoped<IValidator<TransacaoAddDTO>, TransacaoAddValidator>();
             services.AddScoped<IValidator<TransacaoUpdDTO>, TransacaoUpdValidator>();
+            services.AddScoped<IValidator<RelatorioPDF>, RelatorioAddValidator>();
         }
     }
 }
