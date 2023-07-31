@@ -30,7 +30,7 @@ namespace ProjControleFinanceiro.Domain.Extensions
                 Descricao = value.Descricao,
                 Valor = value.Valor,
                 Data = value.Data.ToString("dd/MM/yyyy"),
-                PagoRelaorio = value.Pago ? "Pago" : "Não pago"
+                PagoRelatorio = value.Pago ? "Pago" : "Não pago"
             };
         }
 

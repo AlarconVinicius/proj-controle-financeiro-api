@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using ProjControleFinanceiro.Api.Configuration;
@@ -15,6 +16,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
 });
+
+ValidatorOptions.Global.CascadeMode = CascadeMode.Stop;
 
 builder.Services.RegistrarServicos(builder.Configuration);
 
