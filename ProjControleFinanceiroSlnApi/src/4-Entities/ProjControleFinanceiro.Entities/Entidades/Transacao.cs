@@ -6,6 +6,7 @@ namespace ProjControleFinanceiro.Entities.Entidades
     [Table("Transacoes")]
     public class Transacao : Entity
     {
+        public Guid ClienteId { get; set; }
         public string Descricao { get; set; }
         public double Valor { get; set; }
         public DateTime Data { get; set; }
@@ -25,5 +26,9 @@ namespace ProjControleFinanceiro.Entities.Entidades
             Repete = repete;
             QtdRepeticao = qtdRepeticao;
         }
+        public Transacao(){}
+
+        /* EF Relational */
+        public Cliente cliente { get; set; }    
     }
 }

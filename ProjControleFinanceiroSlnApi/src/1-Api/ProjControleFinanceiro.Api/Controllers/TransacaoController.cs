@@ -47,7 +47,7 @@ namespace ProjControleFinanceiro.Api.Controllers
         [ProducesResponseType(typeof(ApiSuccessResponse<TransacaoViewDTO>), 200)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObterTransacaoPorId([FromRoute] int id)
+        public async Task<IActionResult> ObterTransacaoPorId([FromRoute] Guid id)
         {
             var objetoMapeado = await _transacaoService.ObterTransacaoPorId(id);
             if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
@@ -115,7 +115,7 @@ namespace ProjControleFinanceiro.Api.Controllers
         [ProducesResponseType(typeof(ApiSuccessResponse<object>), 200)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpPatch("{id}/pago")]
-        public async Task<IActionResult> AtualizarStatusPagamento([FromRoute] int id, [FromBody] bool pago)
+        public async Task<IActionResult> AtualizarStatusPagamento([FromRoute] Guid id, [FromBody] bool pago)
         {
             await _transacaoService.AtualizarStatusPagamento(id, pago);
             if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
@@ -132,7 +132,7 @@ namespace ProjControleFinanceiro.Api.Controllers
         [ProducesResponseType(typeof(ApiSuccessResponse<object>), 200)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletarTransacao([FromRoute] int id)
+        public async Task<IActionResult> DeletarTransacao([FromRoute] Guid id)
         {
             await _transacaoService.DeletarTransacao(id);
             if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());

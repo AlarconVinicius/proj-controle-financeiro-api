@@ -23,7 +23,7 @@ namespace ProjControleFinanceiro.Data.Repositorios
                             .Where(t => t.Data.Month == mes && t.Data.Year == ano)
                             .ToListAsync();
         }
-        public async Task<Transacao> ObterTransacaoPorId(int id)
+        public async Task<Transacao> ObterTransacaoPorId(Guid id)
         {
             return await _context.Transacoes.FirstOrDefaultAsync(t => t.Id == id);
         }

@@ -72,7 +72,7 @@ namespace ProjControleFinanceiro.Domain.Services
             }
         }
 
-        public async Task<TransacaoViewDTO> ObterTransacaoPorId(int id)
+        public async Task<TransacaoViewDTO> ObterTransacaoPorId(Guid id)
         {
             try
             {
@@ -194,7 +194,7 @@ namespace ProjControleFinanceiro.Domain.Services
                 return false;
             }
         }
-        public async Task<bool> AtualizarStatusPagamento(int id, bool pago)
+        public async Task<bool> AtualizarStatusPagamento(Guid id, bool pago)
         {
             try
             {
@@ -216,7 +216,7 @@ namespace ProjControleFinanceiro.Domain.Services
                 return false;
             }
         }
-        public async Task<bool> DeletarTransacao(int id)
+        public async Task<bool> DeletarTransacao(Guid id)
         {
             try
             {
