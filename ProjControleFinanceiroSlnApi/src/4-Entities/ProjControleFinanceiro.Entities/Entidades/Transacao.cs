@@ -15,8 +15,9 @@ namespace ProjControleFinanceiro.Entities.Entidades
         public bool Pago { get; set; }
         public bool Repete { get; set; }
         public int QtdRepeticao { get; set; }
-        public Transacao(string descricao, double valor, DateTime data, TipoTransacao tipoTransacao, Categoria categoria, bool pago = false, bool repete = false, int qtdRepeticao = 0)
+        public Transacao(Guid clienteId, string descricao, double valor, DateTime data, TipoTransacao tipoTransacao, Categoria categoria, bool pago = false, bool repete = false, int qtdRepeticao = 0)
         {
+            ClienteId = clienteId;
             Descricao = descricao;
             Valor = valor;
             Data = data;

@@ -12,8 +12,8 @@ using ProjControleFinanceiro.Data.Configuracao;
 namespace ProjControleFinanceiro.Data.Migrations
 {
     [DbContext(typeof(ContextoBase))]
-    [Migration("20230802022543_ClienteMigrationFirts")]
-    partial class ClienteMigrationFirts
+    [Migration("20230802172054_ClienteMigration")]
+    partial class ClienteMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,10 +30,6 @@ namespace ProjControleFinanceiro.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

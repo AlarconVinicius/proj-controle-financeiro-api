@@ -25,13 +25,14 @@ namespace ProjControleFinanceiro.Domain.Services
         private readonly IValidator<TransacaoUpdDTO> _updValidator;
         private readonly IValidator<RelatorioPDF> _addValidatorPdf;
         private string ciclo = "";
-
-        public TransacaoService(ITransacaoRepository transacaoRepository, IValidator<TransacaoAddDTO> addValidator, IValidator<TransacaoUpdDTO> updValidator, IValidator<RelatorioPDF> addValidatorPdf)
+        private readonly IUser _user;
+        public TransacaoService(ITransacaoRepository transacaoRepository, IValidator<TransacaoAddDTO> addValidator, IValidator<TransacaoUpdDTO> updValidator, IValidator<RelatorioPDF> addValidatorPdf, IUser user)
         {
             _transacaoRepository = transacaoRepository;
             _addValidator = addValidator;
             _updValidator = updValidator;
             _addValidatorPdf = addValidatorPdf;
+            _user = user;
         }
         public async Task<TransacaoViewDTO> AdicionarTransacao(TransacaoAddDTO objeto)
         {
@@ -43,6 +44,7 @@ namespace ProjControleFinanceiro.Domain.Services
                     AdicionarErroProcessamento(validationResult);
                     return null!;
                 }
+                objeto.ClienteId = _user.GetUserId();
                 Transacao objetoMapeado = objeto.ToAddDTO();
                 await _transacaoRepository.AddAsync(objetoMapeado);
                 if (objetoMapeado.QtdRepeticao > 0)
@@ -50,7 +52,7 @@ namespace ProjControleFinanceiro.Domain.Services
                     for (int i = 0; i <= objetoMapeado.QtdRepeticao - 1; i++)
                     {
                         DateTime dataFutura = objetoMapeado.Data.AddMonths(i + 1);
-                        Transacao transacaoFutura = new Transacao(objetoMapeado.Descricao, objetoMapeado.Valor, dataFutura, objetoMapeado.TipoTransacao, objetoMapeado.Categoria);
+                        Transacao transacaoFutura = new Transacao(objetoMapeado.ClienteId,objetoMapeado.Descricao, objetoMapeado.Valor, dataFutura, objetoMapeado.TipoTransacao, objetoMapeado.Categoria);
                         await _transacaoRepository.AddAsync(transacaoFutura);
                     }
                 }

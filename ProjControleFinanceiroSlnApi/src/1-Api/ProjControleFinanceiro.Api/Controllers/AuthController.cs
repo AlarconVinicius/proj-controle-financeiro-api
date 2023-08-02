@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using ProjControleFinanceiro.Api.Controllers.Configuracao;
 using ProjControleFinanceiro.Api.Extensions;
 using ProjControleFinanceiro.Domain.DTOs.Usuario;
+using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
+using ProjControleFinanceiro.Entities.Entidades;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,13 +19,15 @@ namespace ProjControleFinanceiro.Api.Controllers
 
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IClienteRepository _cliente;
         private readonly AppSettings _appSettings;
 
-        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IOptions<AppSettings> appSettings)
+        public AuthController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IOptions<AppSettings> appSettings, IClienteRepository cliente)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _cliente = cliente;
         }
 
         [HttpPost("registrar")]
@@ -43,13 +47,28 @@ namespace ProjControleFinanceiro.Api.Controllers
             if(result.Succeeded)
             {
                 //Criar o usuario (Nova tabela chamada Usuario)
+                var userIdentity = await _userManager.FindByEmailAsync(registroUsuario.Email);
+                Guid userId = Guid.Parse(userIdentity.Id);
+                Cliente cliente = new Cliente()
+                {
+                    Id = userId,
+                };
+
+                await _cliente.AddAsync(cliente);
 
                 //Identity
                 await _signInManager.SignInAsync(user, false);
+            
                 return CustomResponse(result);
+            
             }
 
-            return CustomResponse(registroUsuario);
+            foreach(var erros in result.Errors)
+            {
+                AdicionarErroProcessamento(erros.Description);
+            }
+
+            return CustomResponse();
             
         }
 
@@ -60,7 +79,6 @@ namespace ProjControleFinanceiro.Api.Controllers
             if (!ModelState.IsValid) return BadRequest();
 
             var result = await _signInManager.PasswordSignInAsync(usuarioLogin.Email, usuarioLogin.Password, false, true);
-
 
             if (result.Succeeded)
             {

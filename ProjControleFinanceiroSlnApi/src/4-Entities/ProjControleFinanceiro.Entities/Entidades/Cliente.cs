@@ -9,7 +9,6 @@ namespace ProjControleFinanceiro.Entities.Entidades
 {
     public class Cliente : Entity
     {
-        public string nome { get; set; }
 
         //EF 
         public IEnumerable<Transacao> transacoes { get; set; }

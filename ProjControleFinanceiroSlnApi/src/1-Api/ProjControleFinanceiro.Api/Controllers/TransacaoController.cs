@@ -60,7 +60,6 @@ namespace ProjControleFinanceiro.Api.Controllers
         /// <returns>Lista de todas as transações.</returns>
         /// <response code="200">Retorna a lista de transações obtidas com sucesso.</response>
         /// <response code="400">Retorna erros de validação ou problemas na requisição.</response> 
-        [ClaimsAuthorize("Admin", "Total")]
         [ProducesResponseType(typeof(ApiSuccessResponse<TransacaoViewListDTO>), 200)]
         [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpGet]

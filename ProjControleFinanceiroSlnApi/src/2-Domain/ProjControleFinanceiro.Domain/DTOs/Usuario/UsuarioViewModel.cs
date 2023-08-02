@@ -9,6 +9,7 @@ namespace ProjControleFinanceiro.Domain.DTOs.Usuario
 {
     public class UsuarioViewModel
     {
+
         [Required(ErrorMessage = "O campo {0} é obrigatorio")]
         [EmailAddress(ErrorMessage = "O campo {0} está em formato inválido")]
         public string Email { get; set; }
