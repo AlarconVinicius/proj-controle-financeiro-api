@@ -10,6 +10,7 @@ using ProjControleFinanceiro.Entities.Entidades;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ProjControleFinanceiro.Api.Controllers
 {
@@ -76,7 +77,7 @@ namespace ProjControleFinanceiro.Api.Controllers
         [HttpPost("autenticar")]
         public async Task<ActionResult> Login(LoginUserViewModel usuarioLogin)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) { return CustomResponse(ModelState); }
 
             var result = await _signInManager.PasswordSignInAsync(usuarioLogin.Email, usuarioLogin.Password, false, true);
 
@@ -84,8 +85,8 @@ namespace ProjControleFinanceiro.Api.Controllers
             {
                 return Ok(await GerarJwt(usuarioLogin.Email));
             }
-
-            return BadRequest();
+            AdicionarErroProcessamento("Usuário ou senha inválido!");
+            return CustomResponse();
 
         }
 
