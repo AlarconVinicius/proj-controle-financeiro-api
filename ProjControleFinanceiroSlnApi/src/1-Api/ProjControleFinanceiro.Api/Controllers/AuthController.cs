@@ -10,7 +10,6 @@ using ProjControleFinanceiro.Entities.Entidades;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ProjControleFinanceiro.Api.Controllers
 {
@@ -31,6 +30,15 @@ namespace ProjControleFinanceiro.Api.Controllers
             _cliente = cliente;
         }
 
+        /// <summary>
+        /// Adiciona um novo usuário.
+        /// </summary>
+        /// <param name="registroUsuario">Objeto contendo os dados do usuário a ser adicionado.</param>
+        /// <returns>O usuário adicionado.</returns>
+        /// <response code="200">Retorna o usuário adicionado com sucesso.</response>
+        /// <response code="400">Retorna erros de validação ou problemas na requisição.</response>
+        [ProducesResponseType(typeof(ApiSuccessResponse<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpPost("registrar")]
         public async Task<ActionResult> Registar(UsuarioViewModel registroUsuario)
         {
@@ -60,7 +68,7 @@ namespace ProjControleFinanceiro.Api.Controllers
                 //Identity
                 await _signInManager.SignInAsync(user, false);
             
-                return CustomResponse(result);
+                return CustomResponse();
             
             }
 
@@ -73,7 +81,15 @@ namespace ProjControleFinanceiro.Api.Controllers
             
         }
 
-
+        /// <summary>
+        /// Autentica um usuário.
+        /// </summary>
+        /// <param name="usuarioLogin">Objeto contendo os dados do usuário a ser autenticado.</param>
+        /// <returns>O usuário autenticado.</returns>
+        /// <response code="200">Retorna o usuário autenticado com sucesso.</response>
+        /// <response code="400">Retorna erros de validação ou problemas na requisição.</response>
+        [ProducesResponseType(typeof(ApiSuccessResponse<UsuarioRespostaLogin>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
         [HttpPost("autenticar")]
         public async Task<ActionResult> Login(LoginUserViewModel usuarioLogin)
         {
@@ -83,7 +99,7 @@ namespace ProjControleFinanceiro.Api.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(await GerarJwt(usuarioLogin.Email));
+                return CustomResponse(await GerarJwt(usuarioLogin.Email));
             }
             AdicionarErroProcessamento("Usuário ou senha inválido!");
             return CustomResponse();
