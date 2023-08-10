@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProjControleFinanceiro.Api.Configuration;
 using ProjControleFinanceiro.Api.Controllers.Configuracao;
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
-using ProjControleFinanceiro.Domain.DTOs.Transacao.Relatorio;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace ProjControleFinanceiro.Api.Controllers
 {
-   
+
     [Route("api/transacoes")]
     [Authorize]
     public class TransacaoController : MainController
@@ -137,23 +134,5 @@ namespace ProjControleFinanceiro.Api.Controllers
             if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
             return CustomResponse();
         }
-
-
-        /// <summary>
-        /// Gerar PDF com base no filtro de transações
-        /// </summary>
-        /// <returns>Resposta de sucesso.</returns>
-        /// <response code="200">Indica que a geração do relatório obteve sucesso</response>
-        /// <response code="400">Retorna erros de validação ou problemas na requisição.</response>
-        [ProducesResponseType(typeof(ApiSuccessResponse<object>), 200)]
-        [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
-        [HttpPost("relatorio")]
-        public async Task<IActionResult> GerarPdf([FromQuery] RelatorioPDF query)
-        {
-            Byte[] pdfEmByte = await _transacaoService.GerarRelatorio(query);
-            if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
-            return CustomResponse(File(pdfEmByte, "application/pdf", "relatorio.pdf"));
-        }
-
     }
 }

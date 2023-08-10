@@ -1,5 +1,4 @@
 ﻿using ProjControleFinanceiro.Domain.DTOs.Transacao;
-using ProjControleFinanceiro.Domain.DTOs.Transacao.Relatorio;
 
 namespace ProjControleFinanceiro.Domain.Interfaces.Services
 {
@@ -12,6 +11,5 @@ namespace ProjControleFinanceiro.Domain.Interfaces.Services
         public Task<bool> AtualizarTransacao(TransacaoUpdDTO objeto);
         public Task<bool> AtualizarStatusPagamento(Guid id, bool pago);
         public Task<bool> DeletarTransacao(Guid id);
-        public Task<Byte[]> GerarRelatorio(RelatorioPDF query);
     }
 }
