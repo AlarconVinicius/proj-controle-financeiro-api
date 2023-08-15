@@ -31,6 +31,7 @@ namespace ProjControleFinanceiro.Api.Configuration
             services.AddScoped<IMainService, MainService>();
             services.AddScoped<ITransacaoService, TransacaoService>();
             services.AddScoped<IRelatorioService, RelatorioService>();
+            services.AddScoped<IEnumService, EnumService>();
 
             services.AddScoped<IValidator<TransacaoAddDTO>, TransacaoAddValidator>();
             services.AddScoped<IValidator<TransacaoUpdDTO>, TransacaoUpdValidator>();
