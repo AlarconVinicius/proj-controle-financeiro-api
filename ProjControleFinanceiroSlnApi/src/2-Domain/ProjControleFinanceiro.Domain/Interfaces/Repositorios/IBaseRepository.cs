@@ -4,8 +4,8 @@
     {
         Task AddAsync(T objeto);
         Task UpdateAsync(T objeto);
-        Task DeleteAsync(int id);
-        Task<T> GetEntityByIdAsync(int id);
+        Task DeleteAsync(Guid id);
+        Task<T> GetEntityByIdAsync(Guid id);
         Task<List<T>> ListAsync();
     }
 }

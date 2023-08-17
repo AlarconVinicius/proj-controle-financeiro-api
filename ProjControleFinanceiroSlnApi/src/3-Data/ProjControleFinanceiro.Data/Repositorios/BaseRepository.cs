@@ -24,7 +24,7 @@ namespace ProjControleFinanceiro.Data.Repositorios
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var objeto = await GetEntityByIdAsync(id);
             _context.Set<T>().Remove(objeto);
@@ -36,7 +36,7 @@ namespace ProjControleFinanceiro.Data.Repositorios
             return await _context.Set<T>().AsNoTracking().ToListAsync();
         }
 
-        public async Task<T> GetEntityByIdAsync(int id)
+        public async Task<T> GetEntityByIdAsync(Guid id)
         {
             return await _context.Set<T>().FindAsync(id);
         }

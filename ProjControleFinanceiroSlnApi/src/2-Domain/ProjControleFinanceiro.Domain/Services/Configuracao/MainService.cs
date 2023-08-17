@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Results;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 
-namespace ProjControleFinanceiro.Domain.Services
+namespace ProjControleFinanceiro.Domain.Services.Configuracao
 {
     public class MainService : IMainService
     {
@@ -17,7 +17,7 @@ namespace ProjControleFinanceiro.Domain.Services
         }
         public void AdicionarErroProcessamento(List<string> errors)
         {
-            foreach ( var error in errors)
+            foreach (var error in errors)
             {
                 Errors.Add(error);
             }

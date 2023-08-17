@@ -20,7 +20,8 @@ namespace ProjControleFinanceiro.Api.Configuration
             services.AddDefaultIdentity<IdentityUser>()
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>()
-               .AddDefaultTokenProviders();
+               .AddDefaultTokenProviders()
+               .AddErrorDescriber<IdentityMensagensPortugues>();
 
             var appSettingsSection = configuration.GetSection("AppSettings");
 

@@ -7,7 +7,7 @@ namespace ProjControleFinanceiro.Domain.Extensions
     {
         public static Transacao ToAddDTO(this TransacaoAddDTO value)
         {
-            return new Transacao(value.Descricao, value.Valor, value.Data.ToDateTime(), value.TipoTransacao, value.Categoria, value.Pago, value.Repete, value.QtdRepeticao);
+            return new Transacao(value.ClienteId, value.Descricao, value.Valor, value.Data.ToDateTime(), value.TipoTransacao, value.Categoria, value.Pago, value.Repete, value.QtdRepeticao);
         }
         public static TransacaoViewDTO ToGetDTO(this Transacao value)
         {

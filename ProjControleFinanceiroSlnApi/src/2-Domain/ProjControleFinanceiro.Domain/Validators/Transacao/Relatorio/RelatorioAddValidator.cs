@@ -19,21 +19,21 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio
             When(dto => dto.CicloPDf.Equals(CicloPDf.Periodo), () =>
             {
                 RuleFor(dto => dto.Ate)
-                .NotEmpty().WithMessage("Data de inicio precisa ser informada")
-                .Must(validaFormatoData).WithMessage("A data precisa está no formato dd/mm/yyyy");
+                .NotEmpty().WithMessage("Data de inicio precisa ser informada.")
+                .Must(validaFormatoData).WithMessage("A data precisa está no formato dd/mm/yyyy.");
 
 
                 RuleFor(dto => dto.De)
-                    .NotEmpty().WithMessage("Data de fim precisa ser informada")
-                    .Must(validaFormatoData).WithMessage("A data precisa está no formato dd/mm/yyyy")
-                    .Must((dto, inicio) => ValidarDataInicio(inicio, dto.Ate)).WithMessage("Data de inicio precisa ser menor do que Data Fim");
+                    .NotEmpty().WithMessage("Data de fim precisa ser informada.")
+                    .Must(validaFormatoData).WithMessage("A data precisa está no formato dd/mm/yyyy.")
+                    .Must((dto, inicio) => ValidarDataInicio(inicio, dto.Ate)).WithMessage("Data de inicio precisa ser menor do que Data Fim.");
 
 
                 RuleFor(dto => dto.Ano)
-                    .Empty().WithMessage("Para o filtro de Período: o ano não pode ser utilizado");
+                    .Empty().WithMessage("Para o filtro de Período: o ano não pode ser utilizado.");
 
                 RuleFor(dto => dto.Mes)
-                    .Empty().WithMessage("Para o filtro de Período: o mês não pode ser utilizado");
+                    .Empty().WithMessage("Para o filtro de Período: o mês não pode ser utilizado.");
 
             });
 
@@ -41,21 +41,21 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio
             When(dto => dto.CicloPDf.Equals(CicloPDf.Mensal), () =>
             {
                 RuleFor(dto => dto.Mes)
-                .InclusiveBetween(1, 12).WithMessage("Mes precisa ser entre 1 ou 12")
-                .NotEmpty().WithMessage("O mês precisa ser informada");
+                .InclusiveBetween(1, 12).WithMessage("Mês precisa ser entre 1 ou 12.")
+                .NotEmpty().WithMessage("O mês precisa ser informado.");
 
 
                 RuleFor(dto => dto.Ano)
                     .GreaterThanOrEqualTo(1900)
-                    .NotEmpty().WithMessage("Ano precisa ser informado")
+                    .NotEmpty().WithMessage("Ano precisa ser informado.")
                     .WithMessage("O ano deve ser maior ou igual a 1900.");
 
 
                 RuleFor(dto => dto.De)
-                    .Empty().WithMessage("Para o filtro de Mensal: o período não pode ser utilizado");
+                    .Empty().WithMessage("Para o filtro de Mensal: o período não pode ser utilizado.");
 
                 RuleFor(dto => dto.Ate)
-                    .Empty().WithMessage("Para o filtro de Mensal: o período não pode ser utilizado");
+                    .Empty().WithMessage("Para o filtro de Mensal: o período não pode ser utilizado.");
 
             });
 
@@ -63,19 +63,19 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio
             {
 
                 RuleFor(dto => dto.Ano)
-                    .NotEmpty().WithMessage("Data de fim precisa ser informada")
+                    .NotEmpty().WithMessage("Ano precisa ser informado.")
                     .GreaterThanOrEqualTo(1900)
                     .WithMessage("O ano deve ser maior ou igual a 1900.");
 
 
                 RuleFor(dto => dto.De)
-                    .Empty().WithMessage("O período não pode ser utilizado no relatório anual");
+                    .Empty().WithMessage("O período não pode ser utilizado no relatório anual.");
 
                 RuleFor(dto => dto.Ate)
-                    .Empty().WithMessage("O período não pode ser utilizado no relatório anual");
+                    .Empty().WithMessage("O período não pode ser utilizado no relatório anual.");
 
                 RuleFor(dto => dto.Mes)
-                    .Empty().WithMessage("O mês não pode ser utilizado no relatório anual");
+                    .Empty().WithMessage("O mês não pode ser utilizado no relatório anual.");
 
             });
 
@@ -84,10 +84,16 @@ namespace ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio
 
         private bool ValidarDataInicio(string? dataFim, string? dataInicio)
         {
-            DateTime dtInicio = dataInicio.ToDateTime();
-            DateTime dtFim = dataFim.ToDateTime();
-
-            return dtInicio > dtFim;
+            try
+            {
+                DateTime dtInicio = dataInicio.ToDateTime();
+                DateTime dtFim = dataFim.ToDateTime();
+                return dtInicio > dtFim;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private bool validaFormatoData(string data)

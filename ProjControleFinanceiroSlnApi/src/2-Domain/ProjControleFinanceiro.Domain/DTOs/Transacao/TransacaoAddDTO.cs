@@ -5,6 +5,8 @@ namespace ProjControleFinanceiro.Domain.DTOs.Transacao
 {
     public class TransacaoAddDTO
     {
+
+        public Guid ClienteId { get; set; }
         public string Descricao { get; set; }
         public double Valor { get; set; }
         [DefaultValue("dd/MM/yyyy")]

@@ -17,8 +17,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
-ValidatorOptions.Global.CascadeMode = CascadeMode.Stop;
-
 builder.Services.RegistrarServicos(builder.Configuration);
 
 var app = builder.Build();

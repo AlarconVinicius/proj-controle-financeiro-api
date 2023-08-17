@@ -17,21 +17,33 @@ namespace ProjControleFinanceiro.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.18")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ProjControleFinanceiro.Entities.Entidades.Cliente", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clientes");
+                });
 
             modelBuilder.Entity("ProjControleFinanceiro.Entities.Entidades.Transacao", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Categoria")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
@@ -57,7 +69,25 @@ namespace ProjControleFinanceiro.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClienteId");
+
                     b.ToTable("Transacoes");
+                });
+
+            modelBuilder.Entity("ProjControleFinanceiro.Entities.Entidades.Transacao", b =>
+                {
+                    b.HasOne("ProjControleFinanceiro.Entities.Entidades.Cliente", "cliente")
+                        .WithMany("transacoes")
+                        .HasForeignKey("ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("cliente");
+                });
+
+            modelBuilder.Entity("ProjControleFinanceiro.Entities.Entidades.Cliente", b =>
+                {
+                    b.Navigation("transacoes");
                 });
 #pragma warning restore 612, 618
         }
