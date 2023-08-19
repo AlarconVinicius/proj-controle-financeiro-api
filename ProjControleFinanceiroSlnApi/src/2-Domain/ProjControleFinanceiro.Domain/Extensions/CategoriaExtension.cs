@@ -1,17 +1,16 @@
 ﻿using ProjControleFinanceiro.Domain.DTOs.Enums;
 using ProjControleFinanceiro.Entities.Entidades.Enums;
 
-namespace ProjControleFinanceiro.Domain.Extensions
+namespace ProjControleFinanceiro.Domain.Extensions;
+
+public static class CategoriaExtension
 {
-    public static class CategoriaExtension
+    public static CategoriaDto ToGetDTO(this Categoria value)
     {
-        public static CategoriaDTO ToGetDTO(this Categoria value)
+        return new CategoriaDto
         {
-            return new CategoriaDTO
-            {
-                Id = value.GetHashCode(),
-                Categoria = value.ToString()
-            };
-        }
+            Id = value.GetHashCode(),
+            Categoria = value.ToString()
+        };
     }
 }

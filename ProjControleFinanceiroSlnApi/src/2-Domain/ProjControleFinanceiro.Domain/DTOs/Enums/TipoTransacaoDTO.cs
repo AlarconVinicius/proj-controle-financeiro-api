@@ -1,13 +1,12 @@
-﻿namespace ProjControleFinanceiro.Domain.DTOs.Enums
+﻿namespace ProjControleFinanceiro.Domain.DTOs.Enums;
+
+public class TipoTransacaoDto
 {
-    public class TipoTransacaoDTO
+    public int Id { get; set; }
+    public string TipoTransacao { get; set; }
+    public TipoTransacaoDto()
     {
-        public int Id { get; set; }
-        public string TipoTransacao { get; set; }
-        public TipoTransacaoDTO()
-        {
-            Id = 0;
-            TipoTransacao = string.Empty;
-        }
+        Id = 0;
+        TipoTransacao = string.Empty;
     }
 }
