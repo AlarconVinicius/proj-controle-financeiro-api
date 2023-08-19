@@ -1,58 +1,57 @@
 ﻿using Microsoft.OpenApi.Models;
 using System.Reflection;
 
-namespace ProjControleFinanceiro.Api.Configuration
+namespace ProjControleFinanceiro.Api.Configuration;
+
+public static class SwaggerConfig
 {
-    public static class SwaggerConfig
+
+    public static void AddSwaggerConfiguration(this IServiceCollection services)
     {
-
-        public static void AddSwaggerConfiguration(this IServiceCollection services)
+        services.AddSwaggerGen(options =>
         {
-            services.AddSwaggerGen(options =>
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "ControleFinanceiro.Api", Version = "v1" });
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
             {
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                options.IncludeXmlComments(xmlPath);
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ControleFinanceiro.Api", Version = "v1" });
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Insira o token JWT desta maneira: Bearer {seu token}"
 
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
                 {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "Insira o token JWT desta maneira: Bearer {seu token}"
-
-                });
-
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                          new OpenApiSecurityScheme
+                      new OpenApiSecurityScheme
+                      {
+                          Reference = new OpenApiReference
                           {
-                              Reference = new OpenApiReference
-                              {
-                                  Type = ReferenceType.SecurityScheme,
-                                  Id = "Bearer"
-                              }
-                          },
-                         new string[] {}
-                    }
-                });
-
+                              Type = ReferenceType.SecurityScheme,
+                              Id = "Bearer"
+                          }
+                      },
+                     new string[] {}
+                }
             });
 
-        }
-
-        public static void UseSwaggerConfiguration(this IApplicationBuilder app)
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ControleFinanceiro.Api V1");
-            });
-        }
+        });
 
     }
+
+    public static void UseSwaggerConfiguration(this IApplicationBuilder app)
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "ControleFinanceiro.Api V1");
+        });
+    }
+
 }

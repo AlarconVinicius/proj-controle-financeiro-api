@@ -2,77 +2,76 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace ProjControleFinanceiro.Api.Controllers.Configuracao
+namespace ProjControleFinanceiro.Api.Controllers.Configuracao;
+
+[ApiController]
+public abstract class MainController : ControllerBase
 {
-    [ApiController]
-    public abstract class MainController : ControllerBase
+    protected ICollection<string> Erros = new List<string>();
+
+    protected ActionResult CustomResponse(object result = null!)
     {
-        protected ICollection<string> Erros = new List<string>();
-
-        protected ActionResult CustomResponse(object result = null!)
+        if (OperacaoValida())
         {
-            if (OperacaoValida())
+            var response = new ApiSuccessResponse<object>
             {
-                var response = new ApiSuccessResponse<object>
-                {
-                    Success = true,
-                    Data = result
-                };
-
-                return Ok(response);
-            }
-            var errorResponse = new ApiErrorResponse
-            {
-                Success = false,
-                Errors = new Dictionary<string, string[]>
-            {
-                { "Mensagens", Erros.ToArray() }
-            }
+                Success = true,
+                Data = result
             };
 
-            return BadRequest(errorResponse);
+            return Ok(response);
         }
-
-        protected ActionResult CustomResponse(ModelStateDictionary modelState)
+        var errorResponse = new ApiErrorResponse
         {
-            var erros = modelState.Values.SelectMany(e => e.Errors);
-            foreach (var erro in erros)
-            {
-                AdicionarErroProcessamento(erro.ErrorMessage);
-            }
-
-            return CustomResponse();
-        }
-
-        protected ActionResult CustomResponse(ValidationResult validation)
+            Success = false,
+            Errors = new Dictionary<string, string[]>
         {
-            var erros = validation.Errors;
-            foreach (var erro in erros)
-            {
-                AdicionarErroProcessamento(erro.ErrorMessage);
-            }
-
-            return CustomResponse();
+            { "Mensagens", Erros.ToArray() }
         }
+        };
 
-        protected ActionResult CustomResponse(ICollection<string> mensagens)
+        return BadRequest(errorResponse);
+    }
+
+    protected ActionResult CustomResponse(ModelStateDictionary modelState)
+    {
+        var erros = modelState.Values.SelectMany(e => e.Errors);
+        foreach (var erro in erros)
         {
-            foreach (var erro in mensagens)
-            {
-                AdicionarErroProcessamento(erro);
-            }
-
-            return CustomResponse();
+            AdicionarErroProcessamento(erro.ErrorMessage);
         }
 
-        protected bool OperacaoValida()
+        return CustomResponse();
+    }
+
+    protected ActionResult CustomResponse(ValidationResult validation)
+    {
+        var erros = validation.Errors;
+        foreach (var erro in erros)
         {
-            return !Erros.Any();
+            AdicionarErroProcessamento(erro.ErrorMessage);
         }
 
-        protected void AdicionarErroProcessamento(string erro)
+        return CustomResponse();
+    }
+
+    protected ActionResult CustomResponse(ICollection<string> mensagens)
+    {
+        foreach (var erro in mensagens)
         {
-            Erros.Add(erro);
+            AdicionarErroProcessamento(erro);
         }
+
+        return CustomResponse();
+    }
+
+    protected bool OperacaoValida()
+    {
+        return !Erros.Any();
+    }
+
+    protected void AdicionarErroProcessamento(string erro)
+    {
+        Erros.Add(erro);
     }
 }

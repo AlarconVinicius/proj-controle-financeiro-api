@@ -12,33 +12,32 @@ using ProjControleFinanceiro.Domain.Services.Configuracao;
 using ProjControleFinanceiro.Domain.Validators.Transacao;
 using ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio;
 
-namespace ProjControleFinanceiro.Api.Configuration
+namespace ProjControleFinanceiro.Api.Configuration;
+
+public static class InjecaoDependenciaConfig
 {
-    public static class InjecaoDependenciaConfig
+    public static void RegistrarServicos(this IServiceCollection services, IConfiguration configuration)
     {
-        public static void RegistrarServicos(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<ContextoBase>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
-            );
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        services.AddDbContext<ContextoBase>(options =>
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+        );
+        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
-            services.AddScoped<ITransacaoRepository, TransacaoRepository>();
-            services.AddScoped<IRelatorioRepository, RelatorioRepository>();
-            services.AddScoped<IClienteRepository, ClienteRepository>();
-            services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
+        services.AddScoped<ITransacaoRepository, TransacaoRepository>();
+        services.AddScoped<IRelatorioRepository, RelatorioRepository>();
+        services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
-            services.AddScoped<IMainService, MainService>();
-            services.AddScoped<ITransacaoService, TransacaoService>();
-            services.AddScoped<IRelatorioService, RelatorioService>();
-            services.AddScoped<IEnumService, EnumService>();
+        services.AddScoped<IMainService, MainService>();
+        services.AddScoped<ITransacaoService, TransacaoService>();
+        services.AddScoped<IRelatorioService, RelatorioService>();
+        services.AddScoped<IEnumService, EnumService>();
 
-            services.AddScoped<IValidator<TransacaoAddDTO>, TransacaoAddValidator>();
-            services.AddScoped<IValidator<TransacaoUpdDTO>, TransacaoUpdValidator>();
-            services.AddScoped<IValidator<RelatorioPDF>, RelatorioAddValidator>();
+        services.AddScoped<IValidator<TransacaoAddDto>, TransacaoAddValidator>();
+        services.AddScoped<IValidator<TransacaoUpdDto>, TransacaoUpdValidator>();
+        services.AddScoped<IValidator<RelatorioPdfDto>, RelatorioAddValidator>();
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IUser, AspNetUser>();
-        }
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IUser, AspNetUser>();
     }
 }

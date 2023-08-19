@@ -1,18 +1,17 @@
 ﻿using System.ComponentModel;
 
-namespace ProjControleFinanceiro.Api.Controllers.Configuracao
+namespace ProjControleFinanceiro.Api.Controllers.Configuracao;
+
+public class ApiErrorResponse
 {
-    public class ApiErrorResponse
+    [DefaultValue(false)]
+    public bool Success { get; set; }
+    public IDictionary<string, string[]> Errors { get; set; }
+    public ApiErrorResponse()
     {
-        [DefaultValue(false)]
-        public bool Success { get; set; }
-        public IDictionary<string, string[]> Errors { get; set; }
-        public ApiErrorResponse()
+        Errors = new Dictionary<string, string[]>
         {
-            Errors = new Dictionary<string, string[]>
-            {
-                { "Mensagens", new string[0] }
-            };
-        }
+            { "Mensagens", new string[0] }
+        };
     }
 }
