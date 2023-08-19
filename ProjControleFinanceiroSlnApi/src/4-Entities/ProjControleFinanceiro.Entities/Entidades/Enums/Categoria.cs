@@ -1,23 +1,22 @@
-﻿namespace ProjControleFinanceiro.Entities.Entidades.Enums
+﻿namespace ProjControleFinanceiro.Entities.Entidades.Enums;
+
+public enum Categoria
 {
-    public enum Categoria
-    {
-        Lazer = 1,
-        Restaurantes,
-        Viagem,
-        Educacao,
-        Vestuario,
-        Saúde,
-        Cartao,
-        Salario,
-        Casa,
-        Mercado,
-        Servicos,
-        Assinaturas,
-        Pets,
-        Investimentos,
-        Transporte,
-        Presentes,
-        Outros
-    }
+    Lazer = 1,
+    Restaurantes,
+    Viagem,
+    Educacao,
+    Vestuario,
+    Saúde,
+    Cartao,
+    Salario,
+    Casa,
+    Mercado,
+    Servicos,
+    Assinaturas,
+    Pets,
+    Investimentos,
+    Transporte,
+    Presentes,
+    Outros
 }

@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjControleFinanceiro.Entities.Entidades;
 
-namespace ProjControleFinanceiro.Data.Configuracao
-{
-    public class ContextoBase : DbContext
-    {
-        public ContextoBase(DbContextOptions<ContextoBase> options) : base(options)
-        { }
+namespace ProjControleFinanceiro.Data.Configuracao;
 
-        public DbSet<Transacao> Transacoes { get; set; }
-    }
+public class ContextoBase : DbContext
+{
+    public ContextoBase(DbContextOptions<ContextoBase> options) : base(options)
+    { }
+
+    public DbSet<Transacao> Transacoes { get; set; }
 }
