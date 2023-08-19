@@ -29,4 +29,8 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Projetos\C#\ProjControleFinanceiro\ProjControleFinanceiroSlnApi\src\1-Api\ProjControleFinanceiro.Api\.editorconfig" />
+  </ItemGroup>
 </Project>
