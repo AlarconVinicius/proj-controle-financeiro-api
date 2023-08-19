@@ -21,7 +21,7 @@ public class TransacaoValidatorTest
     public void TransacaoAddValidator_Should_ReturnFailureResult_WhenInvalidObject(string description, string date, double value, TipoTransacao type, Categoria category, bool pay, bool repete, int qtdRep, string expectedErrorMessage)
     {
         // Arrange
-        var objeto = new TransacaoAddDTO
+        var objeto = new TransacaoAddDto
         {
             Descricao = description,
             Valor = value,
@@ -45,7 +45,7 @@ public class TransacaoValidatorTest
     public void TransacaoAddValidator_Should_ReturnSuccessResult_WhenValidObject()
     {
         // Arrange
-        var objeto = new TransacaoAddDTO
+        var objeto = new TransacaoAddDto
         {
             Descricao = "Descrição",
             Valor = 100.0,
@@ -75,7 +75,7 @@ public class TransacaoValidatorTest
     public void TransacaoUpdValidator_Should_ReturnFailureResult_WhenInvalidObject(string description, string date, double value, TipoTransacao type, Categoria category, bool pay, bool repete, int qtdRep, string expectedErrorMessage)
     {
         // Arrange
-        var objeto = new TransacaoUpdDTO
+        var objeto = new TransacaoUpdDto
         {
             Descricao = description,
             Valor = value,
@@ -96,7 +96,7 @@ public class TransacaoValidatorTest
     public void TransacaoUpdValidator_Should_ReturnSuccessResult_WhenValidObject()
     {
         // Arrange
-        var objeto = new TransacaoUpdDTO
+        var objeto = new TransacaoUpdDto
         {
             Descricao = "Descrição",
             Valor = 100.0,
