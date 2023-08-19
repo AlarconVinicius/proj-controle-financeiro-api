@@ -1,15 +1,12 @@
-﻿using ProjControleFinanceiro.Entities.Entidades.Enums;
+﻿namespace ProjControleFinanceiro.Domain.DTOs.Enums;
 
-namespace ProjControleFinanceiro.Domain.DTOs.Enums
+public class CategoriaDto
 {
-    public class CategoriaDTO
+    public int Id { get; set; }
+    public string Categoria { get; set; }
+    public CategoriaDto()
     {
-        public int Id { get; set; }
-        public string Categoria { get; set; }
-        public CategoriaDTO()
-        {
-            Id = 0;
-            Categoria = string.Empty;
-        }
+        Id = 0;
+        Categoria = string.Empty;
     }
 }

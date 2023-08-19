@@ -1,10 +1,9 @@
 ﻿using ProjControleFinanceiro.Domain.DTOs.Enums;
 
-namespace ProjControleFinanceiro.Domain.Interfaces.Services
+namespace ProjControleFinanceiro.Domain.Interfaces.Services;
+
+public interface IEnumService : IMainService
 {
-    public interface IEnumService : IMainService
-    {
-        public List<CategoriaDTO> ObterCategoriasEnum();
-        public List<TipoTransacaoDTO> ObterTiposTransacaoEnum();
-    }
+    public List<CategoriaDto> ObterCategoriasEnum();
+    public List<TipoTransacaoDto> ObterTiposTransacaoEnum();
 }

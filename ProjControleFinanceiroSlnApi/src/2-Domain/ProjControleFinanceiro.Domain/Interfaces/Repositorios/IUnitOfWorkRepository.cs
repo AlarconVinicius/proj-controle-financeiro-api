@@ -1,8 +1,7 @@
-﻿namespace ProjControleFinanceiro.Domain.Interfaces.Repositorios
+﻿namespace ProjControleFinanceiro.Domain.Interfaces.Repositorios;
+
+public interface IUnitOfWorkRepository
 {
-    public interface IUnitOfWorkRepository
-    {
-        public void Commit();
-        public void Rollback();
-    }
+    public void Commit();
+    public void Rollback();
 }

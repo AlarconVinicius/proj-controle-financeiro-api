@@ -1,17 +1,16 @@
 ﻿using ProjControleFinanceiro.Domain.DTOs.Enums;
 using ProjControleFinanceiro.Entities.Entidades.Enums;
 
-namespace ProjControleFinanceiro.Domain.Extensions
+namespace ProjControleFinanceiro.Domain.Extensions;
+
+public static class TipoTransacaoExtension
 {
-    public static class TipoTransacaoExtension
+    public static TipoTransacaoDto ToGetDTO(this TipoTransacao value)
     {
-        public static TipoTransacaoDTO ToGetDTO(this TipoTransacao value)
+        return new TipoTransacaoDto
         {
-            return new TipoTransacaoDTO
-            {
-                Id = value.GetHashCode(),
-                TipoTransacao = value.ToString()
-            };
-        }
+            Id = value.GetHashCode(),
+            TipoTransacao = value.ToString()
+        };
     }
 }
