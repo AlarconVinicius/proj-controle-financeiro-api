@@ -12,15 +12,15 @@ using ProjControleFinanceiro.Data.Configuracao;
 namespace ProjControleFinanceiro.Data.Migrations
 {
     [DbContext(typeof(ContextoBase))]
-    [Migration("20230802172054_ClienteMigration")]
-    partial class ClienteMigration
+    [Migration("20230820102020_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
