@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+
 using ProjControleFinanceiro.Api.Controllers.Configuracao;
-using ProjControleFinanceiro.Api.Extensions;
 using ProjControleFinanceiro.Domain.DTOs.Usuario;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Entities.Entidades;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using ProjControleFinanceiro.Identity.Configuracao;
 
 namespace ProjControleFinanceiro.Api.Controllers;
 
