@@ -1,4 +1,10 @@
-﻿namespace ProjControleFinanceiro.Api.IoC;
+﻿using System.Runtime.CompilerServices;
+
+using Microsoft.EntityFrameworkCore;
+
+using ProjControleFinanceiro.Data.Configuracao;
+
+namespace ProjControleFinanceiro.Api.IoC;
 
 public static class ApiConfig
 {
@@ -34,6 +40,20 @@ public static class ApiConfig
 
 
         return app;
+    }
+    public static void MigrationInitialisation(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        var dbContextBase = scope.ServiceProvider.GetRequiredService<ContextoBase>();
+        var dbContextIdentity = scope.ServiceProvider.GetRequiredService<ContextoBase>();
+        if (dbContextBase.Database.GetPendingMigrations().Any())
+        {
+            dbContextBase.Database.Migrate();
+        }
+        if (dbContextIdentity.Database.GetPendingMigrations().Any())
+        {
+            dbContextIdentity.Database.Migrate();
+        }
     }
 
 }
