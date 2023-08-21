@@ -1,0 +1,38 @@
+version: '3.4'
+
+networks:
+  controlefinanceiroapp:
+services:
+  sql:
+    container_name: sql_server2022
+    image: "mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04"
+    ports:
+      - 8002:1433 
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Senha@123
+      - MSSQL_PID=Express
+    networks:
+      - controlefinanceiroapp
+    volumes:
+      - sql_data:/var/opt/mssql
+  projcontrolefinanceiro.api:
+    container_name: controle_financeiro_api
+    image: ${DOCKER_REGISTRY-}controle_financeiro_api
+    # image: controle_financeiro_api
+    build:
+      context: .
+      dockerfile: src/1-Api/ProjControleFinanceiro.Api/Dockerfile
+    ports:
+      - 8001:80
+    depends_on:
+      - sql
+    environment:
+      - DB_HOST=sql_server2022
+      - DB_NAME=controlefinanceiro
+      - DB_SA_PASSWORD=Senha@123
+    networks:
+      - controlefinanceiroapp
+
+volumes:
+  sql_data:
