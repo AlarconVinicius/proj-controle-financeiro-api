@@ -90,7 +90,7 @@ public class TransacaoService : MainService, ITransacaoService
             if (!objetosDb.Any()) return null!;
             foreach (var transacao in objetosDb)
             {
-                if (transacao.TipoTransacao == TipoTransacao.Receita)
+                if (transacao.TipoTransacao == TipoTransacaoEnum.Receita)
                 {
                     transacoesList.Entrada += transacao.Valor;
                 }
@@ -124,7 +124,7 @@ public class TransacaoService : MainService, ITransacaoService
             if (!objetosDb.Any()) return null!;
             foreach (var transacao in objetosDb)
             {
-                if (transacao.TipoTransacao == TipoTransacao.Receita)
+                if (transacao.TipoTransacao == TipoTransacaoEnum.Receita)
                 {
                     transacoesList.Entrada += transacao.Valor;
                 }

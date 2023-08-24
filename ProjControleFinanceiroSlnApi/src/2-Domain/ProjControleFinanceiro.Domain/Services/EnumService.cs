@@ -10,16 +10,16 @@ public class EnumService : MainService, IEnumService
 {
     public List<CategoriaDto> ObterCategoriasEnum()
     {
-        return Enum.GetValues(typeof(Categoria))
-                   .Cast<Categoria>()
+        return Enum.GetValues(typeof(CategoriaEnum))
+                   .Cast<CategoriaEnum>()
                    .Select(categoria => categoria.ToGetDTO())
                    .ToList();
     }
 
     public List<TipoTransacaoDto> ObterTiposTransacaoEnum()
     {
-        return Enum.GetValues(typeof(TipoTransacao))
-                   .Cast<TipoTransacao>()
+        return Enum.GetValues(typeof(TipoTransacaoEnum))
+                   .Cast<TipoTransacaoEnum>()
                    .Select(tipoTransacao => tipoTransacao.ToGetDTO())
                    .ToList();
     }

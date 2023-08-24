@@ -10,12 +10,12 @@ public class Transacao : Entity
     public string Descricao { get; set; }
     public double Valor { get; set; }
     public DateTime Data { get; set; }
-    public TipoTransacao TipoTransacao { get; set; }
-    public Categoria Categoria { get; set; }
+    public TipoTransacaoEnum TipoTransacao { get; set; }
+    public CategoriaEnum Categoria { get; set; }
     public bool Pago { get; set; }
     public bool Repete { get; set; }
     public int QtdRepeticao { get; set; }
-    public Transacao(Guid clienteId, string descricao, double valor, DateTime data, TipoTransacao tipoTransacao, Categoria categoria, bool pago = false, bool repete = false, int qtdRepeticao = 0)
+    public Transacao(Guid clienteId, string descricao, double valor, DateTime data, TipoTransacaoEnum tipoTransacao, CategoriaEnum categoria, bool pago = false, bool repete = false, int qtdRepeticao = 0)
     {
         ClienteId = clienteId;
         Descricao = descricao;

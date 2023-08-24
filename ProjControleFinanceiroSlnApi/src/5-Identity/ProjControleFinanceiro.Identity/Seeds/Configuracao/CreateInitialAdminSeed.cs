@@ -2,6 +2,7 @@
 
 using ProjControleFinanceiro.Data.Configuracao;
 using ProjControleFinanceiro.Entities.Entidades;
+using ProjControleFinanceiro.Entities.Entidades.Enums;
 using ProjControleFinanceiro.Identity.Configuracao;
 
 namespace ProjControleFinanceiro.Identity.Seeds.Configuracao;

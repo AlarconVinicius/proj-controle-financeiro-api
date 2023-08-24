@@ -11,8 +11,8 @@ public class TransacaoAddDto
     public double Valor { get; set; }
     [DefaultValue("dd/MM/yyyy")]
     public string Data { get; set; }
-    public TipoTransacao TipoTransacao { get; set; }
-    public Categoria Categoria { get; set; }
+    public TipoTransacaoEnum TipoTransacao { get; set; }
+    public CategoriaEnum Categoria { get; set; }
     [DefaultValue(false)]
     public bool Pago { get; set; }
     [DefaultValue(false)]
@@ -24,8 +24,8 @@ public class TransacaoAddDto
         Descricao = string.Empty;
         Valor = 0.0;
         Data = DateTime.Now.ToString("dd/MM/yyyy");
-        TipoTransacao = TipoTransacao.Despesa;
-        Categoria = Categoria.Outros;
+        TipoTransacao = TipoTransacaoEnum.Despesa;
+        Categoria = CategoriaEnum.Outros;
         Pago = false;
         Repete = false;
         QtdRepeticao = 0;

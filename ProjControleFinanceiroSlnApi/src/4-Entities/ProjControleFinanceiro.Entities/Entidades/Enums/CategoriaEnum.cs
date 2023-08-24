@@ -1,6 +1,6 @@
 ﻿namespace ProjControleFinanceiro.Entities.Entidades.Enums;
 
-public enum Categoria
+public enum CategoriaEnum
 {
     Lazer = 1,
     Restaurantes,

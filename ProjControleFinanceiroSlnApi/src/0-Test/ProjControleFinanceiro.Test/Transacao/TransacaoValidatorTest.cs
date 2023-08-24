@@ -11,14 +11,14 @@ public class TransacaoValidatorTest
 
     #region Testes Adição
     [Theory]
-    [InlineData("", "13/06/2023", 100.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "O campo Descricao é obrigatório.")]
-    [InlineData("Descrição", "", 100.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "A data é obrigatória.")]
-    [InlineData("Descrição", "DataTeste", 100.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "O campo Data deve seguir o padrão dd/MM/yyyy.")]
-    [InlineData("Descrição", "13/06/2023", 0.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "O campo Valor é obrigatório.")]
-    [InlineData("Descrição", "13/06/2023", 0.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "O campo Valor deve ser maior que 0.")]
-    [InlineData("Descrição", "13/06/2023", 100.0, TipoTransacao.Despesa, Categoria.Outros, true, true, 0, "O campo QtdRepeticao é obrigatório.")]
-    [InlineData("Descrição", "13/06/2023", 100.0, TipoTransacao.Despesa, Categoria.Outros, true, true, 0, "O campo QtdRepeticao deve ser maior que 0.")]
-    public void TransacaoAddValidator_Should_ReturnFailureResult_WhenInvalidObject(string description, string date, double value, TipoTransacao type, Categoria category, bool pay, bool repete, int qtdRep, string expectedErrorMessage)
+    [InlineData("", "13/06/2023", 100.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "O campo Descricao é obrigatório.")]
+    [InlineData("Descrição", "", 100.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "A data é obrigatória.")]
+    [InlineData("Descrição", "DataTeste", 100.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "O campo Data deve seguir o padrão dd/MM/yyyy.")]
+    [InlineData("Descrição", "13/06/2023", 0.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "O campo Valor é obrigatório.")]
+    [InlineData("Descrição", "13/06/2023", 0.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "O campo Valor deve ser maior que 0.")]
+    [InlineData("Descrição", "13/06/2023", 100.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, true, 0, "O campo QtdRepeticao é obrigatório.")]
+    [InlineData("Descrição", "13/06/2023", 100.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, true, 0, "O campo QtdRepeticao deve ser maior que 0.")]
+    public void TransacaoAddValidator_Should_ReturnFailureResult_WhenInvalidObject(string description, string date, double value, TipoTransacaoEnum type, CategoriaEnum category, bool pay, bool repete, int qtdRep, string expectedErrorMessage)
     {
         // Arrange
         var objeto = new TransacaoAddDto
@@ -49,8 +49,8 @@ public class TransacaoValidatorTest
         {
             Descricao = "Descrição",
             Valor = 100.0,
-            TipoTransacao = TipoTransacao.Despesa,
-            Categoria = Categoria.Outros,
+            TipoTransacao = TipoTransacaoEnum.Despesa,
+            Categoria = CategoriaEnum.Outros,
             Data = "13/06/2023",
             Pago = true,
             Repete = false,
@@ -67,12 +67,12 @@ public class TransacaoValidatorTest
 
     #region Testes Atualizar
     [Theory]
-    [InlineData("", "13/06/2023", 100.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "O campo Descricao é obrigatório.")]
-    [InlineData("Descrição", "", 100.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "A data é obrigatória.")]
-    [InlineData("Descrição", "DataTeste", 100.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "O campo Data deve seguir o padrão dd/MM/yyyy.")]
-    [InlineData("Descrição", "13/06/2023", 0.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "O campo Valor é obrigatório.")]
-    [InlineData("Descrição", "13/06/2023", 0.0, TipoTransacao.Despesa, Categoria.Outros, true, false, 0, "O campo Valor deve ser maior que 0.")]
-    public void TransacaoUpdValidator_Should_ReturnFailureResult_WhenInvalidObject(string description, string date, double value, TipoTransacao type, Categoria category, bool pay, bool repete, int qtdRep, string expectedErrorMessage)
+    [InlineData("", "13/06/2023", 100.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "O campo Descricao é obrigatório.")]
+    [InlineData("Descrição", "", 100.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "A data é obrigatória.")]
+    [InlineData("Descrição", "DataTeste", 100.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "O campo Data deve seguir o padrão dd/MM/yyyy.")]
+    [InlineData("Descrição", "13/06/2023", 0.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "O campo Valor é obrigatório.")]
+    [InlineData("Descrição", "13/06/2023", 0.0, TipoTransacaoEnum.Despesa, CategoriaEnum.Outros, true, false, 0, "O campo Valor deve ser maior que 0.")]
+    public void TransacaoUpdValidator_Should_ReturnFailureResult_WhenInvalidObject(string description, string date, double value, TipoTransacaoEnum type, CategoriaEnum category, bool pay, bool repete, int qtdRep, string expectedErrorMessage)
     {
         // Arrange
         var objeto = new TransacaoUpdDto
@@ -100,8 +100,8 @@ public class TransacaoValidatorTest
         {
             Descricao = "Descrição",
             Valor = 100.0,
-            TipoTransacao = TipoTransacao.Despesa,
-            Categoria = Categoria.Outros,
+            TipoTransacao = TipoTransacaoEnum.Despesa,
+            Categoria = CategoriaEnum.Outros,
             Data = "13/06/2023"
         };
 

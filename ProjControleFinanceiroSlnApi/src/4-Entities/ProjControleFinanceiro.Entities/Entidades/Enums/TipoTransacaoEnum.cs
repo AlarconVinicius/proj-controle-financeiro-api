@@ -1,6 +1,6 @@
 ﻿namespace ProjControleFinanceiro.Entities.Entidades.Enums;
 
-public enum TipoTransacao
+public enum TipoTransacaoEnum
 {
     Receita = 1,
     Despesa = 2

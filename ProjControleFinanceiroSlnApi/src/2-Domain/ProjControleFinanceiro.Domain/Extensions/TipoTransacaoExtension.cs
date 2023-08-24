@@ -5,7 +5,7 @@ namespace ProjControleFinanceiro.Domain.Extensions;
 
 public static class TipoTransacaoExtension
 {
-    public static TipoTransacaoDto ToGetDTO(this TipoTransacao value)
+    public static TipoTransacaoDto ToGetDTO(this TipoTransacaoEnum value)
     {
         return new TipoTransacaoDto
         {

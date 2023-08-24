@@ -5,7 +5,7 @@ namespace ProjControleFinanceiro.Domain.Extensions;
 
 public static class CategoriaExtension
 {
-    public static CategoriaDto ToGetDTO(this Categoria value)
+    public static CategoriaDto ToGetDTO(this CategoriaEnum value)
     {
         return new CategoriaDto
         {

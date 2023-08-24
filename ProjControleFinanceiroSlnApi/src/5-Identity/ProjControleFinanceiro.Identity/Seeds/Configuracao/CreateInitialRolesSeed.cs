@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
+using ProjControleFinanceiro.Entities.Entidades.Enums;
 using ProjControleFinanceiro.Identity.Configuracao;
 
 namespace ProjControleFinanceiro.Identity.Seeds.Configuracao;
