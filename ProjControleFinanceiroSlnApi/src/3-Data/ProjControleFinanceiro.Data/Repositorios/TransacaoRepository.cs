@@ -20,13 +20,13 @@ public class TransacaoRepository : BaseRepository<Transacao>, ITransacaoReposito
     }
     public async Task<List<Transacao>> ObterTransacoesMesAno(int mes, int ano)
     {
-        return await _context
-                        .Transacoes
-                        .Where(t => t.Data.Month == mes && t.Data.Year == ano)
-                        .ToListAsync();
+        return await _context.Transacoes
+                             .Where(t => t.ClienteId == _user.GetUserId() && t.Data.Month == mes && t.Data.Year == ano)
+                             .ToListAsync();
     }
     public async Task<Transacao> ObterTransacaoPorId(Guid id)
     {
-        return await _context.Transacoes.FirstOrDefaultAsync(t => t.Id == id && t.ClienteId == _user.GetUserId());
+        return await _context.Transacoes
+                             .FirstOrDefaultAsync(t => t.ClienteId == _user.GetUserId() && t.Id == id);
     }
 }
