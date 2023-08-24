@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\2-Domain\ProjControleFinanceiro.Domain\ProjControleFinanceiro.Domain.csproj" />
+    <ProjectReference Include="..\..\3-Data\ProjControleFinanceiro.Data\ProjControleFinanceiro.Data.csproj" />
   </ItemGroup>
 
 </Project>
