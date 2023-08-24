@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using ProjControleFinanceiro.Data.Configuracao.EntityConfigs;
 using ProjControleFinanceiro.Entities.Entidades;
 
 namespace ProjControleFinanceiro.Data.Configuracao;
@@ -12,19 +13,12 @@ public class ContextoBase : DbContext
     public DbSet<Cliente> Clientes { get; set; }
     public DbSet<Transacao> Transacoes { get; set; }
 
-}
-public class FornecedorMapping : IEntityTypeConfiguration<Cliente>
-{
-    public void Configure(EntityTypeBuilder<Cliente> builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        builder.HasKey(c => c.Id);
+        modelBuilder.ApplyConfiguration(new TransacaoConfiguration());
+        modelBuilder.ApplyConfiguration(new ClienteConfiguration());
 
-        //1 : N
-        builder.HasMany(c => c.transacoes)
-            .WithOne(t => t.cliente)
-            .HasForeignKey(t => t.ClienteId);
-
-       builder.ToTable("clientes");
-
+        base.OnModelCreating(modelBuilder);
     }
+
 }
