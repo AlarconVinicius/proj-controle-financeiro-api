@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 using ProjControleFinanceiro.Api.IoC;
 using ProjControleFinanceiro.Data.Configuracao;
+using ProjControleFinanceiro.Identity.Configuracao;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,7 @@ var app = builder.Build();
 app.UseApiConfiguration(app.Environment);
 using var scope = app.Services.CreateScope();
 var dbContextBase = scope.ServiceProvider.GetRequiredService<ContextoBase>();
-var dbContextIdentity = scope.ServiceProvider.GetRequiredService<ContextoBase>();
+var dbContextIdentity = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 if (dbContextBase.Database.GetPendingMigrations().Any())
 {
     dbContextBase.Database.Migrate();
