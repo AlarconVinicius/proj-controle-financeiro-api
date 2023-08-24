@@ -18,6 +18,8 @@ using ProjControleFinanceiro.Domain.Services.Configuracao;
 using ProjControleFinanceiro.Domain.Validators.Transacao;
 using ProjControleFinanceiro.Domain.Validators.Transacao.Relatorio;
 using ProjControleFinanceiro.Identity.Configuracao;
+using ProjControleFinanceiro.Identity.Domain.Interfaces;
+using ProjControleFinanceiro.Identity.Domain.Services;
 
 namespace ProjControleFinanceiro.Api.IoC;
 
@@ -79,6 +81,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<IMainService, MainService>();
         services.AddScoped<ITransacaoService, TransacaoService>();
         services.AddScoped<IRelatorioService, RelatorioService>();
+        services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEnumService, EnumService>();
 
         services.AddScoped<IValidator<TransacaoAddDto>, TransacaoAddValidator>();
