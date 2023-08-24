@@ -27,8 +27,7 @@ public class Transacao : Entity
         Repete = repete;
         QtdRepeticao = qtdRepeticao;
     }
-    public Transacao(){}
 
-    /* EF Relational */
-    public Cliente cliente { get; set; }    
+    [ForeignKey("ClienteId")]
+    public virtual Cliente? Cliente { get; set; }    
 }

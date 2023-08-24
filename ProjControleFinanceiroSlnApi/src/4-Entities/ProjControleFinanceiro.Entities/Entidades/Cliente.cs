@@ -1,10 +1,11 @@
-﻿namespace ProjControleFinanceiro.Entities.Entidades;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace ProjControleFinanceiro.Entities.Entidades;
+
+[Table("Clientes")]
 public class Cliente : Entity
 {
-
-    //EF 
-    public IEnumerable<Transacao> transacoes { get; set; }
+    public IEnumerable<Transacao> Transacoes { get; set; } = new List<Transacao>();
     public Cliente(){ }
 
 
