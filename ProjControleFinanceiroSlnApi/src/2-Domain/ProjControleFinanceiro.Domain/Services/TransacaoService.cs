@@ -1,6 +1,9 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
+
 using ProjControleFinanceiro.Domain.DTOs.Transacao;
 using ProjControleFinanceiro.Domain.Extensions;
+using ProjControleFinanceiro.Domain.Helpers;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Interfaces.Services;
 using ProjControleFinanceiro.Domain.Services.Configuracao;
@@ -14,13 +17,13 @@ public class TransacaoService : MainService, ITransacaoService
     private readonly ITransacaoRepository _transacaoRepository;
     private readonly IValidator<TransacaoAddDto> _addValidator;
     private readonly IValidator<TransacaoUpdDto> _updValidator;
-    private readonly IUser _user;
-    public TransacaoService(ITransacaoRepository transacaoRepository, IValidator<TransacaoAddDto> addValidator, IValidator<TransacaoUpdDto> updValidator, IUser user)
+    private readonly IHttpContextAccessor _accessor;
+    public TransacaoService(ITransacaoRepository transacaoRepository, IValidator<TransacaoAddDto> addValidator, IValidator<TransacaoUpdDto> updValidator, IHttpContextAccessor accessor)
     {
         _transacaoRepository = transacaoRepository;
         _addValidator = addValidator;
         _updValidator = updValidator;
-        _user = user;
+        _accessor = accessor;
     }
     public async Task<TransacaoViewDto> AdicionarTransacao(TransacaoAddDto objeto)
     {
@@ -32,7 +35,7 @@ public class TransacaoService : MainService, ITransacaoService
                 AdicionarErroProcessamento(validationResult);
                 return null!;
             }
-            objeto.ClienteId = _user.GetUserId();
+            objeto.ClienteId = UsuarioHelper.GetUserId(_accessor);
             Transacao objetoMapeado = objeto.ToAddDTO();
             await _transacaoRepository.AddAsync(objetoMapeado);
             if (objetoMapeado.QtdRepeticao > 0)
