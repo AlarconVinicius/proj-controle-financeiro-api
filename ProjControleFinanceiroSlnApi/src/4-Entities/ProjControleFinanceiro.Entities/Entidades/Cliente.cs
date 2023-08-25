@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ProjControleFinanceiro.Entities.Entidades
+namespace ProjControleFinanceiro.Entities.Entidades;
+
+[Table("Clientes")]
+public class Cliente : Entity
 {
-    public class Cliente : Entity
-    {
+    public IEnumerable<Transacao> Transacoes { get; set; } = new List<Transacao>();
+    public Cliente(){ }
 
-        //EF 
-        public IEnumerable<Transacao> transacoes { get; set; }
-        public Cliente(){ }
-    
 
-    }
 }

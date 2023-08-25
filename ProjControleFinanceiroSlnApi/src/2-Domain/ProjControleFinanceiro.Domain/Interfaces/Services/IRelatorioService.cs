@@ -1,9 +1,8 @@
 ﻿using ProjControleFinanceiro.Domain.DTOs.Transacao.Relatorio;
 
-namespace ProjControleFinanceiro.Domain.Interfaces.Services
+namespace ProjControleFinanceiro.Domain.Interfaces.Services;
+
+public interface IRelatorioService : IMainService
 {
-    public interface IRelatorioService : IMainService
-    {
-        public Task<Byte[]> GerarRelatorio(RelatorioPDF query);
-    }
+    public Task<Byte[]> GerarRelatorio(RelatorioPdfDto query);
 }

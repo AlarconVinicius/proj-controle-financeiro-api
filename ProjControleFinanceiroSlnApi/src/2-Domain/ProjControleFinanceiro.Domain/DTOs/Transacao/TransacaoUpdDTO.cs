@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System.ComponentModel;
+
 using ProjControleFinanceiro.Entities.Entidades.Enums;
-using System.ComponentModel;
 
-namespace ProjControleFinanceiro.Domain.DTOs.Transacao
+namespace ProjControleFinanceiro.Domain.DTOs.Transacao;
+
+public class TransacaoUpdDto
 {
-    public class TransacaoUpdDTO
-    {
-        public Guid Id { get; set; }
-        public string Descricao { get; set; }
-        public double Valor { get; set; }
-        [DefaultValue("dd/MM/yyyy")]
-        public string Data { get; set; }
-        public TipoTransacao TipoTransacao { get; set; }
-        public Categoria Categoria { get; set; }
+    public Guid Id { get; set; }
+    public string Descricao { get; set; }
+    public double Valor { get; set; }
+    [DefaultValue("dd/MM/yyyy")]
+    public string Data { get; set; }
+    public TipoTransacaoEnum TipoTransacao { get; set; }
+    public CategoriaEnum Categoria { get; set; }
 
-        public TransacaoUpdDTO()
-        {
-            Descricao = string.Empty;
-            Valor = 0.0;
-            Data = DateTime.Now.ToString("dd/MM/yyyy");
-            TipoTransacao = TipoTransacao.Despesa;
-            Categoria = Categoria.Outros;
-        }
+    public TransacaoUpdDto()
+    {
+        Descricao = string.Empty;
+        Valor = 0.0;
+        Data = DateTime.Now.ToString("dd/MM/yyyy");
+        TipoTransacao = TipoTransacaoEnum.Despesa;
+        Categoria = CategoriaEnum.Outros;
     }
 }

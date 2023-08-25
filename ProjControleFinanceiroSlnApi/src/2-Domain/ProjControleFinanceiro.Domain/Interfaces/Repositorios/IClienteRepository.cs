@@ -1,12 +1,11 @@
 ﻿using ProjControleFinanceiro.Entities.Entidades;
 
 
-namespace ProjControleFinanceiro.Domain.Interfaces.Repositorios
+namespace ProjControleFinanceiro.Domain.Interfaces.Repositorios;
+
+public interface IClienteRepository : IBaseRepository<Cliente>
 {
-    public interface IClienteRepository : IBaseRepository<Cliente>
-    {
 
 
 
-    }
 }

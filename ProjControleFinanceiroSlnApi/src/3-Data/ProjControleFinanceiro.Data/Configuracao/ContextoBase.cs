@@ -1,31 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using ProjControleFinanceiro.Data.Configuracao.EntityConfigs;
 using ProjControleFinanceiro.Entities.Entidades;
 
-namespace ProjControleFinanceiro.Data.Configuracao
+namespace ProjControleFinanceiro.Data.Configuracao;
+
+public class ContextoBase : DbContext
 {
-    public class ContextoBase : DbContext
+    public ContextoBase(DbContextOptions<ContextoBase> options) : base(options)
+    { }
+
+    public DbSet<Cliente> Clientes { get; set; }
+    public DbSet<Transacao> Transacoes { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public ContextoBase(DbContextOptions<ContextoBase> options) : base(options)
-        { }
+        modelBuilder.ApplyConfiguration(new TransacaoConfiguration());
+        modelBuilder.ApplyConfiguration(new ClienteConfiguration());
 
-        public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Transacao> Transacoes { get; set; }
-  
+        base.OnModelCreating(modelBuilder);
     }
-    public class FornecedorMapping : IEntityTypeConfiguration<Cliente>
-    {
-        public void Configure(EntityTypeBuilder<Cliente> builder)
-        {
-            builder.HasKey(c => c.Id);
 
-            //1 : N
-            builder.HasMany(c => c.transacoes)
-                .WithOne(t => t.cliente)
-                .HasForeignKey(t => t.ClienteId);
-
-           builder.ToTable("clientes");
-
-        }
-    }
 }

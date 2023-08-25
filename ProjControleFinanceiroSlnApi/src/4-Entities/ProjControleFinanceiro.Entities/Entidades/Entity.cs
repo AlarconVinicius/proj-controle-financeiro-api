@@ -1,7 +1,6 @@
-﻿namespace ProjControleFinanceiro.Entities.Entidades
+﻿namespace ProjControleFinanceiro.Entities.Entidades;
+
+public abstract class Entity
 {
-    public abstract class Entity
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }
