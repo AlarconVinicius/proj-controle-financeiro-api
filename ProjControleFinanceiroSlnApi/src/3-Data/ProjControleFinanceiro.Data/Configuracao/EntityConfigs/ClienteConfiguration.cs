@@ -14,7 +14,6 @@ public class ClienteConfiguration : IEntityTypeConfiguration<Cliente>
 
         builder.Property(e => e.Name).HasMaxLength(100).IsRequired();
         builder.Property(e => e.LastName).HasMaxLength(100).IsRequired();
-        builder.Property(e => e.PhoneNumber).HasMaxLength(30).IsRequired();
 
         builder.HasMany(c => c.Transacoes)
             .WithOne(t => t.Cliente)

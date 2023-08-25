@@ -33,6 +33,8 @@ public class CreateInitialAdminSeed
             UserName = email,
             Email = email,
             EmailConfirmed = true,
+            PhoneNumber = phoneNumber,
+            PhoneNumberConfirmed = true,
             NormalizedEmail = email.ToUpper(),
             NormalizedUserName = email.ToUpper()
         };
@@ -49,8 +51,7 @@ public class CreateInitialAdminSeed
             {
                 Id = Guid.Parse(userCreated!.Id),
                 Name = name,
-                LastName = lastName,
-                PhoneNumber = phoneNumber
+                LastName = lastName
             };
             _contextBase.Clientes.Add(cliente);
         }
