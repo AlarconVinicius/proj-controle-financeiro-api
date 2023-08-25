@@ -7,6 +7,7 @@ using ProjControleFinanceiro.Identity.Domain.Interfaces;
 namespace ProjControleFinanceiro.Api.Controllers;
 
 [Route("api")]
+[AllowAnonymous]
 public class AuthController : MainController
 {
     private readonly IAuthService _authService;

@@ -6,6 +6,7 @@ using ProjControleFinanceiro.Domain.Interfaces.Services;
 namespace ProjControleFinanceiro.Api.Controllers;
 
 [Route("api/enums")]
+[Authorize]
 public class EnumController : MainController
 {
     private readonly IEnumService _enumService;
