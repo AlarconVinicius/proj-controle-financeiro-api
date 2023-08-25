@@ -77,7 +77,7 @@ public static class DependencyInjectionConfig
 
         services.AddScoped<ITransacaoRepository, TransacaoRepository>();
         services.AddScoped<IRelatorioRepository, RelatorioRepository>();
-        services.AddScoped<IClienteRepository, ClienteRepository>();
+        services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
 
         services.AddScoped<IMainService, MainService>();
@@ -85,6 +85,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<IRelatorioService, RelatorioService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IEnumService, EnumService>();
+        services.AddScoped<IUsuarioService, UsuarioService>();
 
         services.AddScoped<IValidator<TransacaoAddDto>, TransacaoAddValidator>();
         services.AddScoped<IValidator<TransacaoUpdDto>, TransacaoUpdValidator>();
@@ -93,7 +94,6 @@ public static class DependencyInjectionConfig
         services.AddScoped<IValidator<LoginUserRequest>, LoginUserValidator>();
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddScoped<IUser, AspNetUser>();
     }
 
 }
