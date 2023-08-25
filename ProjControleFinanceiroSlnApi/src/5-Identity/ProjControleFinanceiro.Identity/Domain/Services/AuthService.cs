@@ -37,6 +37,8 @@ public class AuthService : MainService, IAuthService
             UserName = objeto.Email,
             Email = objeto.Email,
             EmailConfirmed = true,
+            NormalizedEmail = objeto.Email.ToUpper(),
+            NormalizedUserName = objeto.Email.ToUpper()
         };
 
         var result = await _userManager.CreateAsync(user, objeto.Password);

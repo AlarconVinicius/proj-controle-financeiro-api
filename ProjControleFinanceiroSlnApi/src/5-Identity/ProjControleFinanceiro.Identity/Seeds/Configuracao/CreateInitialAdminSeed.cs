@@ -22,8 +22,12 @@ public class CreateInitialAdminSeed
 
     public void Create()
     {
+        var name = "Usuário";
+        var lastName = "Administrador";
+        var phoneNumber = "(99) 99999-9999";
         var email = "admin@controlefinanceiro.com";
         var password = "Admin@123";
+
         var user = new IdentityUser
         {
             UserName = email,
@@ -43,7 +47,10 @@ public class CreateInitialAdminSeed
             var userCreated = _userManager.FindByEmailAsync(user.Email).Result;
             Cliente cliente = new Cliente()
             {
-                Id = Guid.Parse(userCreated!.Id)
+                Id = Guid.Parse(userCreated!.Id),
+                Name = name,
+                LastName = lastName,
+                PhoneNumber = phoneNumber
             };
             _contextBase.Clientes.Add(cliente);
         }
