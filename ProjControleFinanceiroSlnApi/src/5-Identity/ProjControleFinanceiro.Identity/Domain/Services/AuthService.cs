@@ -9,26 +9,25 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 using ProjControleFinanceiro.Domain.DTOs.Usuario;
-using ProjControleFinanceiro.Domain.Extensions;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Services.Configuracao;
 using ProjControleFinanceiro.Entities.Entidades;
 using ProjControleFinanceiro.Entities.Entidades.Enums;
 using ProjControleFinanceiro.Identity.Configuracao;
 using ProjControleFinanceiro.Identity.Domain.Interfaces;
-
+using ProjControleFinanceiro.Identity.Extensions;
 
 namespace ProjControleFinanceiro.Identity.Domain.Services;
 public class AuthService : MainService, IAuthService
 {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IClienteRepository _cliente;
+    private readonly IUsuarioRepository _cliente;
     private readonly AppSettings _appSettings;
     private readonly IValidator<AddUserRequest> _addValidator;
     private readonly IValidator<LoginUserRequest> _loginValidator;
 
-    public AuthService(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IClienteRepository cliente, IOptions<AppSettings> appSettings, IValidator<AddUserRequest> addValidator, IValidator<LoginUserRequest> loginValidator)
+    public AuthService(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IUsuarioRepository cliente, IOptions<AppSettings> appSettings, IValidator<AddUserRequest> addValidator, IValidator<LoginUserRequest> loginValidator)
     {
         _signInManager = signInManager;
         _userManager = userManager;
@@ -171,7 +170,7 @@ public class AuthService : MainService, IAuthService
             UsuarioToken = new UsuarioToken
             {
                 Id = user.Id,
-                Email = user.Email,
+                Email = user.Email!,
                 Claims = claims.Select(c => new UsuarioClaim { Type = c.Type, Value = c.Value })
             }
         };

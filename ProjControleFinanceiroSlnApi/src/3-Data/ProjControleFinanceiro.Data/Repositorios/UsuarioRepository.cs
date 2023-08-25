@@ -4,11 +4,10 @@ using ProjControleFinanceiro.Entities.Entidades;
 
 namespace ProjControleFinanceiro.Data.Repositorios;
 
-public class ClienteRepository : BaseRepository<Cliente>, IClienteRepository
+public class UsuarioRepository : BaseRepository<Cliente>, IUsuarioRepository
 {
-    public ClienteRepository(ContextoBase context) : base(context)
-    {
-    }
+    public UsuarioRepository(ContextoBase context) : base(context)
+    { }
 
 
 }
