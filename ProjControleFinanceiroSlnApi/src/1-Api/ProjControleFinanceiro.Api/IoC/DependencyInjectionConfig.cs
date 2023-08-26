@@ -91,6 +91,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<IValidator<TransacaoUpdDto>, TransacaoUpdValidator>();
         services.AddScoped<IValidator<RelatorioPdfDto>, RelatorioAddValidator>();
         services.AddScoped<IValidator<AddUserRequest>, AddUserValidator>();
+        services.AddScoped<IValidator<UpdUserRequest>, UpdUserValidator>();
         services.AddScoped<IValidator<LoginUserRequest>, LoginUserValidator>();
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
