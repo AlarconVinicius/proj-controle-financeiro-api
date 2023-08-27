@@ -96,6 +96,15 @@ public class AuthService : MainService, IAuthService
             {
                 return await GerarJwt(objeto.Email);
             }
+            else if (result.IsLockedOut)
+            {
+                var user = await _userManager.FindByEmailAsync(objeto.Email);
+                var lockoutTime = await _userManager.GetLockoutEndDateAsync(user!);
+                var dataDesbloqueio = lockoutTime?.ToString("dd/MM/yyyy HH:mm");
+                string mensagem = $"O bloqueio expira em: {dataDesbloqueio}";
+                AdicionarErroProcessamento($"Usuário bloqueado. {mensagem}");
+                return null!;
+            }
             AdicionarErroProcessamento("Usuário ou senha inválido!");
             return null!;
         }

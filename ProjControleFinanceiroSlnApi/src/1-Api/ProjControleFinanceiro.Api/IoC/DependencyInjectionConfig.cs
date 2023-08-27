@@ -41,7 +41,12 @@ public static class DependencyInjectionConfig
            .AddEntityFrameworkStores<ApplicationDbContext>()
            .AddDefaultTokenProviders()
            .AddErrorDescriber<IdentityMensagensPortugues>();
-
+        services.Configure<IdentityOptions>(options =>
+        {
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            options.Lockout.MaxFailedAccessAttempts = 10;
+            options.Lockout.AllowedForNewUsers = true;
+        });
         var appSettingsSection = configuration.GetSection("AppSettings");
 
         //Aqui: O middleware entende que a classe AppSettings represente os dados da sessão AppSettings (ou seja, os dados)
