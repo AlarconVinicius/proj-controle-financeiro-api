@@ -1,8 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using ProjControleFinanceiro.Data.Configuracao;
+using ProjControleFinanceiro.Identity.Configuracao;
+using ProjControleFinanceiro.Identity.Seeds.Configuracao;
 
 namespace ProjControleFinanceiro.Api.IoC;
 
@@ -45,7 +48,7 @@ public static class ApiConfig
     {
         using var scope = app.ApplicationServices.CreateScope();
         var dbContextBase = scope.ServiceProvider.GetRequiredService<ContextoBase>();
-        var dbContextIdentity = scope.ServiceProvider.GetRequiredService<ContextoBase>();
+        var dbContextIdentity = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         if (dbContextBase.Database.GetPendingMigrations().Any())
         {
             dbContextBase.Database.Migrate();
@@ -54,6 +57,9 @@ public static class ApiConfig
         {
             dbContextIdentity.Database.Migrate();
         }
+        var userManager = scope.ServiceProvider.GetService<UserManager<IdentityUser>>();
+
+        new ConfigureInitialSeed(dbContextIdentity, dbContextBase, userManager!).StartConfig();
     }
 
 }
