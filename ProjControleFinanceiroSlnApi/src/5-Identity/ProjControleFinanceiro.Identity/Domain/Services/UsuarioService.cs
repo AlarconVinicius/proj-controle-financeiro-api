@@ -1,9 +1,11 @@
 ﻿using FluentValidation;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using ProjControleFinanceiro.Domain.DTOs.Usuario;
+using ProjControleFinanceiro.Domain.Helpers;
 using ProjControleFinanceiro.Domain.Interfaces.Repositorios;
 using ProjControleFinanceiro.Domain.Services.Configuracao;
 using ProjControleFinanceiro.Entities.Entidades;
@@ -16,12 +18,14 @@ public class UsuarioService : MainService, IUsuarioService
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IValidator<UpdUserRequest> _updValidator;
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IHttpContextAccessor _accessor;
 
-    public UsuarioService(IUsuarioRepository usuarioRepository, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IValidator<UpdUserRequest> updValidator)
+    public UsuarioService(IUsuarioRepository usuarioRepository, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IValidator<UpdUserRequest> updValidator, IHttpContextAccessor accessor)
     {
         _userManager = userManager;
         _usuarioRepository = usuarioRepository;
         _updValidator = updValidator;
+        _accessor = accessor;
     }
 
     public async Task AtualizarUsuario(Guid idUsuarioLogado, UpdUserRequest objeto)
@@ -72,6 +76,12 @@ public class UsuarioService : MainService, IUsuarioService
 
     public async Task<UserResponse> ObterUsuarioPorId(Guid id)
     {
+        Guid idUsuarioLogado = UsuarioHelper.GetUserId(_accessor);
+        if (!UsuarioHelper.IsAdmin(_accessor, _userManager) && id != idUsuarioLogado)
+        {
+            AdicionarErroProcessamento("Operação não permitida.");
+            return null!;
+        }
         Cliente usuarioDb = await _usuarioRepository.GetEntityByIdAsync(id);
         var usuarioIdentityDb = await _userManager.FindByIdAsync(id.ToString());
 
@@ -86,6 +96,11 @@ public class UsuarioService : MainService, IUsuarioService
 
     public async Task<IEnumerable<UserResponse>> ObterUsuarios()
     {
+        if (!UsuarioHelper.IsAdmin(_accessor, _userManager))
+        {
+            AdicionarErroProcessamento("Operação não permitida.");
+            return null!;
+        }
         List<Cliente> usuariosDb = await _usuarioRepository.ListAsync();
         List<IdentityUser> usuariosIdentityDb = await _userManager.Users.ToListAsync();
 

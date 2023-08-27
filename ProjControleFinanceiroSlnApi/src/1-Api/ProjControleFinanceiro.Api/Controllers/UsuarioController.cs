@@ -21,14 +21,20 @@ public class UsuarioController : MainController
     }
 
     [HttpGet("{id}")]
-    public async Task<UserResponse> ObterUsuarioPorId(Guid id)
+    public async Task<IActionResult> ObterUsuarioPorId(Guid id)
     {
-        return await _usuarioService.ObterUsuarioPorId(id);
+        var objetoMapeados = await _usuarioService.ObterUsuarioPorId(id);
+        if (!_usuarioService.OperacaoValida()) return CustomResponse(_usuarioService.GetErrors());
+        return CustomResponse(objetoMapeados);
     }
+
     [HttpGet]
-    public async Task<IEnumerable<UserResponse>> ObterUsuarios()
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<IActionResult> ObterUsuarios()
     {
-        return await _usuarioService.ObterUsuarios();
+        var objetosMapeados = await _usuarioService.ObterUsuarios();
+        if (!_usuarioService.OperacaoValida()) return CustomResponse(_usuarioService.GetErrors());
+        return CustomResponse(objetosMapeados);
     }
 
     [HttpPut]
