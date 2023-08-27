@@ -40,9 +40,7 @@ public class UsuarioController : MainController
     [HttpPut]
     public async Task<IActionResult> AtualizarUsuario(UpdUserRequest objeto)
     {
-
-        Guid idUsuarioLogado = UsuarioHelper.GetUserId(_accessor);
-        await _usuarioService.AtualizarUsuario(idUsuarioLogado, objeto);
+        await _usuarioService.AtualizarUsuario(objeto);
         if (!_usuarioService.OperacaoValida()) return CustomResponse(_usuarioService.GetErrors());
         return CustomResponse();
     }

@@ -6,5 +6,5 @@ public interface IUsuarioService : IMainService
 {
     Task<UserResponse> ObterUsuarioPorId(Guid id);
     Task<IEnumerable<UserResponse>> ObterUsuarios();
-    Task AtualizarUsuario(Guid idUsuarioLogado, UpdUserRequest objeto);
+    Task AtualizarUsuario(UpdUserRequest objeto);
 }

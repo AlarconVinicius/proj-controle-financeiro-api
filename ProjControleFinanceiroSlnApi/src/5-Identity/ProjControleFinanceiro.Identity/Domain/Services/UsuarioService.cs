@@ -28,7 +28,7 @@ public class UsuarioService : MainService, IUsuarioService
         _accessor = accessor;
     }
 
-    public async Task AtualizarUsuario(Guid idUsuarioLogado, UpdUserRequest objeto)
+    public async Task AtualizarUsuario(UpdUserRequest objeto)
     {
         try
         {
@@ -45,6 +45,7 @@ public class UsuarioService : MainService, IUsuarioService
                 AdicionarErroProcessamento("Usuário não encontrado.");
                 return;
             }
+            Guid idUsuarioLogado = UsuarioHelper.GetUserId(_accessor);
             var usuarioLogado = await _userManager.FindByIdAsync(idUsuarioLogado.ToString());
             if (usuarioLogado is null)
             {
