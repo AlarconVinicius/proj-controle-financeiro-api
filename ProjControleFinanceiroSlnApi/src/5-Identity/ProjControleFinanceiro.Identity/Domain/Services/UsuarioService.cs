@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System;
+
+using FluentValidation;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -26,6 +28,50 @@ public class UsuarioService : MainService, IUsuarioService
         _usuarioRepository = usuarioRepository;
         _updValidator = updValidator;
         _accessor = accessor;
+    }
+
+    public async Task<UserResponse> ObterUsuarioPorId(Guid id)
+    {
+        Guid idUsuarioLogado = UsuarioHelper.GetUserId(_accessor);
+        if (!UsuarioHelper.IsAdmin(_accessor, _userManager) && id != idUsuarioLogado)
+        {
+            AdicionarErroProcessamento("Operação não permitida.");
+            return null!;
+        }
+        Cliente usuarioDb = await _usuarioRepository.GetEntityByIdAsync(id);
+        var usuarioIdentityDb = await _userManager.FindByIdAsync(id.ToString());
+
+        if (usuarioIdentityDb is null && usuarioDb is null) 
+        {
+            AdicionarErroProcessamento("Usuário não encontrado.");
+            return null!;
+        }
+        var userRoles = (await _userManager.GetRolesAsync(usuarioIdentityDb!)).ToList();
+        return usuarioDb.ToViewUsuarioDto(usuarioIdentityDb!, userRoles);
+    }
+
+    public async Task<IEnumerable<UserResponse>> ObterUsuarios()
+    {
+        if (!UsuarioHelper.IsAdmin(_accessor, _userManager))
+        {
+            AdicionarErroProcessamento("Operação não permitida.");
+            return null!;
+        }
+        List<Cliente> usuariosDb = await _usuarioRepository.ListAsync();
+        List<IdentityUser> usuariosIdentityDb = await _userManager.Users.ToListAsync();
+
+        var usuariosResponses = new List<UserResponse>();
+
+        foreach (var usuarioDb in usuariosDb)
+        {
+            var usuarioIdentityDb = usuariosIdentityDb.First(u => u.Id == usuarioDb.Id.ToString());
+
+            var userRoles = (await _userManager.GetRolesAsync(usuarioIdentityDb)).ToList();
+
+            usuariosResponses.Add(usuarioDb.ToViewUsuarioDto(usuarioIdentityDb, userRoles));
+        }
+
+        return usuariosResponses;
     }
 
     public async Task AtualizarUsuario(UpdUserRequest objeto)
@@ -74,48 +120,19 @@ public class UsuarioService : MainService, IUsuarioService
             AdicionarErroProcessamento($"Erro ao registrar usuário: {ex.Message}");
         }
     }
-
-    public async Task<UserResponse> ObterUsuarioPorId(Guid id)
+    public async Task AlterarStatusBloqueioUsuario(string userId, bool bloquear)
     {
-        Guid idUsuarioLogado = UsuarioHelper.GetUserId(_accessor);
-        if (!UsuarioHelper.IsAdmin(_accessor, _userManager) && id != idUsuarioLogado)
-        {
-            AdicionarErroProcessamento("Operação não permitida.");
-            return null!;
-        }
-        Cliente usuarioDb = await _usuarioRepository.GetEntityByIdAsync(id);
-        var usuarioIdentityDb = await _userManager.FindByIdAsync(id.ToString());
-
-        if (usuarioIdentityDb is null && usuarioDb is null) 
+        DateTimeOffset lockoutEndDate = DateTime.Now.AddDays(-1);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
         {
             AdicionarErroProcessamento("Usuário não encontrado.");
-            return null!;
+            return;
         }
-        var userRoles = (await _userManager.GetRolesAsync(usuarioIdentityDb!)).ToList();
-        return usuarioDb.ToViewUsuarioDto(usuarioIdentityDb!, userRoles);
-    }
-
-    public async Task<IEnumerable<UserResponse>> ObterUsuarios()
-    {
-        if (!UsuarioHelper.IsAdmin(_accessor, _userManager))
+        if (bloquear)
         {
-            AdicionarErroProcessamento("Operação não permitida.");
-            return null!;
+            lockoutEndDate.AddYears(1000);
         }
-        List<Cliente> usuariosDb = await _usuarioRepository.ListAsync();
-        List<IdentityUser> usuariosIdentityDb = await _userManager.Users.ToListAsync();
-
-        var usuariosResponses = new List<UserResponse>();
-
-        foreach (var usuarioDb in usuariosDb)
-        {
-            var usuarioIdentityDb = usuariosIdentityDb.First(u => u.Id == usuarioDb.Id.ToString());
-
-            var userRoles = (await _userManager.GetRolesAsync(usuarioIdentityDb)).ToList();
-
-            usuariosResponses.Add(usuarioDb.ToViewUsuarioDto(usuarioIdentityDb, userRoles));
-        }
-
-        return usuariosResponses;
+        await _userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
     }
 }

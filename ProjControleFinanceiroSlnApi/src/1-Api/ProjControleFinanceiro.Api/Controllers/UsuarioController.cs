@@ -44,4 +44,12 @@ public class UsuarioController : MainController
         if (!_usuarioService.OperacaoValida()) return CustomResponse(_usuarioService.GetErrors());
         return CustomResponse();
     }
+
+    [HttpPatch("{userId}/bloqueio")]
+    public async Task<IActionResult> AlterarStatusBloqueioUsuario(string userId, [FromBody] bool bloquear)
+    {
+        await _usuarioService.AlterarStatusBloqueioUsuario(userId, bloquear);
+        if (!_usuarioService.OperacaoValida()) return CustomResponse(_usuarioService.GetErrors());
+        return CustomResponse();
+    }
 }
