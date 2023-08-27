@@ -122,7 +122,7 @@ public class UsuarioService : MainService, IUsuarioService
     }
     public async Task AlterarStatusBloqueioUsuario(string userId, bool bloquear)
     {
-        DateTimeOffset lockoutEndDate = DateTime.Now.AddDays(-1);
+        DateTimeOffset lockoutEndDate = DateTime.Now;
         var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
@@ -131,7 +131,7 @@ public class UsuarioService : MainService, IUsuarioService
         }
         if (bloquear)
         {
-            lockoutEndDate.AddYears(1000);
+            lockoutEndDate = lockoutEndDate.AddYears(1000);
         }
         await _userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
     }
