@@ -123,6 +123,11 @@ public class UsuarioService : MainService, IUsuarioService
     public async Task AlterarStatusBloqueioUsuario(string userId, bool bloquear)
     {
         DateTimeOffset lockoutEndDate = DateTime.Now;
+        if (userId == (UsuarioHelper.GetUserId(_accessor)).ToString() || !UsuarioHelper.IsAdmin(_accessor, _userManager))
+        {
+            AdicionarErroProcessamento("Operação não permitida");
+            return;
+        }
         var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
         {
