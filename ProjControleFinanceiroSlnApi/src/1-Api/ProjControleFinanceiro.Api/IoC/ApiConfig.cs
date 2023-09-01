@@ -27,6 +27,7 @@ public static class ApiConfig
             app.UseDeveloperExceptionPage();
             app.UseSwaggerConfiguration();
         }
+        app.MigrationInitialisation();
 
         app.UseHttpsRedirection();
 
