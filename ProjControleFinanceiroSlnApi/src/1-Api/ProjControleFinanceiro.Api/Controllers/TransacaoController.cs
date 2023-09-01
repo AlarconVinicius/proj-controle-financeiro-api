@@ -63,7 +63,7 @@ public class TransacaoController : MainController
     [HttpGet]
     public async Task<IActionResult> ObterTransacoes()
     {            
-        var objetosMapeados = CustomResponse(await _transacaoService.ObterTransacoes());
+        var objetosMapeados = await _transacaoService.ObterTransacoes();
         if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
         return CustomResponse(objetosMapeados);
     }
@@ -79,7 +79,7 @@ public class TransacaoController : MainController
     [HttpGet("mes-ano")]
     public async Task<IActionResult> ObterTransacoesMesAno([FromQuery] int mes, [FromQuery] int ano)
     {
-        var objetosMapeados = CustomResponse(await _transacaoService.ObterTransacoesMesAno(mes, ano));
+        var objetosMapeados = await _transacaoService.ObterTransacoesMesAno(mes, ano);
         if (!_transacaoService.OperacaoValida()) return CustomResponse(_transacaoService.GetErrors());
         return CustomResponse(objetosMapeados);
     }
