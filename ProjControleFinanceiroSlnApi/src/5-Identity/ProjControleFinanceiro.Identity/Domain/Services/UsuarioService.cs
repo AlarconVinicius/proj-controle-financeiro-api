@@ -30,46 +30,62 @@ public class UsuarioService : MainService, IUsuarioService
 
     public async Task<UserResponse> ObterUsuarioPorId(Guid id)
     {
-        Guid idUsuarioLogado = UsuarioHelper.GetUserId(_accessor);
-        if (!UsuarioHelper.IsAdmin(_accessor, _userManager) && id != idUsuarioLogado)
+        try
         {
-            AdicionarErroProcessamento("Operação não permitida.");
-            return null!;
-        }
-        Cliente usuarioDb = await _usuarioRepository.GetEntityByIdAsync(id);
-        var usuarioIdentityDb = await _userManager.FindByIdAsync(id.ToString());
+            Guid idUsuarioLogado = UsuarioHelper.GetUserId(_accessor);
+            if (!UsuarioHelper.IsAdmin(_accessor, _userManager) && id != idUsuarioLogado)
+            {
+                AdicionarErroProcessamento("Operação não permitida.");
+                return null!;
+            }
+            Cliente usuarioDb = await _usuarioRepository.GetEntityByIdAsync(id);
+            var usuarioIdentityDb = await _userManager.FindByIdAsync(id.ToString());
 
-        if (usuarioIdentityDb is null && usuarioDb is null) 
+            if (usuarioIdentityDb is null && usuarioDb is null)
+            {
+                AdicionarErroProcessamento("Usuário não encontrado.");
+                return null!;
+            }
+            var userRoles = (await _userManager.GetRolesAsync(usuarioIdentityDb!)).ToList();
+            return usuarioDb.ToViewUsuarioDto(usuarioIdentityDb!, userRoles);
+        }
+        catch (Exception ex)
         {
-            AdicionarErroProcessamento("Usuário não encontrado.");
+            AdicionarErroProcessamento($"Erro ao obter usuário: {ex.Message}");
             return null!;
         }
-        var userRoles = (await _userManager.GetRolesAsync(usuarioIdentityDb!)).ToList();
-        return usuarioDb.ToViewUsuarioDto(usuarioIdentityDb!, userRoles);
     }
 
     public async Task<IEnumerable<UserResponse>> ObterUsuarios()
     {
-        if (!UsuarioHelper.IsAdmin(_accessor, _userManager))
+        try
         {
-            AdicionarErroProcessamento("Operação não permitida.");
+            if (!UsuarioHelper.IsAdmin(_accessor, _userManager))
+            {
+                AdicionarErroProcessamento("Operação não permitida.");
+                return null!;
+            }
+            List<Cliente> usuariosDb = await _usuarioRepository.ListAsync();
+            List<IdentityUser> usuariosIdentityDb = await _userManager.Users.ToListAsync();
+
+            var usuariosResponses = new List<UserResponse>();
+
+            foreach (var usuarioDb in usuariosDb)
+            {
+                var usuarioIdentityDb = usuariosIdentityDb.First(u => u.Id == usuarioDb.Id.ToString());
+
+                var userRoles = (await _userManager.GetRolesAsync(usuarioIdentityDb)).ToList();
+
+                usuariosResponses.Add(usuarioDb.ToViewUsuarioDto(usuarioIdentityDb, userRoles));
+            }
+
+            return usuariosResponses;
+        }
+        catch (Exception ex)
+        {
+            AdicionarErroProcessamento($"Erro ao obter usuários: {ex.Message}");
             return null!;
         }
-        List<Cliente> usuariosDb = await _usuarioRepository.ListAsync();
-        List<IdentityUser> usuariosIdentityDb = await _userManager.Users.ToListAsync();
-
-        var usuariosResponses = new List<UserResponse>();
-
-        foreach (var usuarioDb in usuariosDb)
-        {
-            var usuarioIdentityDb = usuariosIdentityDb.First(u => u.Id == usuarioDb.Id.ToString());
-
-            var userRoles = (await _userManager.GetRolesAsync(usuarioIdentityDb)).ToList();
-
-            usuariosResponses.Add(usuarioDb.ToViewUsuarioDto(usuarioIdentityDb, userRoles));
-        }
-
-        return usuariosResponses;
     }
 
     public async Task AtualizarUsuario(UpdUserRequest objeto)
@@ -115,28 +131,35 @@ public class UsuarioService : MainService, IUsuarioService
         }
         catch (Exception ex)
         {
-            AdicionarErroProcessamento($"Erro ao registrar usuário: {ex.Message}");
+            AdicionarErroProcessamento($"Erro ao atualizar usuário: {ex.Message}");
         }
     }
-    public async Task AlterarStatusBloqueioUsuario(string userId, bool bloquear)
+    public async Task AlterarStatusBloqueioUsuario(Guid userId, bool bloquear)
     {
-        DateTimeOffset lockoutEndDate = DateTime.Now;
-        if (userId == (UsuarioHelper.GetUserId(_accessor)).ToString() || !UsuarioHelper.IsAdmin(_accessor, _userManager))
-        {
-            AdicionarErroProcessamento("Operação não permitida");
-            return;
+        try
+        {  
+            DateTimeOffset lockoutEndDate = DateTime.Now;
+            if (userId == UsuarioHelper.GetUserId(_accessor) || !UsuarioHelper.IsAdmin(_accessor, _userManager))
+            {
+                AdicionarErroProcessamento("Operação não permitida");
+                return;
+            }
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user is null)
+            {
+                AdicionarErroProcessamento("Usuário não encontrado.");
+                return;
+            }
+            if (bloquear)
+            {
+                lockoutEndDate = lockoutEndDate.AddYears(1000);
+            }
+            await _userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
         }
-        var user = await _userManager.FindByIdAsync(userId);
-        if (user is null)
+        catch (Exception ex)
         {
-            AdicionarErroProcessamento("Usuário não encontrado.");
-            return;
+            AdicionarErroProcessamento($"Erro ao bloquear usuário: {ex.Message}");
         }
-        if (bloquear)
-        {
-            lockoutEndDate = lockoutEndDate.AddYears(1000);
-        }
-        await _userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
     }
 
     public async Task DeletarUsuario(Guid userId)
@@ -161,7 +184,6 @@ public class UsuarioService : MainService, IUsuarioService
         catch (Exception ex)
         {
             AdicionarErroProcessamento($"Erro ao deletar usuário: {ex.Message}");
-            return;
         }
     }
 }

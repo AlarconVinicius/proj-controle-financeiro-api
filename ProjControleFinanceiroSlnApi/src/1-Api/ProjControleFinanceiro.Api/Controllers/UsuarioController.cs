@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using ProjControleFinanceiro.Api.Controllers.Configuracao;
 using ProjControleFinanceiro.Domain.DTOs.Usuario;
-using ProjControleFinanceiro.Domain.Helpers;
 using ProjControleFinanceiro.Identity.Domain.Interfaces;
 
 namespace ProjControleFinanceiro.Api.Controllers;
@@ -12,11 +11,9 @@ namespace ProjControleFinanceiro.Api.Controllers;
 [Authorize]
 public class UsuarioController : MainController
 {
-    private readonly IHttpContextAccessor _accessor;
     private readonly IUsuarioService _usuarioService;
-    public UsuarioController(IHttpContextAccessor accessor, IUsuarioService usuarioService)
+    public UsuarioController(IUsuarioService usuarioService)
     {
-        _accessor = accessor;
         _usuarioService = usuarioService;
     }
 
@@ -46,7 +43,7 @@ public class UsuarioController : MainController
     }
 
     [HttpPatch("{userId}/bloqueio")]
-    public async Task<IActionResult> AlterarStatusBloqueioUsuario(string userId, [FromBody] bool bloquear)
+    public async Task<IActionResult> AlterarStatusBloqueioUsuario(Guid userId, [FromBody] bool bloquear)
     {
         await _usuarioService.AlterarStatusBloqueioUsuario(userId, bloquear);
         if (!_usuarioService.OperacaoValida()) return CustomResponse(_usuarioService.GetErrors());
