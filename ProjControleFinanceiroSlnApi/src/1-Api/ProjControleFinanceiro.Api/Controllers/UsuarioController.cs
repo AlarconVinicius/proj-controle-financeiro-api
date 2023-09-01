@@ -52,4 +52,12 @@ public class UsuarioController : MainController
         if (!_usuarioService.OperacaoValida()) return CustomResponse(_usuarioService.GetErrors());
         return CustomResponse();
     }
+
+    [HttpDelete("{userId}")]
+    public async Task<IActionResult> DeletarUsuario(Guid userId)
+    {
+        await _usuarioService.DeletarUsuario(userId);
+        if (!_usuarioService.OperacaoValida()) return CustomResponse(_usuarioService.GetErrors());
+        return CustomResponse();
+    }
 }

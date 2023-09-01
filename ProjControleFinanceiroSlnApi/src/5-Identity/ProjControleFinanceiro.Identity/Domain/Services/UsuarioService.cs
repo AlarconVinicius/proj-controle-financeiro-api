@@ -1,6 +1,4 @@
-﻿using System;
-
-using FluentValidation;
+﻿using FluentValidation;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -139,5 +137,31 @@ public class UsuarioService : MainService, IUsuarioService
             lockoutEndDate = lockoutEndDate.AddYears(1000);
         }
         await _userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
+    }
+
+    public async Task DeletarUsuario(Guid userId)
+    {
+        try
+        {
+            if (userId != UsuarioHelper.GetUserId(_accessor) && !UsuarioHelper.IsAdmin(_accessor, _userManager))
+            {
+                AdicionarErroProcessamento("Operação não permitida");
+                return;
+            }
+            Cliente usuarioDb = await _usuarioRepository.GetEntityByIdAsync(userId);
+            var usuarioIdentityDb = await _userManager.FindByIdAsync(userId.ToString());
+            if (usuarioIdentityDb is null && usuarioDb is null)
+            {
+                AdicionarErroProcessamento("Usuário não encontrado.");
+                return;
+            }
+            await _usuarioRepository.DeleteAsync(userId);
+            await _userManager.DeleteAsync(usuarioIdentityDb!);
+        }
+        catch (Exception ex)
+        {
+            AdicionarErroProcessamento($"Erro ao deletar usuário: {ex.Message}");
+            return;
+        }
     }
 }
