@@ -12,13 +12,11 @@ public class CreateInitialTransactions
     }
     public void Create()
     {
-        var list = _contextBase.Transacoes.ToList();
-        if(list.Count > 0)
+        Guid usuarioId = Guid.Parse("BBDC94BA-D192-409B-A9BF-BF5977B30425");
+        var list = _contextBase.Transacoes.Where(l => l.ClienteId == usuarioId).ToList();
+        if(list.Count <= 0)
         {
-            _contextBase.Transacoes.RemoveRange(list);
-        }
-        var usuario = _contextBase.Clientes.First();
-        var clienteId = usuario.Id;
+        var clienteId = usuarioId;
         var descricaoBase = "Transação Automática";
         var dataBase = DateTime.Now.AddDays(-20);
         var categoria = CategoriaEnum.Outros;
@@ -33,5 +31,6 @@ public class CreateInitialTransactions
 
         _contextBase.Transacoes.AddRange(transacoes);
         _contextBase.SaveChanges();
+        }
     }
 }

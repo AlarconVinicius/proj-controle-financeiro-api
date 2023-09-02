@@ -22,6 +22,7 @@ public class CreateInitialAdminSeed
 
     public void Create()
     {
+        Guid id = Guid.Parse("BBDC94BA-D192-409B-A9BF-BF5977B30425");
         var name = "Usuário";
         var lastName = "Administrador";
         var phoneNumber = "(99) 99999-9999";
@@ -30,6 +31,7 @@ public class CreateInitialAdminSeed
 
         var user = new IdentityUser
         {
+            Id = id.ToString(),
             UserName = email,
             Email = email,
             EmailConfirmed = true,
@@ -46,10 +48,9 @@ public class CreateInitialAdminSeed
         {
             _userManager.CreateAsync(user, password).GetAwaiter().GetResult();
             _userManager.AddToRoleAsync(user, RolesEnum.Admin.ToString()).GetAwaiter().GetResult();
-            var userCreated = _userManager.FindByEmailAsync(user.Email).Result;
             Cliente cliente = new Cliente()
             {
-                Id = Guid.Parse(userCreated!.Id),
+                Id = id,
                 Name = name,
                 LastName = lastName
             };
