@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using ProjControleFinanceiro.Api.Controllers.Configuracao;
 using ProjControleFinanceiro.Domain.DTOs.Usuario;
@@ -7,6 +8,7 @@ using ProjControleFinanceiro.Identity.Domain.Interfaces;
 namespace ProjControleFinanceiro.Api.Controllers;
 
 [Route("api")]
+[AllowAnonymous]
 public class AuthController : MainController
 {
     private readonly IAuthService _authService;
@@ -26,9 +28,8 @@ public class AuthController : MainController
     [ProducesResponseType(typeof(ApiSuccessResponse<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     [HttpPost("registrar")]
-    public async Task<ActionResult> Registar(UsuarioViewModel registroUsuario)
+    public async Task<ActionResult> Registar(AddUserRequest registroUsuario)
     {
-        if(!ModelState.IsValid) { return CustomResponse(ModelState); }
         await _authService.RegistrarUsuario(registroUsuario);
         return _authService.OperacaoValida() ? CustomResponse() : CustomResponse(_authService.GetErrors());
     }
@@ -43,9 +44,8 @@ public class AuthController : MainController
     [ProducesResponseType(typeof(ApiSuccessResponse<UsuarioRespostaLogin>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
     [HttpPost("autenticar")]
-    public async Task<ActionResult> Login(LoginUserViewModel usuarioLogin)
+    public async Task<ActionResult> Login(LoginUserRequest usuarioLogin)
     {
-        if (!ModelState.IsValid) { return CustomResponse(ModelState); }
         var result = await _authService.LogarUsuario(usuarioLogin);
         return _authService.OperacaoValida() ? CustomResponse(result) : CustomResponse(_authService.GetErrors());
     }

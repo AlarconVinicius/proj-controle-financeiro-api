@@ -2,6 +2,8 @@
 using System.Security.Claims;
 using System.Text;
 
+using FluentValidation;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -13,69 +15,104 @@ using ProjControleFinanceiro.Entities.Entidades;
 using ProjControleFinanceiro.Entities.Entidades.Enums;
 using ProjControleFinanceiro.Identity.Configuracao;
 using ProjControleFinanceiro.Identity.Domain.Interfaces;
-
+using ProjControleFinanceiro.Identity.Extensions;
 
 namespace ProjControleFinanceiro.Identity.Domain.Services;
 public class AuthService : MainService, IAuthService
 {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IClienteRepository _cliente;
+    private readonly IUsuarioRepository _cliente;
     private readonly AppSettings _appSettings;
+    private readonly IValidator<AddUserRequest> _addValidator;
+    private readonly IValidator<LoginUserRequest> _loginValidator;
 
-    public AuthService(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IClienteRepository cliente, IOptions<AppSettings> appSettings)
+    public AuthService(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IUsuarioRepository cliente, IOptions<AppSettings> appSettings, IValidator<AddUserRequest> addValidator, IValidator<LoginUserRequest> loginValidator)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _appSettings = appSettings.Value;
         _cliente = cliente;
+        _addValidator = addValidator;
+        _loginValidator = loginValidator;
     }
-    public async Task RegistrarUsuario(UsuarioViewModel objeto)
+    public async Task RegistrarUsuario(AddUserRequest objeto)
     {
-        var user = new IdentityUser
+        try
         {
-            UserName = objeto.Email,
-            Email = objeto.Email,
-            EmailConfirmed = true,
-        };
-
-        var result = await _userManager.CreateAsync(user, objeto.Password);
-        if (result.Succeeded)
-        {
-            var userIdentity = await _userManager.FindByEmailAsync(objeto.Email);
-            await _userManager.AddToRoleAsync(userIdentity!, RolesEnum.User.ToString());
-            Guid userId = Guid.Parse(userIdentity!.Id);
-            Cliente cliente = new Cliente()
+            var validationResult = await _addValidator.ValidateAsync(objeto);
+            if (!validationResult.IsValid)
             {
-                Id = userId,
-            };
+                AdicionarErroProcessamento(validationResult);
+                return;
+            }
 
-            await _cliente.AddAsync(cliente);
+            var user = objeto.ToAddClienteIdentity();
 
-            await _signInManager.SignInAsync(user, false);
+            var result = await _userManager.CreateAsync(user, objeto.Password);
+            if (result.Succeeded)
+            {
+                var userIdentity = await _userManager.FindByEmailAsync(objeto.Email);
+                await _userManager.AddToRoleAsync(userIdentity!, RolesEnum.User.ToString());
+                Guid userId = Guid.Parse(userIdentity!.Id);
+
+                Cliente cliente = objeto.ToAddClienteDto(userId);
+
+                await _cliente.AddAsync(cliente);
+
+                await _signInManager.SignInAsync(user, false);
+
+                return;
+
+            }
+
+            foreach (var erros in result.Errors)
+            {
+                AdicionarErroProcessamento(erros.Description);
+            }
 
             return;
-
         }
-
-        foreach (var erros in result.Errors)
+        catch (Exception ex)
         {
-            AdicionarErroProcessamento(erros.Description);
+            AdicionarErroProcessamento($"Erro ao registrar usuário: {ex.Message}");
+            return;
         }
-
-        return;
     }
 
-    public async Task<UsuarioRespostaLogin> LogarUsuario(LoginUserViewModel objeto)
+    public async Task<UsuarioRespostaLogin> LogarUsuario(LoginUserRequest objeto)
     {
-        var result = await _signInManager.PasswordSignInAsync(objeto.Email, objeto.Password, false, true);
-
-        if (result.Succeeded)
+        try
         {
-            return await GerarJwt(objeto.Email);
+            var validationResult = await _loginValidator.ValidateAsync(objeto);
+            if (!validationResult.IsValid)
+            {
+                AdicionarErroProcessamento(validationResult);
+                return null!;
+            }
+            var result = await _signInManager.PasswordSignInAsync(objeto.Email, objeto.Password, false, true);
+
+            if (result.Succeeded)
+            {
+                return await GerarJwt(objeto.Email);
+            }
+            else if (result.IsLockedOut)
+            {
+                var user = await _userManager.FindByEmailAsync(objeto.Email);
+                var lockoutTime = await _userManager.GetLockoutEndDateAsync(user!);
+                var dataDesbloqueio = lockoutTime?.ToString("dd/MM/yyyy HH:mm");
+                string mensagem = $"O bloqueio expira em: {dataDesbloqueio}";
+                AdicionarErroProcessamento($"Usuário bloqueado. {mensagem}");
+                return null!;
+            }
+            AdicionarErroProcessamento("Usuário ou senha inválido!");
+            return null!;
         }
-        AdicionarErroProcessamento("Usuário ou senha inválido!");
-        return null!;
+        catch(Exception ex)
+        {
+            AdicionarErroProcessamento($"Erro ao logar o usuário: {ex.Message}");
+            return null!;
+        }
     }
 
     private async Task<UsuarioRespostaLogin> GerarJwt(string email)
@@ -142,7 +179,7 @@ public class AuthService : MainService, IAuthService
             UsuarioToken = new UsuarioToken
             {
                 Id = user.Id,
-                Email = user.Email,
+                Email = user.Email!,
                 Claims = claims.Select(c => new UsuarioClaim { Type = c.Type, Value = c.Value })
             }
         };

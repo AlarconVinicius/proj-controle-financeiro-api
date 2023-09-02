@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjControleFinanceiro.Data.Configuracao;
 
@@ -11,9 +12,11 @@ using ProjControleFinanceiro.Data.Configuracao;
 namespace ProjControleFinanceiro.Data.Migrations
 {
     [DbContext(typeof(ContextoBase))]
-    partial class ContextoBaseModelSnapshot : ModelSnapshot
+    [Migration("20230825123522_AddNameLastNamePhoneNumberToCliente")]
+    partial class AddNameLastNamePhoneNumberToCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,6 +40,11 @@ namespace ProjControleFinanceiro.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 

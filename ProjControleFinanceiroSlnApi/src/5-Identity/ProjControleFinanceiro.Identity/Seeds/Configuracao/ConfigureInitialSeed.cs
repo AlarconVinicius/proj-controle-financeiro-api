@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
 using ProjControleFinanceiro.Data.Configuracao;
+using ProjControleFinanceiro.Data.Seeds.Configuracao;
 using ProjControleFinanceiro.Identity.Configuracao;
 
 namespace ProjControleFinanceiro.Identity.Seeds.Configuracao;
@@ -22,5 +23,6 @@ public class ConfigureInitialSeed
     {
         new CreateInitialRolesSeed(_contextIdentity).Create();
         new CreateInitialAdminSeed(_contextIdentity, _contextBase, _userManager!).Create();
+        new CreateInitialTransactions(_contextBase).Create();
     }
 }
