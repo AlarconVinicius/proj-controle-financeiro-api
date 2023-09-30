@@ -36,7 +36,7 @@ Para obter o código-fonte da API de Controle Financeiro Pessoal e começar a tr
 2. Execute o seguinte comando para clonar o repositório:
 
 ```bash
-git clone https://github.com/AlarconVinicius/ProjControleFinanceiro.git
+git clone https://github.com/AlarconVinicius/proj-controle-financeiro-api.git
 ```
 *Isso irá baixar o código-fonte da API para o seu sistema local.*
 
@@ -61,6 +61,13 @@ docker-compose up
 ```
 #### A API será compilada e implantada em um contêiner Docker. Você poderá acessá-la em <strong>http://localhost:8001/swagger/index.html</strong>.
 
+*Nota: Ao iniciar a aplicação pela primeira vez, um perfil de administrador é criado automaticamente com as seguintes informações:*
+
+- **Nome**: Usuário
+- **Sobrenome**: Administrador
+- **Número de Telefone**: (99) 99999-9999
+- **E-mail**: admin@controlefinanceiro.com
+- **Senha**: Admin@123
 <hr>
 
 ## Rotas da API
